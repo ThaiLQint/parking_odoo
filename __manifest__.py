@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "parking",
+    'name': "PARKING",
     'sequence': 0,
 
     'summary': """
-       Ứng dụng sử dụng cho bãi giữ xe, kế thừa những chức năng của những ứng dụng liên quan đến quản lý Kho.
+       Ứng dụng sử dụng cho bãi giữ xe, kế thừa những chức năng của 
+       những ứng dụng liên quan đến quản lý Kho.
        """,
 
     'description': """
@@ -29,6 +30,11 @@
         "views/ProductTemplate.xml",
         "views/StockLocation.xml",
         "views/StockMoveLine.xml",
+        "views/product_color_main.xml",
+        "views/color_config_settings_views.xml",
+        "sercurity/ir.model.access.csv",
+        "views/add_button_view.xml",
+        "views/add_button_setting.xml",
     ],
     'assets': {
         'web.assets_backend':
