@@ -13,9 +13,9 @@ class  ProductColor2(models.Model):
                     string="Color list")
     
     name        = fields.Char(string='Tên màu',store=True)
-    html_color  = fields.Char('Mã màu',store=True)
+    html_color  = fields.Char(store=True)
+    # html_code   = fields.Char('Mã hiển thị')
     sequence    = fields.Integer('Sequence', default=0)
-    
     
     @api.model
     def save_method(self):

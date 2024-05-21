@@ -13,7 +13,7 @@ class  ProductColorValue(models.Model):
         change_default=True)
     name = fields.Char(string="Tên màu", )
     html_color = fields.Char(string="Mã màu",
-                             ) 
+                             )
     # placeholder="Nhập mã màu..."
     
     # @api.model

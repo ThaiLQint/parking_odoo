@@ -1,9 +1,10 @@
 from odoo import api, fields, models, http, exceptions
-import uuid
+import uuid, json
 import logging
 from collections import defaultdict
 from dateutil.relativedelta import relativedelta
 from base64 import b64encode
+# from odoo.exceptions import ValidationError
 
 
 _logger = logging.getLogger(__name__)
@@ -28,7 +29,6 @@ def check_exist_xe(bien_so, ma_dinh_danh):
     if (xe.name == bien_so):
         return -2
 
-#Hàm lấy màu sắc:
 class Product_template(models.Model):
     _inherit = 'product.template'
     _sql_constraints = [
@@ -39,20 +39,12 @@ class Product_template(models.Model):
     name = fields.Char(string="Biển số")
     location_id = fields.Many2one(
         "stock.location", string="Vị trí", compute="_compute_location_id")
-    contact_id = fields.Many2one(
-        'res.partner', string='Chủ sở hữu', required=True)
+    contact_id = fields.Many2one('res.partner', string='Chủ sở hữu', required=True)
     barcode = fields.Char(readonly=False)
     default_code = fields.Char(string="Mã thẻ", readonly=False)
     user_ids = fields.Many2many(
-        'res.partner',  string="Người sử dụng", readonly=False)
-    # partner_gid = fields.Many2many('res.partner', string="Người sử dụng")
-    
-    # color = fields.Selection([
-    #     ('black', 'Đen'),
-    #     ('white', 'Trắng'),
-    #     ('red', 'Đỏ'),
-    # ], string="Màu xe", default=True)
-    # computed_field = fields.Char(string='Computed Field', compute='_compute_computed_field')
+        'res.partner',  string="Người sử dụng", readonly=False, ondelete='cascade')
+    domain = fields.Char(compute="_compute_domain", readonly=True)
     # ------------------------------------------------
     
     color_id = fields.Many2one('product.color.main', string='Màu xe')
@@ -71,7 +63,9 @@ class Product_template(models.Model):
     avatar_128 = fields.Image(
         string="avatar 128", compute='_compute_avatar_128', max_width=128, max_height=128)
     image_1920 = fields.Image(
-        string="Ảnh xe", max_width=256, max_height=256)
+        string="Ảnh trước xe", max_width=256, max_height=256)
+    image_1920_sau_xe = fields.Image(
+        string="Ảnh sau xe", max_width=256, max_height=256)
     image_1920_bien_so = fields.Image(
         string="Ảnh biển số xe", max_width=1920, max_height=1920)
     image_1920_cavet_sau = fields.Image(
@@ -91,7 +85,24 @@ class Product_template(models.Model):
     so_dang_ky = fields.Char(string="Số đăng ký", readonly=False)
     move_history_ids = fields.One2many("stock.move.line", "product_id", string="Lịch sử di chuyển",
                                   )
-# ---------------------------
+    # partner_id = fields.Many2one("res.partner", string="Liên hệ")
+    # partner_ids = fields.One2many("res.partner", "partner_id",string="Danh sách liên hệ")
+    # ---------------------------
+    # Hàm lọc của contact_id va partner_ids:
+    def _compute_domain(self):
+        for rec in self: # Vòng lặp này duyệt qua tất cả các bản ghi
+            
+            # Tạo mảng để lưu trữ các ID của các đối tác liên quan (partner_ids).
+            arr = [] 
+            if not rec.contact_id["id"]:
+                rec.domain = "[]"
+            for contact in rec.contact_id.partner_ids:
+                arr.append(contact["id"])
+            rec.domain = json.dumps([('id', '!=',rec.contact_id["id"]), ('id', 'in',arr) ])
+            # loại bỏ ID của contact_id hiện tại;
+            # chỉ giữ lại các ID có trong danh sách arr.
+      
+          
     def name_get(self):
         # Prefetch the fields used by the `name_get`, so `browse` doesn't fetch other fields
         self.browse(self.ids).read(['name', 'default_code'])
@@ -200,17 +211,7 @@ class Product_template(models.Model):
             return "LỖI: KHÔNG THỂ TẠO UUID DO BỊ ĐÃ TỒN TẠI [1" + hex_arr[1:24]+"]!!"
         message = "ghi epc|"+"1" + hex_arr[1:24] + "|"+hex_arr[24:]
         return message
-
-# TẠO BẢNG LƯU HÃNG XE:
-# class Product_template_2(models.Model):
-#     _name = 'the_xe'
-#     card_id = fields.Many2one('product.template', string="Mã thẻ xe", required=True)
-#     name = fields.Char(string="Mã thẻ xe", required=True)
-
-# class CardXeView(models.Model):
-#     _inherit = "product.template"
-#     card_id = fields.One2many('the_xe','card_id', string="Mã thẻ xe" )   
-   
+# ===============================
 class ProductTable(models.Model):
     _name = 'product_table_block_description'
     product_table_block_id = fields.Many2one('product.template', string="Product FK block title ID")

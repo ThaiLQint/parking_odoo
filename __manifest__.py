@@ -22,7 +22,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['stock', 'product', 'base'],
+    'depends': ['stock', 'product', 'base', 'web'],
     "application": True,
     # always loaded
     'data': [
@@ -31,15 +31,20 @@
         "views/StockLocation.xml",
         "views/StockMoveLine.xml",
         "views/product_color_main.xml",
+        # "views/add_button_view.xml",
         "views/color_config_settings_views.xml",
         "sercurity/ir.model.access.csv",
-        "views/add_button_view.xml",
-        "views/add_button_setting.xml",
+        
     ],
+    'qweb': [],
+    'installable': True,
+    'application': True,
+    'auto_install': True,
     'assets': {
         'web.assets_backend':
         [
             'parking_odoo/static/src/**/*',
+            
         ],
     },
 }

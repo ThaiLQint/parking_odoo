@@ -326,3 +326,14 @@ export const imageField = {
 };
 
 registry.category("fields").add("capture_image", imageField);
+
+// Sự kiện click hình ảnh để phóng to:
+document.addEventListener('DOMContentLoaded', function () {
+  var images = document.querySelectorAll('.image-click-zoom');
+
+  images.forEach(function (image) {
+      image.addEventListener('click', function () {
+          this.classList.toggle('clicked');
+      });
+  });
+});

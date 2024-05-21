@@ -1,44 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="add_btn_view" model="ir.ui.view">
-        <field name="name">add.action.model.form</field>
-        <field name="model">add.action.model</field>
-        <field name="arch" type="xml">
-            <form>
-                <header>
-                    <button name="open_popup_action" string="Add Color" class="btn-primary"/>
-                </header>
-                <sheet>
-                    <group>
-                        <field name="name"/>
-                        <field name="html_color" widget="color" />
-                        <field name="html_color" placeholder="Nhập mã màu..." />
-                    </group>
-                </sheet>
-                
-            </form>
-        </field>
-    </record>
-
-
-
-</odoo>
-
-<!-- <record id="add_view_popup_form" model="ir.ui.view">
-        <field name="name">add.action.model.form</field>
-        <field name="model">add.action.model</field>
-        <field name="arch" type="xml">
-            <form>
-                
-                <group>
-                    <field name="name"/>
-                    <field name="html_color" widget="color" />
-                    <field name="html_color" placeholder="Nhập mã màu..." />
-                </group>
-                <footer>
-                    <button string="Save" type="object" name="save_method" class="btn-primary"/>
-                    <button string="Cancel" class="btn-secondary" special="cancel"/>
-                </footer>
-            </form>
-        </field>
-    </record> -->
+    <templates>
+        <t t-name="kanban-box">
+            <div class="card oe_kanban_global_click p-0">
+                <div class="o_squared_image">
+                    <img class="card-img-top" t-att-src="kanban_image('product.image', 'image_1920', record.id.raw_value)" t-att-alt="record.name.value"/>
+                </div>
+                <div class="card-body p-0">
+                    <h4 class="card-title p-2 m-0 bg-200">
+                        <small>
+                            <field name="name"/>
+                        </small>
+                    </h4>
+                    <div>
+                        <group>
+                            <field name="contact_id" widget="many2one_avatar" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}" />
+                        </group>
+                    </div>
+                </div>
+                <div>
+                    <field name="user_ids" domain="record.domain.raw_value"/>
+                </div>
+            </div>
+        </t>
+    </templates>
+</odoo> -->

@@ -3,6 +3,8 @@ from odoo import api, fields, models, http
 import uuid
 import json
 from dateutil.relativedelta import relativedelta
+from odoo.exceptions import ValidationError
+
 
 _logger = logging.getLogger(__name__)
 
@@ -44,13 +46,80 @@ class Contact(models.Model):
                                   readonly=True)
     product_ids_public = fields.Many2many("product.template", relation="product_template_res_partner_rel", column1="res_partner_id", column2="product_template_id", string="D/S xe dùng chung",
                                           readonly=True)
+    
+    
+    partner_id = fields.Many2one("res.partner", string="Danh sách liên hệ")
+    partner_ids = fields.One2many("res.partner", "partner_id",string="Danh sách liên hệ", domain="[('id', '!=', id)]")
+    
+    
+    vehicle = fields.Many2one("res.partner", string="Vehicle")
+
+    vehicles = fields.One2many('res.partner', 'vehicle', string='Phương Tiện')
+    
     image_1920 = fields.Image(string="Ảnh đại diện", max_width=1024, max_height=768)
     image_1920_cmnd_cccd_truoc = fields.Image(
         string="Ảnh mặt trước CMND/CCCD", max_width=1920, max_height=1920)
     image_1920_cmnd_cccd_sau = fields.Image(
         string="Ảnh mặt sau CMND/CCCD", max_width=1920, max_height=1920)
     
+    contact_id = fields.Many2one('res.partner', string='Chủ sở hữu')
+    bien_so_realtime = fields.Char(string="Biển số xe")
+    car_status = fields.Char(string="Trạng Thái")
+    
+    
+    # @api.model
+    # def btn_save_contact(self, values):
+    #     for partner in self:
+    #         if not values.get('email'):
+    #             raise ValidationError("Email is required")
+    #         # Lưu các thay đổi
+    #         partner.write({
+    #             'name': values.get('name', partner.name),
+    #             'email': values['email'],
+    #         })
+    #     return {'type': 'ir.actions.act_window_close', 'tags':'load'}
+    def delete_button(seft):
+        # seft.partner_id.partner_ids = [(3, seft.id)]
+        _logger.info(seft.product_ids_public)
+        
+    # def delete_button_user_ids(self):
+    #     _logger.info(self.env.with_context.get("id_product"))
+    #     self.env["res.users"].create
+    def delete_button_user_ids(self):
+        # Lấy id_product từ context
+        # _logger.info(self.env.context)
+        # id_product = self.env.context.get('params')['id']
+        _logger.info(self.env.context['id'])
+        id_product = self.env.context['id']
+        _logger.info(f"Product ID from context: {id_product}")
+
+        if id_product:
+            product = self.env['product.template'].browse(id_product)
+            _logger.info(f"Product browsed: {product}")
+            # Kiểm tra sản phẩm có tồn tại không
+            if product.exists():
+                _logger.info(f"Product exists: {product.name}")
+                # Kiểm tra user id có trong product user_ids không
+                if self.id in product.user_ids.ids:
+                    product.write({'user_ids': [(3, self.id)]})
+                    _logger.info(f"User ID {self.id} removed from product {product.id}")
+                else:
+                    _logger.warning(f"User ID {self.id} not in product user_ids")
+            else:
+                _logger.error(f"Product ID {id_product} does not exist")
+        else:
+            _logger.error("No product ID found in context")
+    
+    # def delete_button_user_ids(self):
+    #     _logger.info(self.env.context.get("id_product"))
+    #     id_product = self.env.context.get("id_product")
+    #     if id_product:
+    #         product = self.env['product.template'].browse(id_product)
+    #         if product.exists() and self.id in product.user_ids.ids:
+    #             product.write({'user_ids': [(3, self.id)]})
+    
     @api.model
+   
     def create(self, vals):
         vals['date_expiration'] = fields.Datetime.now() + \
             relativedelta(months=1)
