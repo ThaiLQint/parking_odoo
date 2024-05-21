@@ -38,7 +38,6 @@
         <field name="inherit_id" ref="stock.view_move_line_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='state']" position='replace' />
-
             <xpath expr="//sheet" position='replace' />
             <xpath expr="//header" position='after'>
                 <sheet>
@@ -51,8 +50,6 @@
                                 name="date_in" />
                             <field required="{'invisible': [('picking_code', '!=', 'outgoing')]}"
                                 name="date_sub_in_out" />
-
-
                             <field name="contact_id" on_change="1"
                                 can_create="true" can_write="true" />
                         </group>

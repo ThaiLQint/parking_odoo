@@ -281,9 +281,12 @@ class ControllerHistoryLPR(http.Controller):
     def post_in_move_history(self, **kw):
         product_template = http.request.env["product.template"].sudo().search(
             [('default_code', '=', kw['sEPC'])], limit=1)
+        
+        # product_template.contact_id.defaut_code ==kw["tid_ng"]
         user = http.request.env['res.partner'].sudo().search(
             domain=[('id', '=', kw['user_id'])],
             limit=1)
+        # Nếu user_id = với pro.teml.contact_id giong
         if not user:
             return "0"
         if not product_template:

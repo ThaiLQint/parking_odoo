@@ -6,6 +6,7 @@ import os
 import logging
 import pytz
 from datetime import date
+import json
 from dateutil.relativedelta import relativedelta
 _logger = logging.getLogger(__name__)
 
@@ -56,23 +57,26 @@ def check_epc_xe(ma_the):
 
 def contains(list, filter):
     for x in list:
+        # gọi hàm lọc với phần tử x làm đối số
         if filter(x):
-            return x
+            return x  # ĐK trả về True, trả về chính nó là x
     return None
     # do stuff
 
-
+# Chuyển đổi một ngày tháng từ múi UTC sang giờ của người dùng:
 def changeDate(date_in):
     user_tz = pytz.timezone(str(http.request.env.context.get(
         'tz') or http.request.env.user.tz or pytz.utc))
     # Convert the date to a Python `datetime` object
     python_date = date_in.strptime(
         str(date_in), "%Y-%m-%d %H:%M:%S")
+    #Chuyển đổi thành múi giờ UTC - chuyển sang múi giờ người dùng qua astimezone(user_tz):
     timezone = pytz.utc.localize(python_date).astimezone(user_tz)
     # if (timezone.date() == today):
     display_date_result = timezone.strftime("%H:%M:%S %d/%m/%Y")
     return display_date_result
 
+# api/product/get/all
 
 class ControllerProduct(http.Controller):
     @http.route('/parking/get/move_history/', website=False, csrf=False, type='json', methods=['POST'],  auth='public')
@@ -90,6 +94,7 @@ class ControllerProduct(http.Controller):
                     'product_id', 'contact_id'],
             order="id desc")
         res = []
+        
         for move_history in move_histories:
             display_date_result = changeDate(move_history['date'])
             if move_history['picking_code'] == 'incoming':
@@ -192,3 +197,106 @@ class ControllerProduct(http.Controller):
             "user_id": history.contact_id.id,
             "history_id": history.id,
         }
+
+
+class ProductController(http.Controller):
+    @http.route('/api/product/get/all', type='json', auth='public', methods=['GET'], csrf=False)
+    def get_all_products(self, **kw):
+        products = http.request.env['product.template'].sudo().search([])  # Lấy tất cả sản phẩm
+        product_data = []
+        _logger.info(kw['login'])
+        for product in products:
+            product_data.append({
+                'name': product.name,
+                'hang_xe': product.categ_id.name,
+                'color': product.color_id.html_color,
+                # Thêm các trường dữ liệu khác của sản phẩm nếu cần
+            })
+        return product_data
+    
+# API thêm sửa 1 product:
+import json
+class AddProductController(http.Controller):
+    @http.route('/api/product/add/color', type='json', auth='public', methods=['POST'], csrf=False)
+    def add_or_update_product(self, **kw):
+        # Lấy thông tin màu sắc từ yêu cầu  # color_data = []
+        name = kw.get('name')
+        html_color = kw.get('html_color')
+        
+        # Kiểm tra xem tên màu đã tồn tại trong cơ sở dữ liệu chưa
+        existing_color = http.request.env["product.color.main"].sudo().search([('name', '=', name)], limit=1)
+        if existing_color:
+            _logger.error('Color with name %s already exists', name)
+            return {'success': False, 'message': 'Color with name already exists'}
+
+        # Tạo màu sắc mới
+        try:
+            new_color = http.request.env["product.color.main"].sudo().create({
+                'name': name,
+                'html_color': html_color
+            })
+            _logger.info('New color created - ID: %s, Name: %s, HTML Color: %s', new_color.id, new_color.name, new_color.html_color)
+            
+            color_data = {
+                'color_id': new_color.id, 
+                'name': new_color.name,
+                'html_color': new_color.html_color
+            }
+            
+            return {'success': True, 'message': 'Thêm màu thành công', 'data': color_data}
+        except Exception as e:
+            _logger.error('Error creating new color: %s', str(e))
+            return {'success': False, 'message': 'Error creating new color', 'error': str(e)}
+
+    # API cập nhật màu sắc có sẵn:
+    @http.route('/api/product/update_color', type='json', auth='public', methods=['POST'], csrf=False)
+    def update_color(self, **kw):        
+        color_id = kw.get('color_id')
+        name = kw.get('name')
+        html_color = kw.get('html_color')
+
+        if not color_id:
+            _logger.error('Missing color_id in request data')
+            return {'success': False, 'message': 'Thiếu color_id trong request data'}
+
+        if not name or not html_color:
+            _logger.error('Missing name or html_color in request data')
+            return {'success': False, 'message': 'Thiếu name hoặc html_color trong request data'}
+
+        # Tìm kiếm màu sắc theo color_id
+        color = http.request.env["product.color.main"].sudo().search([('id', '=', color_id)], limit=1)
+        
+        if not color:
+            _logger.error('Color with id %s not found', color_id)
+            return {'success': False, 'message': 'Color with id not found'}
+
+        # Kiểm tra xem tên hoặc mã màu đã tồn tại trong các màu khác hay không
+        # Toán tử | này kết hợp hai DK tiếp theo bằng cách yêu cầu 
+        # ít nhất một trong hai DK đó phải đúng.
+        existing_color = http.request.env["product.color.main"].sudo().search([
+            ('id', '!=', color_id),
+            '|',
+            ('name', '=', name),
+            ('html_color', '=', html_color)
+        ], limit=1)
+
+        if existing_color:
+            _logger.error('Color with name %s or html_color %s already exists', name, html_color)
+            return {'success': False, 'message': 'Color with the same name or html_color already exists'}
+
+        # Cập nhật màu sắc
+        color.write({
+            'name': name,
+            'html_color': html_color
+        })
+        _logger.info('Color updated - ID: %s, Name: %s, HTML Color: %s', color.id, color.name, color.html_color)
+        
+        updated_color_data = {
+            'color_id': color.id, 
+            'name': color.name,
+            'html_color': color.html_color
+        }
+        return {'success': True, 'message': 'Cập nhật màu thành công', 'data': updated_color_data}
+
+        
+        

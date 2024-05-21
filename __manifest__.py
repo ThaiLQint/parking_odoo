@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "parking",
+    'name': "PARKING",
     'sequence': 0,
 
     'summary': """
-       Ứng dụng sử dụng cho bãi giữ xe, kế thừa những chức năng của những ứng dụng liên quan đến quản lý Kho.
+       Ứng dụng sử dụng cho bãi giữ xe, kế thừa những chức năng của 
+       những ứng dụng liên quan đến quản lý Kho.
        """,
 
     'description': """
@@ -21,7 +22,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['stock', 'product', 'base'],
+    'depends': ['stock', 'product', 'base', 'web'],
     "application": True,
     # always loaded
     'data': [
@@ -29,11 +30,21 @@
         "views/ProductTemplate.xml",
         "views/StockLocation.xml",
         "views/StockMoveLine.xml",
+        "views/product_color_main.xml",
+        # "views/add_button_view.xml",
+        "views/color_config_settings_views.xml",
+        "sercurity/ir.model.access.csv",
+        
     ],
+    'qweb': [],
+    'installable': True,
+    'application': True,
+    'auto_install': True,
     'assets': {
         'web.assets_backend':
         [
             'parking_odoo/static/src/**/*',
+            
         ],
     },
 }

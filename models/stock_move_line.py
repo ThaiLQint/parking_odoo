@@ -35,7 +35,8 @@ class stock_move_line(models.Model):
     bien_so_realtime = fields.Char(string="Biển số nhận diện được")
     move_history_id_before = fields.Many2one(
         'stock.move.line', string="Trạng thái trước đó")
-    location_id = fields.Many2one("stock.location", string="Vị trí")
+    
+    location_id = fields.Many2one("stock.location", string="Cổng")
     product_id = fields.Many2one(
         "product.template", string="Biển số đã đăng ký")
     contact_id = fields.Many2one("res.partner", string="Họ tên")
@@ -56,9 +57,11 @@ class stock_move_line(models.Model):
     i_1920_bs_cam_before = fields.Image(string="BIỂN SỐ TRƯỚC ĐÓ", related='move_history_id_before.image_1920_bs_camera',
                                          max_width=1920, max_height=1920)
 
-    date_in = fields.Datetime(string="Thời gian xe vào")
-    date_sub_in_out = fields.Char(string="Thời gian gửi xe")
-
+    date_in = fields.Datetime(string="TG xe vào")
+    date_sub_in_out = fields.Char(string="TG gửi xe")
+    
+    create_date = fields.Datetime(string="Thời gian tạo")
+    
     def create(self, vals):
         new_record = super(stock_move_line, self).create(vals)
         return new_record

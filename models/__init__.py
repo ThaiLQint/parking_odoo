@@ -8,3 +8,10 @@ from . import Product_template
 from . import Product_product
 from . import ResUsers
 from . import _test
+
+from . import product_color
+from . import product_color_values
+from . import add_action
+
+# from . import res_config_settings
+# from . import product_template_color_line
