@@ -45,9 +45,9 @@ class stock_move_line(models.Model):
                                  max_width=1920, max_height=1920, related='contact_id.image_1920')
     image_1920_xe = fields.Image(string="XE Đ/K", related='product_id.image_1920',
                                  max_width=1920, max_height=1920)
-    image_1920_camera_truoc = fields.Image(string="Biển số Đ/K", related='product_id.image_1920_bien_so',
+    image_1920_camera_truoc = fields.Image(string="Ảnh chụp trước",
                                            max_width=1920, max_height=1920)
-    image_1920_camera_sau = fields.Image(string="Ảnh chụp",
+    image_1920_camera_sau = fields.Image(string="Ảnh chụp sau",
                                          max_width=1920, max_height=1920)
     image_1920_bs_camera = fields.Image(string="BIỂN SỐ",
                                          max_width=1920, max_height=1920)

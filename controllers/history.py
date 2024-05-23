@@ -16,8 +16,9 @@ class History(http.Controller):
 
     # kw["tid"]
     # kw["isIn"]
-    @http.route('/api/history/validate', type='json', auth='public', methods=['POST'], website=False, csrf=False)
+    @http.route('/api/history/validate', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def validate(self, **kw):
+
         tid = kw.get("tid", None)
         checkProduct = False
         # Tìm kiếm sản phẩm theo default_code
@@ -26,7 +27,7 @@ class History(http.Controller):
         picking_code = "outgoing"
         if product:
             if not self._defferentTime(product.write_date):
-                return {"code": 400, "message": "Chờ 5s"}
+                return json.dumps({"code": 400, "message": "Chờ 5s"})
             product.write({"write_date": datetime.now()})
 
             if product.picking_code == "outgoing" and port == "Cổng Vào":
@@ -34,14 +35,14 @@ class History(http.Controller):
             elif product.picking_code == "incoming" and port == "Cổng Ra":
                 picking_code = "outgoing"
             else:
-                return {"code": 400, "message": "Xe đã RA" if port == "Cổng Ra" else "Xe đã VÀO"}
+                return json.dumps({"code": 400, "message": "Xe đã RA" if port == "Cổng Ra" else "Xe đã VÀO"})
 
             return self._handle_product_found(tid)
 
         # Tìm kiếm đối tác theo ref
         partner = self._find_partner_by_tid(tid)
         if not partner:
-            return {"code": 400, "message": "Không tìm thấy thẻ"}
+            return json.dumps({"code": 400, "message": "Không tìm thấy thẻ"})
 
         # Kiểm tra danh sách sản phẩm riêng tư
         productTID = self._check_product_list(partner.product_ids_private)
@@ -60,14 +61,23 @@ class History(http.Controller):
             elif product.picking_code == "incoming" and port == "Cổng Ra":
                 picking_code = "outgoing"
             else:
-                return {"code": 400, "message": "Xe đã " + "RA" if port == "Cổng Ra" else "VÀO"}
+                return json.dumps({"code": 400, "message": "Xe đã " + "RA" if port == "Cổng Ra" else "VÀO"})
             product.write({"picking_code": picking_code})
+
+            file = kw['imgTruoc']
+            img_attachment = file.read()
+            imgTruoc = base64.b64encode(img_attachment)
+
+            file = kw['imgSau']
+            img_attachment = file.read()
+            imgSau = base64.b64encode(img_attachment)
+
             idHistory = self._handle_history(
-                partner.id, product.id, port, product.move_history_id["id"], picking_code)
+                partner.id, product.id, port, product.move_history_id["id"], picking_code, imgTruoc, imgSau)
             product.write({"move_history_id": idHistory})
 
-            return {"code": 200, "message": "Xe VÀO họp lệ" if picking_code == "incoming" else "Xe RA họp lệ"}
-        return {"code": 400, "message": "Xe không hợp lệ"}
+            return json.dumps({"code": 200, "message": "Xe VÀO họp lệ" if picking_code == "incoming" else "Xe RA họp lệ"})
+        return json.dumps({"code": 400, "message": "Xe không hợp lệ"})
 
     def _find_product_by_tid(self, tid):
         """Tìm kiếm sản phẩm theo default_code."""
@@ -80,9 +90,9 @@ class History(http.Controller):
     def _handle_product_found(self, tid):
         """Xử lý khi tìm thấy sản phẩm."""
         my_dict.setdefault(tid, tid)
-        return {"code": 200, "message": "Tìm thấy thẻ xe"}
+        return json.dumps({"code": 200, "message": "Tìm thấy thẻ xe"})
 
-    def _handle_history(self, idPartner, idProduct, port, move_history_id, picking_code):
+    def _handle_history(self, idPartner, idProduct, port, move_history_id, picking_code, imgTruoc, imgSau):
         """Tìm kiếm sản phẩm theo default_code."""
         location = request.env['stock.location'].sudo().search(
             [("complete_name", "=", "WH/Stock")], limit=1)
@@ -96,8 +106,8 @@ class History(http.Controller):
             'port': port,
             'location_dest_id': location.id,
             'company_id': 1,
-            #  'image_1920_camera_sau': image_1920_camera_sau,
-            #  'image_1920_bs_camera': image_1920_bs_camera,
+            'image_1920_camera_sau': imgSau,
+            'image_1920_camera_truoc': imgTruoc,
         })
         return move_history.id
 
