@@ -32,6 +32,7 @@ class stock_move_line(models.Model):
         help='The stock operation where the packing has been made')
     picking_code = fields.Selection(
         related='picking_id.picking_type_id.code', store=True, readonly=False)
+    port  = fields.Char(string="Cổng")
     bien_so_realtime = fields.Char(string="Biển số nhận diện được")
     move_history_id_before = fields.Many2one(
         'stock.move.line', string="Trạng thái trước đó")

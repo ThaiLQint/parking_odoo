@@ -42,15 +42,23 @@ class Contact(models.Model):
     viper = fields.Char(string="Viper", required=True)
     what_app = fields.Char(string="What's App", required=True)
     date_expiration = fields.Datetime(string="Ngày hết hạn", required=True)
-    product_ids = fields.One2many("product.template", "contact_id", string="D/S xe",
-                                  readonly=True)
+    
     product_ids_public = fields.Many2many("product.template", relation="product_template_res_partner_rel", column1="res_partner_id", column2="product_template_id", string="D/S xe dùng chung",
-                                          readonly=True)
-    
-    
-    partner_id = fields.Many2one("res.partner", string="Danh sách liên hệ")
-    partner_ids = fields.One2many("res.partner", "partner_id",string="Danh sách liên hệ", domain="[('id', '!=', id)]")
-    
+                                        readonly=True)
+        
+    product_ids_private = fields.One2many("product.template", "contact_id", string="D/S xe chính chủ",
+                                        readonly=True)
+
+    partner_id = fields.Many2one("res.partner", string="Liên hệ")
+    partner_ids = fields.Many2many(
+    'res.partner', 
+    'contact_partner_rel', 
+    'contact_id', 
+    'partner_id', 
+    string='Danh sách liên hệ',
+    domain="[('id', '!=', id)]",
+    )
+
     
     vehicle = fields.Many2one("res.partner", string="Vehicle")
 
@@ -67,24 +75,14 @@ class Contact(models.Model):
     car_status = fields.Char(string="Trạng Thái")
     
     
-    # @api.model
-    # def btn_save_contact(self, values):
-    #     for partner in self:
-    #         if not values.get('email'):
-    #             raise ValidationError("Email is required")
-    #         # Lưu các thay đổi
-    #         partner.write({
-    #             'name': values.get('name', partner.name),
-    #             'email': values['email'],
-    #         })
-    #     return {'type': 'ir.actions.act_window_close', 'tags':'load'}
-    def delete_button(seft):
-        # seft.partner_id.partner_ids = [(3, seft.id)]
-        _logger.info(seft.product_ids_public)
+
+    # def delete_button(self):
+    #     # seft.partner_id.partner_ids = [(3, seft.id)]
+    #     _logger.info(self.product_ids_public)
+    #     _logger.info(self.product_ids_private)
+
+
         
-    # def delete_button_user_ids(self):
-    #     _logger.info(self.env.with_context.get("id_product"))
-    #     self.env["res.users"].create
     def delete_button_user_ids(self):
         # Lấy id_product từ context
         # _logger.info(self.env.context)
@@ -149,3 +147,4 @@ class Contact(models.Model):
             return "LỖI: KHÔNG THỂ TẠO UUID DO BỊ ĐÃ TỒN TẠI [0" + hex_arr[1:24]+"]!!"
         message = "ghi epc|"+"0" + hex_arr[1:24] + "|"+hex_arr[24:]
         return message
+    

@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="product.product_template_tree_view" />
             <field name="arch" type="xml">
                 <xpath expr="//tree/field[@name='default_code']" position="after">
-                    <field name="barcode2"/>
+                    <field name="barcode2" />
                 </xpath>
             </field>
         </record>
@@ -32,8 +32,8 @@
                     <attribute name="string">Mã thẻ</attribute>
                 </xpath>
                 <xpath expr="//tree/field[@name='default_code']" position="after">
-                    <field name="barcode"/>
-                    <field name="categ_id"/>
+                    <field name="barcode" />
+                    <field name="categ_id" />
                     <field name="contact_id" widget='many2one_avatar' />
                     <field name="user_ids" widget='many2many_tags_avatar' />
                     <field name="so_khung" string="Số khung xe" />
@@ -67,7 +67,8 @@
                 <xpath expr="//label[@for='name']" position="attributes">
                     <attribute name="string">BIỂN SỐ XE</attribute>
                 </xpath>
-                <xpath expr="//form/sheet/div[@class='oe_title']/h1/div/field[@name='name']" position="attributes">
+                <xpath expr="//form/sheet/div[@class='oe_title']/h1/div/field[@name='name']"
+                    position="attributes">
                     <attribute name="placeholder">e.g. 54A12123</attribute>
                 </xpath>
                 <xpath expr="//form/sheet/div[@name='options']" position="attributes">
@@ -77,10 +78,11 @@
                     <attribute name="invisible">0</attribute>
                 </xpath>
                 <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
-                    <field name="image_1920" widget="image" class="oe_avatar" options="{'zoom': true}"/>
+                    <field name="image_1920" widget="image" class="oe_avatar"
+                        options="{'zoom': true}" />
                 </xpath>
 
-                <xpath expr="//page[@name='invoicing']" position="replace"></xpath>
+                <!-- <xpath expr="//page[@name='invoicing']" position="replace"></xpath> -->
                 <xpath expr="//page[@name='general_information']" position="replace"></xpath>
                 <xpath expr="//page[@name='sales']" position="replace"></xpath>
                 <xpath expr="//page[@name='purchase']" position="replace"></xpath>
@@ -90,36 +92,47 @@
                 <xpath expr="//form/sheet/notebook">
                     <page string="Thông tin chung" name="general_information">
                         <group>
-                            <field name="active" invisible="1"/>
+                            <field name="active" invisible="1" />
                             <group>
-                                <field name="contact_id" widget="many2one_avatar" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}" />
+                                <field name="contact_id" widget="many2one_avatar"
+                                    options="{'no_create':True, 'no_create_edit':True, 'no_open': True}" />
                             </group>
                         </group>
                         <div class="o_row" style="display: flex; align-items: flex-start;">
 
                             <div class="o_row" style="display: flex;">
-                                <label for="user_ids" string="Thêm người sử dụng"/>
+                                <label for="user_ids" string="Thêm người sử dụng" />
                             </div>
-                            <div >
-                                <field name="domain" invisible="1"/>
+                            <div>
+                                <field name="domain" invisible="1" />
                                 <field name="user_ids" domain="domain" context="{'id':id}">
                                     <kanban create="false" delete="false">
                                         <templates>
                                             <t t-name="kanban-box">
-                                                <div t-attf-class="oe_kanban_content oe_kanban_global_click">
-                                                    <div class="o_kanban_record_bottom" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                                <div
+                                                    t-attf-class="oe_kanban_content oe_kanban_global_click">
+                                                    <div class="o_kanban_record_bottom"
+                                                        style="display: flex; justify-content: space-between; align-items: flex-start;">
                                                         <div class="o_kanban_record_bottom_right">
-                                                            <field name="image_1920" widget="image" class="oe_avatar avatar-hover" />
+                                                            <field name="image_1920" widget="image"
+                                                                class="oe_avatar avatar-hover" />
                                                         </div>
-                                                        <div class="o_kanban_record_bottom_left" style="width: 360px; height: 80px; display: flex; flex-direction: column;margin-left: 10px;">
-                                                            <field name="name" string="Name : " style="margin-bottom: 5px; margin-top: 5px; font-weight:bold"></field>
-                                                            <field name="ma_dinh_danh" string="ID : " style="margin-bottom: 5px;"></field>
-                                                            <field name="ref" string="Mã thẻ : " style="margin-bottom: 5px;"></field>
+                                                        <div class="o_kanban_record_bottom_left"
+                                                            style="width: 360px; height: 80px; display: flex; flex-direction: column;margin-left: 10px;">
+                                                            <field name="name" string="Name : "
+                                                                style="margin-bottom: 5px; margin-top: 5px; font-weight:bold"></field>
+                                                            <field name="ma_dinh_danh"
+                                                                string="ID : "
+                                                                style="margin-bottom: 5px;"></field>
+                                                            <field name="ref" string="Mã thẻ : "
+                                                                style="margin-bottom: 5px;"></field>
 
                                                         </div>
 
                                                         <div class="delete-button text-end">
-                                                            <a type="object" name="delete_button_user_ids" class="fa fa-trash"/>
+                                                            <a type="object"
+                                                                name="delete_button_user_ids"
+                                                                class="fa fa-trash" />
                                                         </div>
                                                     </div>
 
@@ -134,24 +147,35 @@
                 </xpath>
 
 
-                <xpath expr="//form/sheet/notebook/page[@name='general_information']" position="after">
+                <xpath expr="//form/sheet/notebook/page[@name='general_information']"
+                    position="after">
                     <page string="Hồ sơ xe" name="recordxe">
                         <div style="display:flex; align-items: flex-start;">
                             <sheet>
 
-                                <group >
-                                    <field name="image_1920" string="Ảnh trước xe" widget="image" class="image-zoom-hover " options="{'zoom': true}" style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;"/>
+                                <group>
+                                    <field name="image_1920" string="Ảnh trước xe" widget="image"
+                                        class="image-zoom-hover " options="{'zoom': true}"
+                                        style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;" />
                                 </group>
-                                <group >
-                                    <field name="image_1920_sau_xe" string="Ảnh sau xe" widget="image" class="image-zoom-hover" options="{'zoom': true}" style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;"/>
+                                <group>
+                                    <field name="image_1920_sau_xe" string="Ảnh sau xe"
+                                        widget="image" class="image-zoom-hover"
+                                        options="{'zoom': true}"
+                                        style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;" />
                                 </group>
                             </sheet>
                             <sheet>
-                                <group >
-                                    <field name="image_1920_bien_so" widget="image" class="image-zoom-hover oe-avatar" options="{'zoom': true}" style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;" />
+                                <group>
+                                    <field name="image_1920_bien_so" widget="image"
+                                        class="image-zoom-hover oe-avatar" options="{'zoom': true}"
+                                        style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;" />
                                 </group>
-                                <group >
-                                    <field name="image_1920_cavet_sau" string="Mặt sau CV" widget="capture_image" class="image-zoom-hover " options="{'zoom': true}" style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;" />
+                                <group>
+                                    <field name="image_1920_cavet_sau" string="Mặt sau CV"
+                                        widget="capture_image" class="image-zoom-hover "
+                                        options="{'zoom': true}"
+                                        style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;" />
                                 </group>
                             </sheet>
                         </div>
@@ -161,13 +185,15 @@
                 <xpath expr="//form/sheet/notebook/page[@name='recordxe']" position="after">
                     <page name="inout_history" string="Lịch sử RA/VÀO">
                         <field name="move_history_ids">
-                            <tree create="0" edit="0">
+                            <tree create="0" edit="0" default_order="create_date desc">
                                 <field name="create_date"></field>
-                                <field name="picking_code"></field>
+                                <field name="product_id"></field>
+                                <field name="image_1920_xe" widget="image"></field>
+                                <field name="port"></field>
                                 <field name="contact_id"></field>
-                                <field name="product_id" widget='image'></field>
-                                <field name="bien_so_realtime" widget='image'></field>
-                                <field name="location_id"></field>
+                                <field name="picking_code" widget="badge"
+                                    decoration-muted="picking_code == 'outgoing'"
+                                    decoration-success="picking_code == 'incoming'" />
                             </tree>
                         </field>
                     </page>
@@ -185,19 +211,22 @@
                     </page>
                 </xpath>
                 <xpath expr="//form/sheet/div[@class='oe_title']" position="after">
-                    <field name='check_doi_the' invisible='1'/>
+                    <field name='check_doi_the' invisible='1' />
                     <div id="registered_2">
-                        <widget name="web_ribbon" title="CHƯA CÓ THẺ" bg_color="bg-success" invisible="check_doi_the == 0" />
+                        <widget name="web_ribbon" title="CHƯA CÓ THẺ" bg_color="bg-success"
+                            invisible="check_doi_the == 0" />
                     </div>
-                    <separator string="Thông tin xe"/>
+                    <separator string="Thông tin xe" />
 
                     <div class="o_row" style="display: flex; align-items: flex-start;">
                         <div class="o_col-12" style="flex: 1;">
                             <group>
-                                <field name='categ_id' widget="many2one" options="{'no_create':True, 'no_create_edit':False, 'no_open': True}" />
-                                <label for="color_id" string="Màu xe"/>
+                                <field name='categ_id' widget="many2one"
+                                    options="{'no_create':False, 'no_create_edit':False, 'no_open': True}" />
+                                <label for="color_id" string="Màu xe" />
                                 <div class="o_row" style="display: flex;">
-                                    <field name="html_color" class="oe_inline" string="" widget="color" />
+                                    <field name="html_color" class="oe_inline" string=""
+                                        widget="color" />
                                     <span>
                                         <field name="color_id" />
                                     </span>
@@ -207,15 +236,19 @@
 
                         <div class="o_col-4" style="flex: 1;">
                             <group>
-                                <field name='so_khung' string="Số khung" placeholder="e.g. RUY19008811" />
+                                <field name='so_khung' string="Số khung"
+                                    placeholder="e.g. RUY19008811" />
                                 <field name='so_may' string="Số máy" placeholder="JF08E-0028585" />
-                                <field name='so_dang_ky' string="Số đăng ký (Mặt sau cà vẹt)" placeholder="Nhập số..." />
+                                <field name='so_dang_ky' string="Số đăng ký (Mặt sau cà vẹt)"
+                                    placeholder="Nhập số..." />
                             </group>
                         </div>
 
                         <div class="o_col-4" style="flex: 1; display: flex; align-items: center;">
                             <div style="width: 100%; margin-left: 20px;" class="image-zoom-hover ">
-                                <field name="image_1920_cavet_truoc" widget="image" nolabel="1" options="{'zoom': true}" style="max-width: 200px; max-height: 200px; margin-top: 0px;" />
+                                <field name="image_1920_cavet_truoc" widget="image" nolabel="1"
+                                    options="{'zoom': true}"
+                                    style="max-width: 200px; max-height: 200px; margin-top: 0px;" />
                             </div>
                         </div>
                     </div>
@@ -234,10 +267,12 @@
                 </xpath>
                 <!-- <xpath expr="//field[@name='priority']" position="replace"> </xpath> -->
                 <xpath expr="//t[@t-if='record.default_code.value']" position="replace"></xpath>
-                <xpath expr="//div[@t-if='record.product_variant_count.value &gt; 1']" position="replace"></xpath>
+                <xpath expr="//div[@t-if='record.product_variant_count.value &gt; 1']"
+                    position="replace"></xpath>
                 <xpath expr="//div[@name='product_lst_price']" position="replace">
                 </xpath>
-                <xpath expr="//div[@t-if='record.show_on_hand_qty_status_button.raw_value']" position="replace">
+                <xpath expr="//div[@t-if='record.show_on_hand_qty_status_button.raw_value']"
+                    position="replace">
                 </xpath>
 
                 <xpath expr="//div[@class='o_kanban_record_top mb-0']" position="after">
@@ -246,22 +281,22 @@
                     </div>
                     <div class="mt-1">
                         <span class="o_stat_text">VÀO: <b>
-                            <field name="nbr_moves_in" modifiers="{&quot;readonly&quot;: true}" />
-                        </b>
-                    </span>
-                </div>
-                <div class="mt-1">
-                    <span class="o_stat_text">RA: <b>
-                        <field name="nbr_moves_out" modifiers="{&quot;readonly&quot;: true}" />
-                    </b>
-                </span>
-            </div>
+                                <field name="nbr_moves_in" modifiers="{&quot;readonly&quot;: true}" />
+                            </b>
+                        </span>
+                    </div>
+                    <div class="mt-1">
+                        <span class="o_stat_text">RA: <b>
+                                <field name="nbr_moves_out" modifiers="{&quot;readonly&quot;: true}" />
+                            </b>
+                        </span>
+                    </div>
 
-        </xpath>
-    </field>
+                </xpath>
+            </field>
 
 
-</record>
+        </record>
 
-</data>
+    </data>
 </odoo>
