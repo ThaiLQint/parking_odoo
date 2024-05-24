@@ -30,8 +30,7 @@
                     <!-- Cái này là của titile -->
                     <field name='employee' invisible='1'></field>
                     <div id="registered">
-                        <widget name="web_ribbon" title="Đã Có Thẻ" bg_color="bg-success"
-                            invisible="employee == 0" />
+                        <widget name="web_ribbon" title="Đã Có Thẻ" bg_color="bg-success" invisible="employee == 0" />
                     </div>
                 </xpath>
                 <field name="mobile" position="attributes">
@@ -56,6 +55,7 @@
                     <attribute name="invisible">1</attribute>
                 </field>
 
+
                 <xpath expr="//field[@name='image_1920']" position="replace" />
 
                 <xpath expr="//label[@for='phone']" position="replace" />
@@ -68,20 +68,18 @@
                     <attribute name="string">Số CMND/CCCD</attribute>
                 </xpath>
                 <xpath expr="//field[@name='vat']" position="after">
-                    <field name="phone" widget="phone" on_change="1"
-                        modifiers="{&quot;required&quot;: true}" />
-                    <field name="email" widget="email" on_change="1"
-                        modifiers="{&quot;required&quot;: true}" />
+                    <field name="phone" widget="phone" on_change="1" modifiers="{&quot;required&quot;: true}" />
+                    <field name="email" widget="email" on_change="1" modifiers="{&quot;required&quot;: true}" />
                     <!-- Danh sách xe  -->
+                    <field name='product_ids' widget="many2many_tags_avatar" invisible="1" />
+                    <field name="barcode" invisible="1" />
                 </xpath>
 
                 <!-- Image Avatar -->
                 <xpath expr="//form/sheet/group/group" position="after">
                     <group>
-                        <field name="image_1920" widget="capture_image" on_change="1"
-                            class="oe_avatar" options="{'no_auto_resize': True}" />
-                        <field name="ma_dinh_danh" placeholder="e.g. 31195100312" on_change="1"
-                            modifiers="{&quot;required&quot;: true}" />
+                        <field name="image_1920" widget="capture_image" on_change="1" class="oe_avatar" options="{'no_auto_resize': True}" />
+                        <field name="ma_dinh_danh" placeholder="e.g. 31195100312" on_change="1" modifiers="{&quot;required&quot;: true}" />
                         <field name="ref" placeholder="e.g. 31195100312" on_change="1" />
                         <field name="zalo" string="Zalo" />
                         <field name="viper" string="Viper" />
@@ -93,12 +91,10 @@
                 <xpath expr="//form/sheet/notebook/page/field" position="after">
                     <div style="display: flex">
                         <group>
-                            <field name="image_1920_cmnd_cccd_truoc" widget="capture_image"
-                                on_change="1" />
+                            <field name="image_1920_cmnd_cccd_truoc" widget="capture_image" on_change="1" />
                         </group>
                         <group style="margin-left: 100px">
-                            <field name="image_1920_cmnd_cccd_sau" widget="capture_image"
-                                on_change="1" />
+                            <field name="image_1920_cmnd_cccd_sau" widget="capture_image" on_change="1" />
                         </group>
                     </div>
                 </xpath>
@@ -114,69 +110,46 @@
 
                 <xpath expr="//page[@name='sales_purchases']" position="inside">
                     <!-- Add id "kanban_view" to hide/show kanban initially -->
-                    <field name="partner_ids">
+                    <field name="partner_ids" class="ms-3">
                         <kanban create="false" delete="false">
                             <templates>
                                 <t t-name="kanban-box">
-                                    <div t-attf-class="oe_kanban_content oe_kanban_global_click">
-                                        <!-- Hiển thị các trường của mỗi partner_id trong một thẻ
-                                        card riêng biệt -->
-                                        <!-- <div class="o_kanban_record"> -->
-                                        <div class="o_kanban_record_bottom"
-                                            style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                            <div class="o_kanban_record_bottom_right">
-                                                <field name="image_1920" widget="image"
-                                                    class="oe_avatar avatar-hover" />
+                                    <!-- Display fields of each partner_id in separate card -->
+                                    <group class="o_kanban_record d-flex flex-column" style="width: 100%; height: 100%;">
+                                        <div class="row flex-grow-1 oe_kanban_global_click" style="width: 100%; height: 100%">
+                                            <div class="col-6">
+                                                <div class="o_kanban_record_head h-100 d-flex align-items-center">
+                                                    <div class="o_kanban_record_head_left">
+                                                        <field class="img-fluid" name="image_1920" widget="image"/>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="o_kanban_record_bottom_left"
-                                                style="width: 360px; height: 80px; display: flex; flex-direction: column;margin-left: 10px;">
-                                                <field name="name" string="Name : "
-                                                    style="margin-bottom: 5px; margin-top: 5px; font-weight:bold"></field>
-                                                <field name="ma_dinh_danh" string="ID : "
-                                                    style="margin-bottom: 5px;"></field>
-                                                <field name="ref" string="Mã thẻ : "
-                                                    style="margin-bottom: 5px;"></field>
+                                            <div class="col-6">
+                                                <div class="o_kanban_record_right h-100 d-flex flex-column justify-content-center">
+                                                    <div class="text-nowrap name-container">
+                                                        <strong><field name="name"/></strong>
+                                                    </div>
+
+                                                    <div>
+                                                        <strong>ID: </strong>
+                                                        <field name="ma_dinh_danh" attrs="{'invisible': [('ma_dinh_danh','=',False)]}"/>
+                                                    </div>
+
+                                                    <div>
+                                                        <strong>Mã thẻ: </strong>
+                                                        <field name="ref" attrs="{'invisible': [('ref','=',False)]}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="delete-button text-end">
+                                                <a type="delete" name="delete_button" class="fa fa-trash"/>
                                             </div>
                                         </div>
-                                        <div class="delete-button text-end">
-                                            <a type="delete" name="delete_button"
-                                                class="fa fa-trash" />
-                                        </div>
-
-                                        <!-- </div> -->
-                                    </div>
-                                </t>
-
+                                    </group>
+                                </t>    
                             </templates>
                         </kanban>
                     </field>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static"
-                        data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content" id="modalPartner">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Find
-                                        Contact</h1>
-                                    <a name="btn_x" class="btn_close btn" data-bs-dismiss="modal"
-                                        aria-label="Close">X</a>
-                                </div>
-                                <div class="modal-body">
-                                    <group>
-                                        <field name="partner_ids" widget="many2many_tags_avatar"
-                                            string="D/Sách Liên Hệ" />
-                                    </group>
-                                </div>
-                                <div class="modal-footer">
-                                    <a name="btn_x" class="btn_close btn btn-primary"
-                                        data-bs-dismiss="modal">Save &amp; Close</a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
                 </xpath>
 
                 <xpath expr="//page[@name='sales_purchases']" position="attributes">
@@ -194,26 +167,23 @@
                             <kanban create="false" delete="false">
                                 <templates>
                                     <t t-name="kanban-box">
-                                        <div t-attf-class="oe_kanban_content oe_kanban_global_click"
-                                            style="background-image: url('/path/to/your/image.jpg');">
-                                            <!-- Hiển thị avatar_128 và biển số xe sau của mỗi sản
-                                            phẩm trong một thẻ card riêng biệt -->
-                                            <div class="o_kanban_record_bottom"
-                                                style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 128px;">
-                                                <field name="picking_code" invisible="1" />
-                                                <div class="o_kanban_record_bottom_left"
-                                                    style="width: 128px; height: 128px; margin-right: 10px;">
-                                                    <field name="image_1920" widget="image"
-                                                        class="oe_avatar avatar-hover" />
+                                        <group t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border" style="width: 80%; height: 100%;">
+                                            <!-- Hiển thị avatar_128 và biển số xe sau của mỗi sản phẩm trong một thẻ card riêng biệt -->
+                                            <div class="row row-cols-1 text-center">
+                                                <div class="col mt-2">
+                                                    <field name="picking_code" invisible="1" />
+                                                    <div class="o_kanban_record_bottom_left">
+                                                        <field name="image_1920" widget="image" style="max-width: 100% ; height: 100%"/>
+                                                    </div>
                                                 </div>
-                                                <div class="o_kanban_record_bottom_right"
-                                                    style="flex-grow: 1; font-weight: bold;display: flex; flex-direction: column; align-items: center;">
-                                                    <field name="name"
-                                                        decoration-muted="picking_code == 'outgoing'"
-                                                        decoration-success="picking_code == 'incoming'" />
+
+                                                <div class="col mt-3 fs-3">
+                                                    <div class="o_kanban_record_bottom_right">
+                                                        <field name="name" decoration-muted="picking_code == 'outgoing'" decoration-success="picking_code == 'incoming'" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </group>
                                     </t>
                                 </templates>
                             </kanban>
@@ -225,26 +195,23 @@
                             <kanban create="false" delete="false">
                                 <templates>
                                     <t t-name="kanban-box">
-                                        <div t-attf-class="oe_kanban_content oe_kanban_global_click"
-                                            style="background-image: url('/path/to/your/image.jpg');">
-                                            <!-- Hiển thị avatar_128 và biển số xe sau của mỗi sản
-                                            phẩm trong một thẻ card riêng biệt -->
-                                            <div class="o_kanban_record_bottom"
-                                                style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 128px;">
-                                                <field name="picking_code" invisible="1" />
-                                                <div class="o_kanban_record_bottom_left"
-                                                    style="width: 128px; height: 128px; margin-right: 10px;">
-                                                    <field name="image_1920" widget="image"
-                                                        class="oe_avatar avatar-hover" />
+                                        <group t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border" style="width: 80%; height: 100%;">
+                                            <!-- Hiển thị avatar_128 và biển số xe sau của mỗi sản phẩm trong một thẻ card riêng biệt -->
+                                            <div class="row row-cols-1 text-center">
+                                                <div class="col mt-2">
+                                                    <field name="picking_code" invisible="1" />
+                                                    <div class="o_kanban_record_bottom_left">
+                                                        <field name="image_1920" widget="image" style="max-width: 100% ; height: 100%"/>
+                                                    </div>
                                                 </div>
-                                                <div class="o_kanban_record_bottom_right"
-                                                    style="flex-grow: 1; font-weight: bold;display: flex; flex-direction: column; align-items: center;">
-                                                    <field name="name"
-                                                        decoration-muted="picking_code == 'outgoing'"
-                                                        decoration-success="picking_code == 'incoming'" />
+
+                                                <div class="col mt-3 fs-3">
+                                                    <div class="o_kanban_record_bottom_right">
+                                                        <field name="name" decoration-muted="picking_code == 'outgoing'" decoration-success="picking_code == 'incoming'" />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </group>
                                     </t>
                                 </templates>
                             </kanban>
@@ -252,19 +219,13 @@
                     </div>
                 </xpath>
 
-
                 <!-- Ẩn các trường không cần thiết -->
-                <xpath expr="//form/sheet/notebook/page/field[@name = 'child_ids']"
-                    position="attributes">
+                <xpath expr="//form/sheet/notebook/page/field[@name = 'child_ids']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-                <!-- <xpath expr="//page[@name='accounting']" position="attributes">
+                <xpath expr="//page[@name='accounting']" position="attributes">
                     <attribute name="invisible">1</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//page[@name='invoicing']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath> -->
-                <!-- <xpath expr="//page[@name='invoicing']" position="replace"></xpath> -->
+                </xpath>
                 <xpath expr="//group[@name='container_row_2']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
@@ -273,6 +234,9 @@
                 </xpath>
                 <xpath expr="//div[@class='o_address_format']" position="attributes">
                     <attribute name="invisible">0</attribute>
+                </xpath>
+                <xpath expr="//div[@class='oe_chatter']" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </xpath>
             </field>
         </record>

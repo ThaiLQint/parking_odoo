@@ -229,7 +229,6 @@ class Product_template(models.Model):
         return message
 # ===============================
 
-
 class ProductTable(models.Model):
     _name = 'product_table_block_description'
     product_table_block_id = fields.Many2one(

@@ -2,12 +2,20 @@
 
 import { registry } from "@web/core/registry";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
 import { AlertDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { formView } from "@web/views/form/form_view";
 import { FormController } from "@web/views/form/form_controller";
 import { FormRenderer } from "@web/views/form/form_renderer";
 import { onMounted, onWillUpdateProps, useState } from "@odoo/owl";
 import { useService } from "@web/core/utils/hooks";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
 import { _t } from "@web/core/l10n/translation";
 
 var websocket;
@@ -193,7 +201,10 @@ export class ButtonFormController extends FormController {
       title: title,
       body: _t(content),
     });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
     document.getElementById("rfid_btn").disabled = false;
   }
 
@@ -258,4 +269,8 @@ registry.category("views").add("rfid_button", {
   ...formView,
   Controller: ButtonFormController,
   Renderer: ButtonFormRenderer,
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
