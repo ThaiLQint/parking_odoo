@@ -23,7 +23,7 @@ class History(http.Controller):
 
     @http.route('/api/history/getbyid', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def getById(self, **kw):
-        moveHistory = _find_by_key("stock.move.line", "id", kw["id"])
+        moveHistory = self._find_by_key("stock.move.line", "id", kw["id"])
         if not moveHistory:
             return json.dumps({"code": 400, "message": "Lịch sử di chuyển không tìm thấy"})
         partner = moveHistory.contact_id
