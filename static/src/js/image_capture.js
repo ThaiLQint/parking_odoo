@@ -325,7 +325,6 @@ export const imageField = {
   }),
 };
 
-<<<<<<< HEAD
 registry.category("fields").add("capture_image", imageField);
 
 // Sự kiện click hình ảnh để phóng to:
@@ -338,6 +337,3 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 });
-=======
-registry.category("fields").add("capture_image", imageField);
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd

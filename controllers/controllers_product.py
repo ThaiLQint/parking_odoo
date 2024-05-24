@@ -6,10 +6,7 @@ import os
 import logging
 import pytz
 from datetime import date
-<<<<<<< HEAD
 import json
-=======
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
 from dateutil.relativedelta import relativedelta
 _logger = logging.getLogger(__name__)
 
@@ -60,7 +57,6 @@ def check_epc_xe(ma_the):
 
 def contains(list, filter):
     for x in list:
-<<<<<<< HEAD
         # gọi hàm lọc với phần tử x làm đối số
         if filter(x):
             return x  # ĐK trả về True, trả về chính nó là x
@@ -68,33 +64,19 @@ def contains(list, filter):
     # do stuff
 
 # Chuyển đổi một ngày tháng từ múi UTC sang giờ của người dùng:
-=======
-        if filter(x):
-            return x
-    return None
-    # do stuff
-
-
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
 def changeDate(date_in):
     user_tz = pytz.timezone(str(http.request.env.context.get(
         'tz') or http.request.env.user.tz or pytz.utc))
     # Convert the date to a Python `datetime` object
     python_date = date_in.strptime(
         str(date_in), "%Y-%m-%d %H:%M:%S")
-<<<<<<< HEAD
     #Chuyển đổi thành múi giờ UTC - chuyển sang múi giờ người dùng qua astimezone(user_tz):
-=======
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
     timezone = pytz.utc.localize(python_date).astimezone(user_tz)
     # if (timezone.date() == today):
     display_date_result = timezone.strftime("%H:%M:%S %d/%m/%Y")
     return display_date_result
 
-<<<<<<< HEAD
 # api/product/get/all
-=======
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
 
 class ControllerProduct(http.Controller):
     @http.route('/parking/get/move_history/', website=False, csrf=False, type='json', methods=['POST'],  auth='public')
@@ -112,10 +94,7 @@ class ControllerProduct(http.Controller):
                     'product_id', 'contact_id'],
             order="id desc")
         res = []
-<<<<<<< HEAD
         
-=======
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
         for move_history in move_histories:
             display_date_result = changeDate(move_history['date'])
             if move_history['picking_code'] == 'incoming':
@@ -218,7 +197,6 @@ class ControllerProduct(http.Controller):
             "user_id": history.contact_id.id,
             "history_id": history.id,
         }
-<<<<<<< HEAD
 
 
 class ProductController(http.Controller):
@@ -322,5 +300,3 @@ class AddProductController(http.Controller):
 
         
         
-=======
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd

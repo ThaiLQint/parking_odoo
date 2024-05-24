@@ -21,7 +21,6 @@ class stock_locations(models.Model):
             else:
                 record.state = "empty"
    
-<<<<<<< HEAD
     # @api.model
     # def create(self, vals):
     #     record = self.search([('name', '=', vals['name'])])
@@ -29,12 +28,3 @@ class stock_locations(models.Model):
     #         raise ValidationError("VỊ TRÍ ĐÃ TỒN TẠI!!")
     #     new_record = super(stock_locations, self).create(vals)
     #     return new_record
-=======
-    @api.model
-    def create(self, vals):
-        record = self.search([('name', '=', vals['name'])])
-        if record:
-            raise ValidationError("VỊ TRÍ ĐÃ TỒN TẠI!!")
-        new_record = super(stock_locations, self).create(vals)
-        return new_record
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd

@@ -1,14 +1,11 @@
 from odoo import api, fields, models
 
-<<<<<<< HEAD
 # COLOR_CHOICES = [
 #     ('white', 'White'),
 #     ('black', 'Black'),
 #     ('red', 'Red'),
 #     ('blue', 'Blue'),
 #     ],
-=======
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
 
 class Product_product(models.Model):
     _inherit = 'product.product'
@@ -19,7 +16,6 @@ class Product_product(models.Model):
     check_doi_the = fields.Boolean(string="Đã đổi thẻ", default=False)
     activity_summary = fields.Char(string="Hãng xe", store=True)
 
-<<<<<<< HEAD
     so_khung = fields.Char(string="Số khung", store=True)
     # default_color = fields.Integer(string="Màu xe")
 
@@ -30,8 +26,3 @@ class Product_product(models.Model):
     @api.constrains('barcode')
     def _check_barcode_uniqueness(self):
         return 0  
-=======
-    @api.constrains('barcode')
-    def _check_barcode_uniqueness(self):
-        return 0
->>>>>>> 28d7efaacc4993e575e361c03fefee412a40d6fd
