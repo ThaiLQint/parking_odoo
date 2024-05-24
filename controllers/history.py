@@ -18,74 +18,136 @@ class History(http.Controller):
     # kw["isIn"]
     @http.route('/api/history/validate', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def validate(self, **kw):
+        if kw["code"] == "parking":
+            return self._parkingHistoryHandle(kw)
 
+    @http.route('/api/history/getbyid', type='http', auth='public', methods=['POST'], website=False, csrf=False)
+    def getById(self, **kw):
+        moveHistory = _find_by_key("stock.move.line", "id", kw["id"])
+        if not moveHistory:
+            return json.dumps({"code": 400, "message": "Lịch sử di chuyển không tìm thấy"})
+        partner = moveHistory.contact_id
+        product = moveHistory.contact_id
+        return json.dumps({
+            "nameNg": partner.name,
+            "nameXe": product.name,
+            "tidNg": partner.ref[8:],
+            "tidXe": product.default[8:],
+            "typeXe": product.categ_id.complete_name,
+            "imgXe": product.image_1920.decode(),
+            "imgPath1": moveHistory.image_1920_camera_truoc.decode(),
+            "imgPath2": moveHistory.image_1920_camera_sau.decode(),
+            "imgBienSo": product.image_1920_bien_so.decode(),
+            "createDateTime": self._changeDate(moveHistory.create_date),
+        })
+
+    def _changeDate(self, date_in):
+        user_tz = pytz.timezone(str(http.request.env.user.tz or pytz.utc))
+        # Convert the date to a Python `datetime` object
+        python_date = date_in.strptime(
+            str(date_in), "%Y-%m-%d %H:%M:%S")
+        timezone = pytz.utc.localize(python_date).astimezone(user_tz)
+        # if (timezone.date() == today):
+
+        display_date_result = timezone.strftime("%d/%m/%Y %H:%M:%S")
+        return display_date_result
+
+    def _parkingHistoryHandle(self, kw):
         tid = kw.get("tid", None)
         checkProduct = False
         # Tìm kiếm sản phẩm theo default_code
-        product = self._find_product_by_tid(tid)
+        product = self._find_by_key("product.template", "default_code", tid)
         port = kw["port"]
         picking_code = "outgoing"
         if product:
-            if not self._defferentTime(product.write_date):
+            if not self._defferentTime(product.write_date): # timer chờ 5s
                 return json.dumps({"code": 400, "message": "Chờ 5s"})
             product.write({"write_date": datetime.now()})
 
-            if product.picking_code == "outgoing" and port == "Cổng Vào":
+            if product.picking_code == "outgoing" and port == "Cổng Vào": # Nếu phát hiện thẻ xe trong database và đã ra bãi
                 picking_code = "incoming"
-            elif product.picking_code == "incoming" and port == "Cổng Ra":
-                picking_code = "outgoing"
-            else:
-                return json.dumps({"code": 400, "message": "Xe đã RA" if port == "Cổng Ra" else "Xe đã VÀO"})
-
-            return self._handle_product_found(tid)
-
-        # Tìm kiếm đối tác theo ref
-        partner = self._find_partner_by_tid(tid)
-        if not partner:
-            return json.dumps({"code": 400, "message": "Không tìm thấy thẻ"})
-
-        # Kiểm tra danh sách sản phẩm riêng tư
-        productTID = self._check_product_list(partner.product_ids_private)
-        if productTID != "None":
-            checkProduct = True
-        # Kiểm tra danh sách sản phẩm công cộng
-        if checkProduct == False:
-            productTID = self._check_product_list(partner.product_ids_public)
-            if productTID != "None":
                 checkProduct = True
-        if checkProduct:
-            product = self._find_product_by_tid(my_dict[productTID])
-            my_dict.pop(productTID, "None")
-            if product.picking_code == "outgoing" and port == "Cổng Vào":
-                picking_code = "incoming"
             elif product.picking_code == "incoming" and port == "Cổng Ra":
                 picking_code = "outgoing"
             else:
-                return json.dumps({"code": 400, "message": "Xe đã " + "RA" if port == "Cổng Ra" else "VÀO"})
+                if port == "Cổng Ra":
+                    message = "đã RA"
+                elif port == "Cổng Vào":
+                    message = "đã VÀO"
+                else:
+                    message = "không hợp lệ!!"
+                return json.dumps({"code": 400, "message": "Xe " + message})
+
+            result = self._handle_product_found(tid) # Lưu cặp giá trị thẻ <key, value>
+            if picking_code == "outgoing":
+                return result
+        if picking_code == "outgoing":
+            # Tìm kiếm đối tác theo ref
+            partner = self._find_by_key("res.partner", "ref", tid)
+            if not partner:
+                return json.dumps({"code": 400, "message": "Không tìm thấy thẻ"})
+
+            # Kiểm tra danh sách sản phẩm riêng tư
+            tid = self._check_product_list(partner.product_ids_private)
+            if tid != "None":
+                checkProduct = True
+            # Kiểm tra danh sách sản phẩm công cộng
+            if checkProduct == False:
+                tid = self._check_product_list(partner.product_ids_public)
+                if tid != "None":
+                    checkProduct = True
+
+            if checkProduct:
+                product = self._find_by_key(
+                    "product.template", "default_code", my_dict[tid])
+
+                if product.picking_code == "incoming" and port == "Cổng Ra":
+                    picking_code = "outgoing"
+                else:
+                    if port == "Cổng Ra":
+                        message = "đã RA"
+                    elif port == "Cổng Vào":
+                        message = "đã VÀO"
+                    else:
+                        message = "không hợp lệ!!"
+                    return json.dumps({"code": 400, "message": "Xe " + message})
+        
+        if checkProduct:  # Xe vào + thẻ người thẻ xe lối ra hợp lệ
+            my_dict.pop(tid, "None")
             product.write({"picking_code": picking_code})
-
-            file = kw['imgTruoc']
-            img_attachment = file.read()
-            imgTruoc = base64.b64encode(img_attachment)
-
-            file = kw['imgSau']
-            img_attachment = file.read()
-            imgSau = base64.b64encode(img_attachment)
+            imgTruoc, imgSau = self._imgTruocSauCamera(kw["imgTruoc"], kw["imgSau"])
+            id = 0
+            if picking_code == "incoming":
+                id = product.contact_id.id
+            elif picking_code == "outgoing":
+                id = partner.id
 
             idHistory = self._handle_history(
-                partner.id, product.id, port, product.move_history_id["id"], picking_code, imgTruoc, imgSau)
+                id, product.id, port, product.move_history_id["id"], picking_code, imgTruoc, imgSau)
             product.write({"move_history_id": idHistory})
+            if picking_code == "incoming":
+                message = "VÀO họp lệ"
+            elif picking_code == "outgoing":
+                message = "RA họp lệ"
+            else:
+                message = "không hợp lệ!!"
+            return json.dumps({"code": 200, "message": "Xe " + message})
+        else:
+            return json.dumps({"code": 400, "message": "Xe không hợp lệ!!"})
 
-            return json.dumps({"code": 200, "message": "Xe VÀO họp lệ" if picking_code == "incoming" else "Xe RA họp lệ"})
-        return json.dumps({"code": 400, "message": "Xe không hợp lệ"})
+    def _imgTruocSauCamera(self, imgTruoc, imgSau):
+        file = imgTruoc
+        img_attachment = file.read()
+        imgTruoc = base64.b64encode(img_attachment)
 
-    def _find_product_by_tid(self, tid):
+        file = imgSau
+        img_attachment = file.read()
+        imgSau = base64.b64encode(img_attachment)
+        return imgTruoc, imgSau
+
+    def _find_by_key(self, module, key, value):
         """Tìm kiếm sản phẩm theo default_code."""
-        return request.env['product.template'].sudo().search([('default_code', '=', tid)], limit=1)
-
-    def _find_partner_by_tid(self, tid):
-        """Tìm kiếm đối tác theo ref."""
-        return request.env['res.partner'].sudo().search([('ref', '=', tid)], limit=1)
+        return request.env[module].sudo().search([(key, '=', value)], limit=1)
 
     def _handle_product_found(self, tid):
         """Xử lý khi tìm thấy sản phẩm."""
