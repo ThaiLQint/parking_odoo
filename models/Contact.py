@@ -42,8 +42,7 @@ class Contact(models.Model):
     viper = fields.Char(string="Viper", required=True)
     what_app = fields.Char(string="What's App", required=True)
     date_expiration = fields.Datetime(string="Ngày hết hạn", required=True)
-    product_ids = fields.One2many("product.template", "contact_id", string="D/S xe",
-                                  readonly=True)
+    
     product_ids_public = fields.Many2many("product.template", relation="product_template_res_partner_rel", column1="res_partner_id", column2="product_template_id", string="D/S xe dùng chung",
                                         readonly=True)
         
@@ -56,7 +55,8 @@ class Contact(models.Model):
     'contact_partner_rel', 
     'contact_id', 
     'partner_id', 
-    string='Danh sách liên hệ'
+    string='Danh sách liên hệ',
+    domain="[('id', '!=', id)]",
     )
 
     
@@ -73,7 +73,16 @@ class Contact(models.Model):
     contact_id = fields.Many2one('res.partner', string='Chủ sở hữu')
     bien_so_realtime = fields.Char(string="Biển số xe")
     car_status = fields.Char(string="Trạng Thái")
+    
+    
 
+    # def delete_button(self):
+    #     # seft.partner_id.partner_ids = [(3, seft.id)]
+    #     _logger.info(self.product_ids_public)
+    #     _logger.info(self.product_ids_private)
+
+
+        
     def delete_button_user_ids(self):
         # Lấy id_product từ context
         # _logger.info(self.env.context)
@@ -99,7 +108,16 @@ class Contact(models.Model):
         else:
             _logger.error("No product ID found in context")
     
+    # def delete_button_user_ids(self):
+    #     _logger.info(self.env.context.get("id_product"))
+    #     id_product = self.env.context.get("id_product")
+    #     if id_product:
+    #         product = self.env['product.template'].browse(id_product)
+    #         if product.exists() and self.id in product.user_ids.ids:
+    #             product.write({'user_ids': [(3, self.id)]})
+    
     @api.model
+   
     def create(self, vals):
         vals['date_expiration'] = fields.Datetime.now() + \
             relativedelta(months=1)

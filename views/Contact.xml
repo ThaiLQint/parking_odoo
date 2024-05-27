@@ -71,8 +71,6 @@
                     <field name="phone" widget="phone" on_change="1" modifiers="{&quot;required&quot;: true}" />
                     <field name="email" widget="email" on_change="1" modifiers="{&quot;required&quot;: true}" />
                     <!-- Danh sách xe  -->
-                    <field name='product_ids' widget="many2many_tags_avatar" invisible="1" />
-                    <field name="barcode" invisible="1" />
                 </xpath>
 
                 <!-- Image Avatar -->
@@ -223,9 +221,9 @@
                 <xpath expr="//form/sheet/notebook/page/field[@name = 'child_ids']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-                <xpath expr="//page[@name='accounting']" position="attributes">
+                <!-- <xpath expr="//page[@name='accounting']" position="attributes">
                     <attribute name="invisible">1</attribute>
-                </xpath>
+                </xpath> -->
                 <xpath expr="//group[@name='container_row_2']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>

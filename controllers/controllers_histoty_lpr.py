@@ -251,10 +251,8 @@ def changeDate(date_in, is_het_han):
         str(date_in), "%Y-%m-%d %H:%M:%S")
     timezone = pytz.utc.localize(python_date).astimezone(user_tz)
     # if (timezone.date() == today):
-    if is_het_han:
-        display_date_result = timezone.strftime("%d/%m/%Y")
-    else:
-        display_date_result = timezone.strftime("%H:%M:%S %d/%m/%Y")
+
+    display_date_result = timezone.strftime("%d/%m/%Y %H:%M:%S")
     return display_date_result
 
 
@@ -266,24 +264,28 @@ class ControllerHistoryLPR(http.Controller):
     #     img = cv2.imdecode(arr, -1)  # 'Load it as it is'
     #     result = testImage(img)
     #     return result
-    
+
     @http.route('/parking/post/in/edit', website=False, csrf=False, type='http', methods=['POST'],  auth='public')
     def edit(self, **kw):
-        product_template = http.request.env["product.template"].sudo().search([('default_code', '=', kw['sEPC'])], limit=1)
-       
+        product_template = http.request.env["product.template"].sudo().search(
+            [('default_code', '=', kw['sEPC'])], limit=1)
+
         file = kw['image_capture']
         img_attachment = file.read()
         image_1920 = base64.b64encode(img_attachment)
-        
-        product_template.write({'name':'helo', 'image_1920': image_1920})
+
+        product_template.write({'name': 'helo', 'image_1920': image_1920})
 
     @http.route('/parking/post/in/move_history', website=False, csrf=False, type='http', methods=['POST'],  auth='public')
     def post_in_move_history(self, **kw):
         product_template = http.request.env["product.template"].sudo().search(
             [('default_code', '=', kw['sEPC'])], limit=1)
+
+        # product_template.contact_id.defaut_code ==kw["tid_ng"]
         user = http.request.env['res.partner'].sudo().search(
             domain=[('id', '=', kw['user_id'])],
             limit=1)
+        # Nếu user_id = với pro.teml.contact_id giong
         if not user:
             return "0"
         if not product_template:
@@ -293,7 +295,7 @@ class ControllerHistoryLPR(http.Controller):
             img_attachment = file.read()
            # arr = np.asarray(bytearray(img_attachment), dtype=np.uint8)
             image_1920_camera_sau = base64.b64encode(img_attachment)
-        else: 
+        else:
             image_1920_camera_sau = None
         display_date_result2 = changeDate(user.date_expiration, True)
         if not product_template.location_id:
@@ -309,7 +311,6 @@ class ControllerHistoryLPR(http.Controller):
                 image_1920_bs_camera = None
             else:
                 image_1920_bs_camera = bien_so_realtime['jpg']
-            
             stock_move_history = http.request.env["stock.move.line"].sudo().create(
                 {
                     'move_history_id_before': product_template.move_history_id.id,
@@ -328,7 +329,7 @@ class ControllerHistoryLPR(http.Controller):
             display_date_result = changeDate(stock_move_history.date, False)
             if image_1920_camera_sau != None:
                 image_1920_camera_sau = image_1920_camera_sau.decode()
-            else: 
+            else:
                 image_1920_camera_sau = "-1"
             return json.dumps({
                 "bien_so_realtime": bien_so_realtime['lp'],
@@ -345,7 +346,7 @@ class ControllerHistoryLPR(http.Controller):
             }, ensure_ascii=False)
         if image_1920_camera_sau != None:
             image_1920_camera_sau = image_1920_camera_sau.decode()
-        else: 
+        else:
             image_1920_camera_sau = "-1"
         return json.dumps({
             "bien_so_dk": product_template.name,
@@ -374,9 +375,9 @@ class ControllerHistoryLPR(http.Controller):
         if 'image_capture' in kw:
             file = kw['image_capture']
             img_attachment = file.read()
-            #arr = np.asarray(bytearray(img_attachment), dtype=np.uint8)
+            # arr = np.asarray(bytearray(img_attachment), dtype=np.uint8)
             image_1920_camera_sau = base64.b64encode(img_attachment)
-        else: 
+        else:
             image_1920_camera_sau = None
         if product_template.location_id:
             # img = cv2.imdecode(arr, -1)  # 'Load it as it is'
@@ -422,17 +423,19 @@ class ControllerHistoryLPR(http.Controller):
                 bien_so_realtime_vao = "unknown"
             else:
                 bien_so_realtime_vao = product_template.move_history_id.bien_so_realtime
-            if(stock_move_history.i_1920_cam_sau_before == False):
+            if (stock_move_history.i_1920_cam_sau_before == False):
                 i_1920_cam_sau_before = None
-            else: i_1920_cam_sau_before = stock_move_history.i_1920_cam_sau_before.decode()
-        
-            if(stock_move_history.i_1920_cam_trc_before == False):
+            else:
+                i_1920_cam_sau_before = stock_move_history.i_1920_cam_sau_before.decode()
+
+            if (stock_move_history.i_1920_cam_trc_before == False):
                 i_1920_cam_trc_before = None
-            else: i_1920_cam_trc_before = stock_move_history.i_1920_cam_trc_before.decode()
+            else:
+                i_1920_cam_trc_before = stock_move_history.i_1920_cam_trc_before.decode()
 
             if image_1920_camera_sau != None:
                 image_1920_camera_sau = image_1920_camera_sau.decode()
-            else: 
+            else:
                 image_1920_camera_sau = "-1"
             return json.dumps({
                 "bien_so_realtime": bien_so_realtime['lp'],
@@ -453,15 +456,14 @@ class ControllerHistoryLPR(http.Controller):
 
         if image_1920_camera_sau != None:
             image_1920_camera_sau = image_1920_camera_sau.decode()
-        else: 
+        else:
             image_1920_camera_sau = "-1"
         return json.dumps({
             "bien_so_dk": product_template.name,
-            "user_name":user.name,
+            "user_name": user.name,
             "bien_so_realtime": "unknown",
             "image_1920_ng": user.image_1920.decode(),
             "image_1920_xe": product_template.image_1920.decode(),
             "image_1920_bs_dk": product_template.image_1920_bien_so.decode(),
             "image_1920_camera_sau": image_1920_camera_sau,
-            
         }, ensure_ascii=False)
