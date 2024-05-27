@@ -30,7 +30,7 @@ class Contact(models.Model):
              "- Delivery Address: Preferred address for all deliveries. Selected by default when you deliver an order that belongs to this company.\n"
              "- Other: Other address for the company (e.g. subsidiary, ...)")
     display_name = fields.Char(string="Họ tên", required=False)
-    name = fields.Char(string="Họ tên")
+    name = fields.Char(string="Họ tên ")
     vat = fields.Char(string="Số CMND/CCCD", required=True)
     phone = fields.Char(string="Số điện thoại", required=True)  
     barcode = fields.Char(string="Mật khẩu",readonly=False)
@@ -39,18 +39,24 @@ class Contact(models.Model):
     ma_dinh_danh = fields.Char(string="ID nhân viên", required=False, store=True)
     # job_position = fields.Char(string="Job Position", required=True)
     zalo = fields.Char(string="Zalo", required=True)
-    viper = fields.Char(string="Viper", required=True)
-    what_app = fields.Char(string="What's App", required=True)
-    date_expiration = fields.Datetime(string="Ngày hết hạn", required=True)
-    product_ids = fields.One2many("product.template", "contact_id", string="D/S xe",
-                                  readonly=True)
+    viper = fields.Char(string="Viper" )
+    what_app = fields.Char(string="What's App")
+    date_expiration = fields.Datetime(string="Ngày hết hạn")
+    
     product_ids_public = fields.Many2many("product.template", relation="product_template_res_partner_rel", column1="res_partner_id", column2="product_template_id", string="D/S xe dùng chung",
-                                          readonly=True)
-    
-    
-    partner_id = fields.Many2one("res.partner", string="Danh sách liên hệ")
-    partner_ids = fields.One2many("res.partner", "partner_id",string="Danh sách liên hệ", domain="[('id', '!=', id)]")
-    
+                                        readonly=True)
+    product_ids_private = fields.One2many("product.template", "contact_id", string="D/S xe chính chủ",
+                                        readonly=True)
+
+    partner_id = fields.Many2one("res.partner", string="Liên hệ")
+    partner_ids = fields.Many2many(
+    'res.partner', 
+    'contact_partner_rel', 
+    'contact_id', 
+    'partner_id', 
+    string='Danh sách liên hệ',
+    domain="[('id', '!=', id)]",
+    )
     
     vehicle = fields.Many2one("res.partner", string="Vehicle")
 
@@ -66,31 +72,17 @@ class Contact(models.Model):
     bien_so_realtime = fields.Char(string="Biển số xe")
     car_status = fields.Char(string="Trạng Thái")
     
-    
-    # @api.model
-    # def btn_save_contact(self, values):
-    #     for partner in self:
-    #         if not values.get('email'):
-    #             raise ValidationError("Email is required")
-    #         # Lưu các thay đổi
-    #         partner.write({
-    #             'name': values.get('name', partner.name),
-    #             'email': values['email'],
-    #         })
-    #     return {'type': 'ir.actions.act_window_close', 'tags':'load'}
     def delete_button(seft):
-        # seft.partner_id.partner_ids = [(3, seft.id)]
+        seft.partner_id.partner_ids = [(3, seft.id)]
         _logger.info(seft.product_ids_public)
         
-    # def delete_button_user_ids(self):
-    #     _logger.info(self.env.with_context.get("id_product"))
-    #     self.env["res.users"].create
+
     def delete_button_user_ids(self):
         # Lấy id_product từ context
-        # _logger.info(self.env.context)
-        # id_product = self.env.context.get('params')['id']
         _logger.info(self.env.context['id'])
         id_product = self.env.context['id']
+
+        # id_product = self.env.context.get('id')
         _logger.info(f"Product ID from context: {id_product}")
 
         if id_product:

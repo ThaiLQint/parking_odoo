@@ -22,19 +22,19 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['stock', 'product', 'base', 'web'],
-    "application": True,
+    # "application": True,
     # always loaded
+    'depends': ['stock', 'product', 'base', 'web'],
     'data': [
-        "views/Contact.xml",
+        "views/Contact_view.xml",
         "views/ProductTemplate.xml",
         "views/StockLocation.xml",
         "views/StockMoveLine.xml",
         "views/product_color_main.xml",
-        # "views/add_button_view.xml",
-        "views/color_config_settings_views.xml",
-        "sercurity/ir.model.access.csv",
-        
+        "views/color_config_settings_views.xml",     
+        "views/nsp_menu_setting.xml",     
+        "views/hiden_view.xml",     
+        "security/ir.model.access.csv",     
     ],
     'qweb': [],
     'installable': True,

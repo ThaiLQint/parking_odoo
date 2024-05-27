@@ -80,7 +80,7 @@
                     <field name="image_1920" widget="image" class="oe_avatar" options="{'zoom': true}"/>
                 </xpath>
 
-                <xpath expr="//page[@name='invoicing']" position="replace"></xpath>
+                <!-- <xpath expr="//page[@name='invoicing']" position="replace"></xpath> -->
                 <xpath expr="//page[@name='general_information']" position="replace"></xpath>
                 <xpath expr="//page[@name='sales']" position="replace"></xpath>
                 <xpath expr="//page[@name='purchase']" position="replace"></xpath>
@@ -90,64 +90,70 @@
                 <xpath expr="//form/sheet/notebook">
                     <page string="Thông tin chung" name="general_information">
                         <group>
-                            <field name="active" invisible="1"/>
+                            <field name="active" invisible="1" />
                             <group>
-                                <field name="contact_id" widget="many2one_avatar" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}" />
+                                <field name="contact_id" widget="many2one_avatar" options="{'no_create':True, 'no_create_edit':True, 'no_open': True, 'color_field': 'color'}" />
                             </group>
                         </group>
+
                         <div class="o_row" style="display: flex; align-items: flex-start;">
+                            <div class="o_col-24" style="flex: 1;">
+                                <group>
+                                    <label for="user_ids" string="Người sử dụng:"/>
+                                    <div class="o_row" style="display: flex;">
+                                        <field name="domain" invisible="1"/>
+                                        <field name="user_ids" add-label="Thêm người dùng" nolabel="1" domain="domain" context="{'id':id}" class="oe_inline btn_color">
+                                            <kanban create="false" delete="false">
+                                                <templates>
+                                                    <t t-name="kanban-box" style="width: 240px; 
+                                                                height: 120px; 
+                                                                padding: 10px; 
+                                                                margin: 10px; 
+                                                                border: 1px solid #ccc; 
+                                                                box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); 
+                                                                border-radius: 5px;">
+                                                        <div t-attf-class="oe_kanban_content oe_kanban_global_click">
+                                                            <div class="o_kanban_record_bottom" style="display: flex; justify-content: space-around; align-items: flex-start; padding: 10px;">
+                                                                <div class="o_kanban_record_bottom_right" style="margin-right: 10px;">
+                                                                    <field name="image_1920" widget="image" class="oe_avatar avatar-hover" />
+                                                                </div>
+                                                                <div class="o_kanban_record_bottom_left" style="flex-grow: 1; display: flex; flex-direction: column;">
+                                                                    <field name="name" style="margin-bottom: 5px; font-weight:bold"></field>
+                                                                    <field name="ma_dinh_danh" style="margin-bottom: 5px;"></field>
+                                                                    <field name="ref" style="margin-bottom: 5px;"></field>
 
-                            <div class="o_row" style="display: flex;">
-                                <label for="user_ids" string="Thêm người sử dụng"/>
-                            </div>
-                            <div >
-                                <field name="domain" invisible="1"/>
-                                <field name="user_ids" domain="domain" context="{'id':id}">
-                                    <kanban create="false" delete="false">
-                                        <templates>
-                                            <t t-name="kanban-box">
-                                                <div t-attf-class="oe_kanban_content oe_kanban_global_click">
-                                                    <div class="o_kanban_record_bottom" style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                                        <div class="o_kanban_record_bottom_right">
-                                                            <field name="image_1920" widget="image" class="oe_avatar avatar-hover" />
+                                                                </div>
+                                                                <div class="delete-button text-end" style="margin-left: 10px;">
+                                                                    <a type="delete" name="delete_button_user_ids" class="fa fa-trash"/>
+                                                                </div>
+                                                            </div>
+
                                                         </div>
-                                                        <div class="o_kanban_record_bottom_left" style="width: 360px; height: 80px; display: flex; flex-direction: column;margin-left: 10px;">
-                                                            <field name="name" string="Name : " style="margin-bottom: 5px; margin-top: 5px; font-weight:bold"></field>
-                                                            <field name="ma_dinh_danh" string="ID : " style="margin-bottom: 5px;"></field>
-                                                            <field name="ref" string="Mã thẻ : " style="margin-bottom: 5px;"></field>
-
-                                                        </div>
-
-                                                        <div class="delete-button text-end">
-                                                            <a type="object" name="delete_button_user_ids" class="fa fa-trash"/>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </t>
-                                        </templates>
-                                    </kanban>
-                                </field>
+                                                    </t>
+                                                </templates>
+                                            </kanban>
+                                        </field>
+                                    </div>
+                                </group>
                             </div>
                         </div>
+
                     </page>
                 </xpath>
-
 
                 <xpath expr="//form/sheet/notebook/page[@name='general_information']" position="after">
                     <page string="Hồ sơ xe" name="recordxe">
                         <div style="display:flex; align-items: flex-start;">
                             <sheet>
-
                                 <group >
                                     <field name="image_1920" string="Ảnh trước xe" widget="image" class="image-zoom-hover " options="{'zoom': true}" style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;"/>
                                 </group>
-                                <group >
+                                <group>
                                     <field name="image_1920_sau_xe" string="Ảnh sau xe" widget="image" class="image-zoom-hover" options="{'zoom': true}" style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;"/>
                                 </group>
                             </sheet>
                             <sheet>
-                                <group >
+                                <group>
                                     <field name="image_1920_bien_so" widget="image" class="image-zoom-hover oe-avatar" options="{'zoom': true}" style="max-width: 200px; max-height: 200px; float: left; margin-right: 10px;" />
                                 </group>
                                 <group >
@@ -160,14 +166,14 @@
 
                 <xpath expr="//form/sheet/notebook/page[@name='recordxe']" position="after">
                     <page name="inout_history" string="Lịch sử RA/VÀO">
-                        <field name="move_history_ids">
-                            <tree create="0" edit="0">
+                        <field name="move_history_ids" class="format-fie">
+                            <tree create="0" edit="0" default_order="create_date desc">
                                 <field name="create_date"></field>
-                                <field name="picking_code"></field>
+                                <field name="product_id"></field>
+                                <field name="image_1920_xe" widget="image"></field>
+                                <field name="port"></field>
                                 <field name="contact_id"></field>
-                                <field name="product_id" widget='image'></field>
-                                <field name="bien_so_realtime" widget='image'></field>
-                                <field name="location_id"></field>
+                                <field name="picking_code" widget="badge" decoration-muted="picking_code == 'outgoing'" decoration-success="picking_code == 'incoming'" />
                             </tree>
                         </field>
                     </page>
@@ -176,18 +182,21 @@
 
                 <xpath expr="//form/sheet/notebook/page[@name='inout_history']" position="after">
                     <page name="manager_info" string="Thông tin quản lý">
-                        <group>
+                        <sheet>
                             <group>
-                                <field name="default_code" />
-                                <field name="barcode" string="Mật khẩu" password="true"></field>
+                                <group>
+                                    <field name="default_code" />
+                                    <field name="barcode" string="Mật khẩu" password="true"></field>
+                                </group>
                             </group>
-                        </group>
+                        </sheet>
                     </page>
                 </xpath>
                 <xpath expr="//form/sheet/div[@class='oe_title']" position="after">
-                    <field name='check_doi_the' invisible='1'/>
+                    <label for="check_doi_the" string="Xe trong bãi" style="font-size:20px; padding-right:5px"/>
+                    <field name='check_doi_the' invisible='0' add-label="Xe trong bãi" style="font-size:20px; padding:10px"/>
                     <div id="registered_2">
-                        <widget name="web_ribbon" title="CHƯA CÓ THẺ" bg_color="bg-success" invisible="check_doi_the == 0" />
+                        <widget name="web_ribbon" title="XE TRONG BÃI" bg_color="bg-success" invisible="check_doi_the == 0" />
                     </div>
                     <separator string="Thông tin xe"/>
 
@@ -199,7 +208,7 @@
                                 <div class="o_row" style="display: flex;">
                                     <field name="html_color" class="oe_inline" string="" widget="color" />
                                     <span>
-                                        <field name="color_id" />
+                                        <field name="color_id" widget="many2one" options="{'no_create':True, 'no_create_edit':True, 'no_open': True}" />
                                     </span>
                                 </div>
                             </group>
@@ -259,8 +268,6 @@
 
         </xpath>
     </field>
-
-
 </record>
 
 </data>
