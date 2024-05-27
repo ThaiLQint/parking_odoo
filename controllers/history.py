@@ -23,29 +23,33 @@ class History(http.Controller):
 
     @http.route('/api/history/getbyid', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def getById(self, **kw):
+        _logger.info(kw["id"])
         moveHistory = self._find_by_key("stock.move.line", "id", kw["id"])
         if not moveHistory:
             return json.dumps({"code": 400, "message": "Lịch sử di chuyển không tìm thấy"})
         partner = moveHistory.contact_id
-        product = moveHistory.contact_id
+        product = moveHistory.product_id
         return json.dumps({
             "nameNg": partner.name,
             "nameXe": product.name,
             "tidNg": partner.ref[8:],
-            "tidXe": product.default[8:],
+            "tidXe": product.default_code[8:],
             "typeXe": product.categ_id.complete_name,
             "imgXe": product.image_1920.decode(),
+            "imgNg": partner.image_1920.decode(),
             "imgPath1": moveHistory.image_1920_camera_truoc.decode(),
             "imgPath2": moveHistory.image_1920_camera_sau.decode(),
             "imgBienSo": product.image_1920_bien_so.decode(),
             "createDateTime": self._changeDate(moveHistory.create_date),
+            "pickingCode": product.picking_code,
         })
 
     def _changeDate(self, date_in):
         user_tz = pytz.timezone(str(http.request.env.user.tz or pytz.utc))
+        _logger.info(date_in)
         # Convert the date to a Python `datetime` object
         python_date = date_in.strptime(
-            str(date_in), "%Y-%m-%d %H:%M:%S")
+            str(date_in), "%Y-%m-%d %H:%M:%S.%f")
         timezone = pytz.utc.localize(python_date).astimezone(user_tz)
         # if (timezone.date() == today):
 
@@ -60,11 +64,12 @@ class History(http.Controller):
         port = kw["port"]
         picking_code = "outgoing"
         if product:
-            if not self._defferentTime(product.write_date): # timer chờ 5s
+            if not self._defferentTime(product.write_date):  # timer chờ 5s
                 return json.dumps({"code": 400, "message": "Chờ 5s"})
             product.write({"write_date": datetime.now()})
 
-            if product.picking_code == "outgoing" and port == "Cổng Vào": # Nếu phát hiện thẻ xe trong database và đã ra bãi
+            # Nếu phát hiện thẻ xe trong database và đã ra bãi
+            if product.picking_code == "outgoing" and port == "Cổng Vào":
                 picking_code = "incoming"
                 checkProduct = True
             elif product.picking_code == "incoming" and port == "Cổng Ra":
@@ -78,7 +83,8 @@ class History(http.Controller):
                     message = "không hợp lệ!!"
                 return json.dumps({"code": 400, "message": "Xe " + message})
 
-            result = self._handle_product_found(tid) # Lưu cặp giá trị thẻ <key, value>
+            # Lưu cặp giá trị thẻ <key, value>
+            result = self._handle_product_found(tid)
             if picking_code == "outgoing":
                 return result
         if picking_code == "outgoing":
@@ -111,11 +117,12 @@ class History(http.Controller):
                     else:
                         message = "không hợp lệ!!"
                     return json.dumps({"code": 400, "message": "Xe " + message})
-        
+
         if checkProduct:  # Xe vào + thẻ người thẻ xe lối ra hợp lệ
             my_dict.pop(tid, "None")
             product.write({"picking_code": picking_code})
-            imgTruoc, imgSau = self._imgTruocSauCamera(kw["imgTruoc"], kw["imgSau"])
+            imgTruoc, imgSau = self._imgTruocSauCamera(
+                kw["imgTruoc"], kw["imgSau"])
             id = 0
             if picking_code == "incoming":
                 id = product.contact_id.id
@@ -136,13 +143,18 @@ class History(http.Controller):
             return json.dumps({"code": 400, "message": "Xe không hợp lệ!!"})
 
     def _imgTruocSauCamera(self, imgTruoc, imgSau):
-        file = imgTruoc
-        img_attachment = file.read()
-        imgTruoc = base64.b64encode(img_attachment)
-
-        file = imgSau
-        img_attachment = file.read()
-        imgSau = base64.b64encode(img_attachment)
+        if imgTruoc != "None":
+            file = imgTruoc
+            img_attachment = file.read()
+            imgTruoc = base64.b64encode(img_attachment)
+        else:
+            imgTruoc = None
+        if imgSau != "None":
+            file = imgSau
+            img_attachment = file.read()
+            imgSau = base64.b64encode(img_attachment)
+        else:
+            imgSau = None
         return imgTruoc, imgSau
 
     def _find_by_key(self, module, key, value):
