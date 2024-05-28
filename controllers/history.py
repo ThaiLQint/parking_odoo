@@ -23,7 +23,6 @@ class History(http.Controller):
 
     @http.route('/api/history/getbyid', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def getById(self, **kw):
-        _logger.info(kw["id"])
         moveHistory = self._find_by_key("stock.move.line", "id", kw["id"])
         if not moveHistory:
             return json.dumps({"code": 400, "message": "Lịch sử di chuyển không tìm thấy"})
@@ -64,12 +63,11 @@ class History(http.Controller):
         port = kw["port"]
         picking_code = "outgoing"
         if product:
-            if not self._defferentTime(product.write_date):  # timer chờ 5s
+            if not self._defferentTime(product.write_date): # timer chờ 5s
                 return json.dumps({"code": 400, "message": "Chờ 5s"})
             product.write({"write_date": datetime.now()})
 
-            # Nếu phát hiện thẻ xe trong database và đã ra bãi
-            if product.picking_code == "outgoing" and port == "Cổng Vào":
+            if product.picking_code == "outgoing" and port == "Cổng Vào": # Nếu phát hiện thẻ xe trong database và đã ra bãi
                 picking_code = "incoming"
                 checkProduct = True
             elif product.picking_code == "incoming" and port == "Cổng Ra":
@@ -83,8 +81,7 @@ class History(http.Controller):
                     message = "không hợp lệ!!"
                 return json.dumps({"code": 400, "message": "Xe " + message})
 
-            # Lưu cặp giá trị thẻ <key, value>
-            result = self._handle_product_found(tid)
+            result = self._handle_product_found(tid) # Lưu cặp giá trị thẻ <key, value>
             if picking_code == "outgoing":
                 return result
         if picking_code == "outgoing":

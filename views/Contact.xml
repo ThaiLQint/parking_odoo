@@ -241,14 +241,15 @@
                             <kanban create="false" delete="false">
                                 <templates>
                                     <t t-name="kanban-box">
+                                        <field name="picking_code" invisible="1" />
                                         <group
-                                            t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border"
+                                            invisible="picking_code == 'outgoing'"
+                                            t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-success"
                                             style="width: 80%; height: 100%;">
                                             <!-- Hiển thị avatar_128 và biển số xe sau của mỗi sản
                                             phẩm trong một thẻ card riêng biệt -->
                                             <div class="row row-cols-1 text-center">
                                                 <div class="col mt-2">
-                                                    <field name="picking_code" invisible="1" />
                                                     <div class="o_kanban_record_bottom_left">
                                                         <field name="image_1920" widget="image"
                                                             style="max-width: 100% ; height: 100%" />
@@ -256,14 +257,40 @@
                                                 </div>
 
                                                 <div class="col mt-3 fs-3">
-                                                    <div class="o_kanban_record_bottom_right">
+                                                    <div
+                                                        class="o_kanban_record_bottom_right fs-3 fw-bold">
                                                         <field name="name"
                                                             decoration-success="picking_code == 'outgoing'"
-                                                            decoration-muted="picking_code == 'incoming'" />
+                                                            decoration-white="picking_code == 'incoming'" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </group>
+                                        <group
+                                            invisible="picking_code == 'incoming'"
+                                            t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-secondary"
+                                            style="width: 80%; height: 100%;">
+                                            <!-- Hiển thị avatar_128 và biển số xe sau của mỗi sản
+                                        phẩm trong một thẻ card riêng biệt -->
+                                            <div class="row row-cols-1 text-center">
+                                                <div class="col mt-2">
+                                                    <div class="o_kanban_record_bottom_left">
+                                                        <field name="image_1920" widget="image"
+                                                            style="max-width: 100% ; height: 100%" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col mt-3 fs-3">
+                                                    <div
+                                                        class="o_kanban_record_bottom_right fs-3 fw-bold">
+                                                        <field name="name"
+                                                            decoration-success="picking_code == 'outgoing'"
+                                                            decoration-white="picking_code == 'incoming'" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </group>
+
                                     </t>
                                 </templates>
                             </kanban>
