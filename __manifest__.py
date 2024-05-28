@@ -25,7 +25,7 @@
     "application": True,
     # always loaded
     'data': [
-        "views/Contact_view.xml",
+        "views/Contact.xml",
         "views/ProductTemplate.xml",
         "views/StockLocation.xml",
         "views/StockMoveLine.xml",
