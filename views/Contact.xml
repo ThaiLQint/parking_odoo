@@ -178,7 +178,7 @@
                     <div>
                         <h2>Sản phẩm chính chủ</h2>
                         <field name="product_ids_private">
-                            <kanban create="false" delete="false">
+                            <kanban offset="0" limit="4" total="50" create="false" delete="false">
                                 <templates>
                                     <t t-name="kanban-box">
                                         <field name="picking_code" invisible="1" />
@@ -238,7 +238,7 @@
                     <div>
                         <h2>Sản phẩm dùng chung</h2>
                         <field name="product_ids_public">
-                            <kanban create="false" delete="false">
+                            <kanban offset="0" limit="4" total="50" create="false" delete="false">
                                 <templates>
                                     <t t-name="kanban-box">
                                         <field name="picking_code" invisible="1" />
