@@ -30,7 +30,7 @@ class Contact(models.Model):
              "- Delivery Address: Preferred address for all deliveries. Selected by default when you deliver an order that belongs to this company.\n"
              "- Other: Other address for the company (e.g. subsidiary, ...)")
     display_name = fields.Char(string="Họ tên", required=False)
-    name = fields.Char(string="Họ tên")
+    name = fields.Char(string="Họ tên ")
     vat = fields.Char(string="Số CMND/CCCD", required=True)
     phone = fields.Char(string="Số điện thoại", required=True)  
     barcode = fields.Char(string="Mật khẩu",readonly=False)
@@ -58,7 +58,6 @@ class Contact(models.Model):
     string='Danh sách liên hệ',
     domain="[('id', '!=', id)]",
     )
-
     
     vehicle = fields.Many2one("res.partner", string="Vehicle")
 
@@ -74,21 +73,17 @@ class Contact(models.Model):
     bien_so_realtime = fields.Char(string="Biển số xe")
     car_status = fields.Char(string="Trạng Thái")
     
-    
-
-    # def delete_button(self):
-    #     # seft.partner_id.partner_ids = [(3, seft.id)]
-    #     _logger.info(self.product_ids_public)
-    #     _logger.info(self.product_ids_private)
-
-
+    def delete_button(seft):
+        seft.partner_id.partner_ids = [(3, seft.id)]
+        _logger.info(seft.product_ids_public)
         
+
     def delete_button_user_ids(self):
         # Lấy id_product từ context
-        # _logger.info(self.env.context)
-        # id_product = self.env.context.get('params')['id']
         _logger.info(self.env.context['id'])
         id_product = self.env.context['id']
+
+        # id_product = self.env.context.get('id')
         _logger.info(f"Product ID from context: {id_product}")
 
         if id_product:

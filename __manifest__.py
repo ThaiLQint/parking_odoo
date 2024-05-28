@@ -25,15 +25,14 @@
     "application": True,
     # always loaded
     'data': [
-        "views/Contact.xml",
+        "views/Contact_view.xml",
         "views/ProductTemplate.xml",
         "views/StockLocation.xml",
         "views/StockMoveLine.xml",
         "views/product_color_main.xml",
-        # "views/add_button_view.xml",
-        "views/color_config_settings_views.xml",
-        "sercurity/ir.model.access.csv",
-        
+        "views/nsp_menu_setting.xml",     
+        "views/hiden_view.xml",     
+        "security/ir.model.access.csv",     
     ],
     'qweb': [],
     'installable': True,
@@ -43,7 +42,6 @@
         'web.assets_backend':
         [
             'parking_odoo/static/src/**/*',
-            
         ],
     },
 }

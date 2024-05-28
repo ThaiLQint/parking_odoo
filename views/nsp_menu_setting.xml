@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Define the actions -->
+        <record id="action_contact_list" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+
+        <record id="action_vehicle" model="ir.actions.act_window">
+            <field name="name">Vehicle</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+
+        <record id="app_nsp_action" model="ir.actions.act_window">
+            <field name="name">NSP Service</field>
+            <field name="res_model">stock.picking.type</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <!-- Define the menu items -->
+        <menuitem id="nsp_menu_root" name="NSP" sequence="15" action="app_nsp_action"/>
+
+        <menuitem id="menu_contact" name="Contact" parent="nsp_menu_root" sequence="1" action="action_contact_list"/>
+
+        <menuitem id="menu_vehicle" name="Vehicle" parent="nsp_menu_root" sequence="5" action="action_vehicle"/>
+
+        <menuitem id="menu_nsp_config" name="Configuration" parent="nsp_menu_root" sequence="100"/>
+
+        <record id="color_setting_action" model="ir.actions.act_window">
+            <field name="name">Color</field>
+            <field name="res_model">product.color.main</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+
+        <menuitem id="parking_config_settings_menu" 
+        name="Color" 
+        parent="menu_nsp_config"
+        sequence="1" action="color_setting_action"/>
+
+        <record id="stock_move_action" model="ir.actions.act_window">
+            <field name="name">Moves History</field>
+            <field name="res_model">stock.move.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+        </record>
+        <menuitem id="stock_move_setting_menu" name="Moves History" 
+        parent="menu_nsp_config" 
+        sequence="10" action="stock_move_action" groups="base.group_system" />
+
+    </data>
+</odoo>

@@ -227,19 +227,5 @@ class Product_template(models.Model):
             return "LỖI: KHÔNG THỂ TẠO UUID DO BỊ ĐÃ TỒN TẠI [1" + hex_arr[1:24]+"]!!"
         message = "ghi epc|"+"1" + hex_arr[1:24] + "|"+hex_arr[24:]
         return message
-# ===============================
+# ==============================
 
-class ProductTable(models.Model):
-    _name = 'product_table_block_description'
-    product_table_block_id = fields.Many2one(
-        'product.template', string="Product FK block title ID")
-    password_card = fields.Char(string="Mật khẩu", required=True)
-    product_table_block_description = fields.Text(string="Mã thẻ xe")
-
-    sequence = fields.Integer(string="Sequence", index=True)
-
-
-class ProductTableView(models.Model):
-    _inherit = "product.template"
-    product_template_id = fields.One2many(
-        'product_table_block_description', 'product_table_block_id', string="Product Block ID")
