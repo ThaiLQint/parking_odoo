@@ -162,10 +162,12 @@
                     <div>
                         <h2>Sản phẩm chính chủ</h2>
                         <field name="product_ids_private">
-                            <kanban create="false" delete="false">
+                            <kanban offset="0" limit="4" total="50" create="false" delete="false">
                                 <templates>
                                     <t t-name="kanban-box">
-                                        <group t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border" style="width: 80%; height: 100%;">
+                                        <field name="picking_code" invisible="1" />
+                                        <group t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border
+                                        t-att-colors" style="width: 80%; height: 100%;">
                                             <!-- Hiển thị avatar_128 và biển số xe sau của mỗi sản phẩm trong một thẻ card riêng biệt -->
                                             <div class="row row-cols-1 text-center">
                                                 <div class="col mt-2">
@@ -190,7 +192,7 @@
                     <div>
                         <h2>Sản phẩm dùng chung</h2>
                         <field name="product_ids_public">
-                            <kanban create="false" delete="false">
+                            <kanban offset="0" limit="4" total="50" create="false" delete="false">
                                 <templates>
                                     <t t-name="kanban-box">
                                         <group t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border" style="width: 80%; height: 100%;">
