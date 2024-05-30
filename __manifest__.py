@@ -25,6 +25,7 @@
     "application": True,
     # always loaded
     'data': [
+        "views/AlerTag.xml",
         "views/Contact.xml",
         "views/ProductTemplate.xml",
         "views/StockLocation.xml",
@@ -37,6 +38,7 @@
     'qweb': [],
     'installable': True,
     'application': True,
+    
     'auto_install': True,
     'assets': {
         'web.assets_backend':

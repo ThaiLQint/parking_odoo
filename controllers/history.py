@@ -1,33 +1,143 @@
-from odoo import http, modules
+import requests
+from odoo import http, _, fields
 import pytz
 import logging
 import base64
 import json
-import math
-
+from odoo.exceptions import UserError
 from datetime import datetime, timedelta
-from odoo.http import request
+from odoo.http import request, Response
 import threading
+import time
 _logger = logging.getLogger(__name__)
-my_dict = {}
+
 
 class History(http.Controller):
+    def __init__(self):
+        self.my_dict = {}  # Khởi tạo dictionary rỗng
+        url = 'http://localhost:8069'
+        db = 'nsp.t4tek.tk'
+        username = 'NhanDT'
+        password = '123456aA@'
 
-    # kw["tid"]
-    # kw["isIn"]
+        session_url = f'{url}/web/session/authenticate'
+        data = {
+            'params': {
+                'db': db,
+                'login': username,
+                'password': password,
+            }
+        }
+        session_response = requests.post(session_url, json=data)
+        session_data = session_response.json()
+        if session_data.get('result') and session_response.cookies.get('session_id'):
+            self.session_id = session_response.cookies['session_id']
+        else:
+            _logger.error(
+                f'Error: Failed to authenticate - {session_data.get("error")}')
+            return None
+        threaded = threading.Thread(
+            target=self.threadCheckAlert
+        )
+        threaded.start()
+
+    def _defferentTime(self, datetime, second):
+        difference = datetime.now() - datetime
+        # Lấy tổng số giây
+        total_seconds = difference.total_seconds()
+        if (total_seconds < second):
+            return False
+        return True
+
+    def run_Webhook(self, id):
+        try:
+            # 'send and forget' strategy, and avoid locking the user if the webhook
+            # is slow or non-functional (we still allow for a 1s timeout so that
+            # if we get a proper error response code like 400, 404 or 500 we can log)
+            json_values = {
+                'params': {
+                    'productId': id,
+                    'tag': 'Người',
+                    'code': 'parking',
+                    'codeAlert': 1
+                }
+            }
+            response = requests.post("http://localhost:8069/api/history/alert/tag", json=json_values, headers={
+                                     'Content-Type': 'application/json',
+                                     'Cookie': f"session_id={self.session_id}",
+                                     }, timeout=0.1)
+            response.raise_for_status()
+        except requests.exceptions.ReadTimeout:
+            _logger.warning("Webhook call timed out after 1s - it may or may not have failed. "
+                            "If this happens often, it may be a sign that the system you're "
+                            "trying to reach is slow or non-functional.")
+        except requests.exceptions.RequestException as e:
+            _logger.warning("Webhook call failed: %s", e)
+        except Exception as e:  # noqa: BLE001
+            raise UserError(
+                _("Wow, your webhook call failed with a really unusual error: %s", e)) from e
+
+    def threadCheckAlert(self):
+        while True:
+            for key in self.my_dict:
+                value = self.my_dict[key]
+                if self._defferentTime(value["datetime"], 2):
+                    try:
+                        self.run_Webhook(value["id"])
+                    except Exception as e:
+                        _logger.error(str(e))
+                    # self.my_dict.pop(key)
+                    if not self.my_dict:
+                        break
+            time.sleep(1)
+
     @http.route('/api/history/validate', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def validate(self, **kw):
         if kw["code"] == "parking":
             return self._parkingHistoryHandle(kw)
 
+    @http.route('/api/history/alert/tag', type='json', auth='public', methods=['POST'])
+    def alert_tag(self, **kw):
+        if kw["code"] == "parking":
+            return self.create_alert_tag(kw)
+
+    def create_alert_tag(self, kw):
+        code = kw["codeAlert"]
+        if code == 1:
+            name = "Thiếu thẻ người"
+        if code == 2:
+            name = "Sai mật khẩu thẻ " + kw["tag"]
+        request.env["alert.tag"].sudo().create({
+            "code": code,
+            "name": name,
+            "product_id": kw["productId"]
+        })
+        return Response(json.dumps({"message": "Tạo thành công"}), content_type='application/json;charset=utf-8', status=201)
+
+    @http.route('/api/history/alert/product', type='http', auth='public', methods=['GET'])
+    def alert_get_product(self, **kw):
+        if kw["code"] == "parking":
+            return self.create_alert_tag(kw)
+
     @http.route('/api/history/getbyid', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def getById(self, **kw):
         moveHistory = self._find_by_key("stock.move.line", "id", kw["id"])
         if not moveHistory:
-            return json.dumps({"code": 400, "message": "Lịch sử di chuyển không tìm thấy"})
+            return Response(json.dumps({"message": "Lịch sử di chuyển không tìm thấy"}), content_type='application/json;charset=utf-8', status=400)
         partner = moveHistory.contact_id
         product = moveHistory.product_id
-        return json.dumps({
+
+        if product.image_1920 == False:
+            product.image_1920 = "None"
+        if partner.image_1920 == False:
+            product.image_1920 = "None"
+        if product.image_1920_bien_so == False:
+            product.image_1920_bien_so = "None"
+        if moveHistory.image_1920_camera_truoc == False:
+            moveHistory.image_1920_camera_truoc = "None"
+        if moveHistory.image_1920_camera_sau == False:
+            moveHistory.image_1920_camera_sau = "None"
+        return Response(json.dumps({
             "nameNg": partner.name,
             "nameXe": product.name,
             "tidNg": partner.ref[8:],
@@ -40,7 +150,7 @@ class History(http.Controller):
             "imgBienSo": product.image_1920_bien_so.decode(),
             "createDateTime": self._changeDate(moveHistory.create_date),
             "pickingCode": product.picking_code,
-        })
+        }), content_type='application/json;charset=utf-8', status=200)
 
     def _changeDate(self, date_in):
         user_tz = pytz.timezone(str(http.request.env.user.tz or pytz.utc))
@@ -62,11 +172,11 @@ class History(http.Controller):
         port = kw["port"]
         picking_code = "outgoing"
         if product:
-            if not self._defferentTime(product.write_date): # timer chờ 5s
-                return json.dumps({"code": 400, "message": "Chờ 5s"})
+            if not self._defferentTime(product.write_date, 5):  # timer chờ 5s
+                return Response(json.dumps({"message": "Chờ 5s"}), content_type='application/json;charset=utf-8', status=400)
             product.write({"write_date": datetime.now()})
-
-            if product.picking_code == "outgoing" and port == "Cổng Vào": # Nếu phát hiện thẻ xe trong database và đã ra bãi
+            # Nếu phát hiện thẻ xe trong database và đã ra bãi
+            if product.picking_code == "outgoing" and port == "Cổng Vào":
                 picking_code = "incoming"
                 checkProduct = True
             elif product.picking_code == "incoming" and port == "Cổng Ra":
@@ -78,17 +188,17 @@ class History(http.Controller):
                     message = "đã VÀO"
                 else:
                     message = "không hợp lệ!!"
-                return json.dumps({"code": 400, "message": "Xe " + message})
 
-            result = self._handle_product_found(tid) # Lưu cặp giá trị thẻ <key, value>
+                return Response(json.dumps({"message": "Xe " + message}), content_type='application/json;charset=utf-8', status=400)
+            # Lưu cặp giá trị thẻ <key, value>
+            result = self._handle_product_found(tid, product.id)
             if picking_code == "outgoing":
                 return result
         if picking_code == "outgoing":
             # Tìm kiếm đối tác theo ref
             partner = self._find_by_key("res.partner", "ref", tid)
             if not partner:
-                return json.dumps({"code": 400, "message": "Không tìm thấy thẻ"})
-
+                return Response(json.dumps({"message": "Không tìm thấy thẻ"}), content_type='application/json;charset=utf-8', status=400)
             # Kiểm tra danh sách sản phẩm riêng tư
             tid = self._check_product_list(partner.product_ids_private)
             if tid != "None":
@@ -101,7 +211,7 @@ class History(http.Controller):
 
             if checkProduct:
                 product = self._find_by_key(
-                    "product.template", "default_code", my_dict[tid])
+                    "product.template", "default_code", self.my_dict[tid]['tid'])
 
                 if product.picking_code == "incoming" and port == "Cổng Ra":
                     picking_code = "outgoing"
@@ -112,10 +222,11 @@ class History(http.Controller):
                         message = "đã VÀO"
                     else:
                         message = "không hợp lệ!!"
-                    return json.dumps({"code": 400, "message": "Xe " + message})
+
+                    return Response(json.dumps({"message": "Xe " + message}), content_type='application/json;charset=utf-8', status=400)
 
         if checkProduct:  # Xe vào + thẻ người thẻ xe lối ra hợp lệ
-            my_dict.pop(tid, "None")
+            self.my_dict.pop(tid, "None")
             product.write({"picking_code": picking_code})
             imgTruoc, imgSau = self._imgTruocSauCamera(
                 kw["imgTruoc"], kw["imgSau"])
@@ -127,16 +238,18 @@ class History(http.Controller):
 
             idHistory = self._handle_history(
                 id, product.id, port, product.move_history_id["id"], picking_code, imgTruoc, imgSau)
-            product.write({"move_history_id": idHistory})
             if picking_code == "incoming":
                 message = "VÀO họp lệ"
+                check_in = True
             elif picking_code == "outgoing":
                 message = "RA họp lệ"
+                check_in = False
             else:
                 message = "không hợp lệ!!"
-            return json.dumps({"code": 200, "message": "Xe " + message})
+            product.write({"move_history_id": idHistory, "check_in": check_in})
+            return Response(json.dumps({"message": "Xe " + message}), content_type='application/json;charset=utf-8', status=200)
         else:
-            return json.dumps({"code": 400, "message": "Xe không hợp lệ!!"})
+            return Response(json.dumps({"message": "Xe không hợp lệ!!"}), content_type='application/json;charset=utf-8', status=400)
 
     def _imgTruocSauCamera(self, imgTruoc, imgSau):
         if imgTruoc != "None":
@@ -157,10 +270,12 @@ class History(http.Controller):
         """Tìm kiếm sản phẩm theo default_code."""
         return request.env[module].sudo().search([(key, '=', value)], limit=1)
 
-    def _handle_product_found(self, tid):
+    def _handle_product_found(self, tid, id):
         """Xử lý khi tìm thấy sản phẩm."""
-        my_dict.setdefault(tid, tid)
-        return json.dumps({"code": 200, "message": "Tìm thấy thẻ xe"})
+        self.my_dict.setdefault(
+            tid, {"tid": tid, "datetime": datetime.now(), 'id': id})
+
+        return Response(json.dumps({"message": "Tìm thấy thẻ xe"}), content_type='application/json;charset=utf-8', status=200)
 
     def _handle_history(self, idPartner, idProduct, port, move_history_id, picking_code, imgTruoc, imgSau):
         """Tìm kiếm sản phẩm theo default_code."""
@@ -179,19 +294,19 @@ class History(http.Controller):
             'image_1920_camera_sau': imgSau,
             'image_1920_camera_truoc': imgTruoc,
         })
+        result = request.env['stock.move.line'].sudo().search(
+            [('product_id', '=', idProduct), ('create_date', '=', fields.date.today())], limit=10, order="create_date desc")
+        _logger.info(result)
+
+        if len(result) > 9:
+            pass
+        for record in result:
+            _logger.info(record['create_date'])
         return move_history.id
 
     def _check_product_list(self, product_list):
         """Kiểm tra danh sách sản phẩm."""
         for product in product_list:
-            if my_dict.get(product["default_code"], "None") != "None":
+            if self.my_dict.get(product["default_code"], "None") != "None":
                 return product["default_code"]
         return "None"
-
-    def _defferentTime(self, datetime):
-        difference = datetime.now() - datetime
-        # Lấy tổng số giây
-        total_seconds = difference.total_seconds()
-        if (total_seconds < 5):
-            return False
-        return True

@@ -34,7 +34,7 @@ class stock_move_line(models.Model):
     picking_code = fields.Selection(
         related='picking_id.picking_type_id.code', store=True, readonly=False)
     port  = fields.Char(string="Cổng")
-    bien_so_realtime = fields.Char(string="Biển số nhận diện được")
+    bien_so_realtime = fields.Char(string="Gửi webhook")
     move_history_id_before = fields.Many2one(
         'stock.move.line', string="Trạng thái trước đó")
     
@@ -83,7 +83,6 @@ class state_picking_type(models.Model):
     _inherit = 'stock.picking.type'
     code = fields.Selection([('incoming', 'Vào bãi'), ('outgoing', 'Ra bãi'), (
         'internal', "Internal Transfer")], string="Ra/vào bãi", default="outgoing")
-
 
 class state_picking(models.Model):
     _inherit = 'stock.picking'
