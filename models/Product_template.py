@@ -40,8 +40,8 @@ class Product_template(models.Model):
     ]
 
     name = fields.Char(string="Biển số")
-    location_id = fields.Many2one(
-        "stock.location", string="Vị trí", compute="_compute_location_id")
+    # location_id = fields.Many2one(
+    #     "stock.location", string="Vị trí", compute="_compute_location_id")
     contact_id = fields.Many2one(
         'res.partner', string='Chủ sở hữu', required=True)
     barcode = fields.Char(readonly=False)
@@ -64,6 +64,7 @@ class Product_template(models.Model):
     so_khung = fields.Char(string="Số khung", store=True)
 
     check_doi_the = fields.Boolean(string="Đã đổi thẻ", default=False)
+    check_in = fields.Boolean(string="Đã vào bãi", default=False)
 
     avatar_128 = fields.Image(
         string="avatar 128", compute='_compute_avatar_128', max_width=128, max_height=128)
@@ -99,7 +100,6 @@ class Product_template(models.Model):
     picking_code = fields.Selection(
         related='picking_id.picking_type_id.code', store=True, readonly=False, default="outgoing")
     # Hàm lọc của contact_id va partner_ids:
-
     def _compute_domain(self):
         for rec in self:  # Vòng lặp này duyệt qua tất cả các bản ghi
 
@@ -154,15 +154,15 @@ class Product_template(models.Model):
             product.nbr_moves_in = res_incoming.get(product.id, 0)
             product.nbr_moves_out = res_outgoing.get(product.id, 0)
 
-    @api.depends("location_id")
-    def _compute_location_id(self):
-        for record in self:
-            location = record.location_id.search(
-                [('product_id', '=', record.id)])
-            if not location:
-                record.location_id = None
-            else:
-                record.location_id = location.id
+    # @api.depends("location_id")
+    # def _compute_location_id(self):
+    #     for record in self:
+    #         location = record.location_id.search(
+    #             [('product_id', '=', record.id)])
+    #         if not location:
+    #             record.location_id = None
+    #         else:
+    #             record.location_id = location.id
 
     @api.model
     def create(self, vals):

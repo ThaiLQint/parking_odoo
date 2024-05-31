@@ -1,7 +1,5 @@
 from odoo import api, fields, models, http, exceptions
 import uuid
-from odoo.tools import re
-from odoo.exceptions import UserError
 
 class  ProductColor2(models.Model):
     _name = 'product.color.main'

@@ -54,6 +54,12 @@
             <field name="inherit_id" ref="product.product_template_only_form_view" />
 
             <field name="arch" type="xml">
+                <xpath expr="//sheet/field[@name='product_variant_count']" position="before">
+                    <field name="picking_code" invisible='0' />
+                    <widget name="web_ribbon" title="ĐÃ VÀO BÃI" bg_color="bg-success"
+                        invisible="picking_code != 'incoming'" />
+                </xpath>
+
                 <xpath expr="//div[@class='oe_chatter']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
@@ -79,7 +85,7 @@
                 </xpath>
                 <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
                     <field name="image_1920" widget="image" class="oe_avatar"
-                        options="{'zoom': true}" />
+                        options="{'size': [250, 250]}" />
                 </xpath>
 
                 <!-- <xpath expr="//page[@name='invoicing']" position="replace"></xpath> -->
@@ -198,7 +204,8 @@
                 <xpath expr="//form/sheet/notebook/page[@name='recordxe']" position="after">
                     <page name="inout_history" string="Lịch sử RA/VÀO">
                         <field name="move_history_ids" class="format-fie">
-                            <tree create="0" edit="0" default_order="create_date desc">
+                            <tree create="0" edit="0" default_order="create_date desc" offset="0"
+                                limit="10">
                                 <field name="create_date"></field>
                                 <field name="product_id"></field>
                                 <field name="image_1920_xe" widget="image"></field>
@@ -226,16 +233,8 @@
                     </page>
                 </xpath>
                 <xpath expr="//form/sheet/div[@class='oe_title']" position="after">
-                    <label for="check_doi_the" string="Xe trong bãi"
-                        style="font-size:20px; padding-right:5px" />
-                    <field name='check_doi_the' invisible='0' add-label="Xe trong bãi"
-                        style="font-size:20px; padding:10px" />
-                    <div id="registered_2">
-                        <widget name="web_ribbon" title="XE TRONG BÃI" bg_color="bg-success"
-                            invisible="check_doi_the == 0" />
-                    </div>
-                    <separator string="Thông tin xe" />
 
+                    <separator string="Thông tin xe" />
                     <div class="o_row" style="display: flex; align-items: flex-start;">
                         <div class="o_col-12" style="flex: 1;">
                             <group>

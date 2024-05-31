@@ -56,8 +56,8 @@
                         <group>
                             <!-- 'no_open': True -->
                             <field name="picking_code" widget="badge"
-                                decoration-muted="picking_code == 'incoming'"
-                                decoration-success="picking_code == 'outgoing'" />
+                                decoration-muted="picking_code == 'outgoing'"
+                                decoration-success="picking_code == 'incoming'" />
                             <field name="location_id" options="{'no_create': True}"
                                 modifiers="{&quot;required&quot;: true}" can_create="true"
                                 can_write="true" />
