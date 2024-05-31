@@ -65,6 +65,7 @@
                 <xpath expr="//field[@name='vat']" position="attributes">
                     <attribute name="string">Số CMND/CCCD</attribute>
                 </xpath>
+
                 <xpath expr="//field[@name='vat']" position="after">
                     <field name="phone" widget="phone" on_change="1"
                         modifiers="{&quot;required&quot;: true}" />
@@ -75,7 +76,9 @@
 
                 <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
                     <field name="image_1920" widget="capture_image" on_change="1"
-                        class="oe_avatar" options="{'no_auto_resize': True}" />
+                        class="oe_avatar"
+                        options="{'size': [250, 250]}"
+                    />
                 </xpath>
                 <!-- Image Avatar -->
                 <xpath expr="//form/sheet/group/group" position="after">

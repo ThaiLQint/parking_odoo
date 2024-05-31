@@ -54,6 +54,12 @@
             <field name="inherit_id" ref="product.product_template_only_form_view" />
 
             <field name="arch" type="xml">
+                <xpath expr="//sheet/field[@name='product_variant_count']" position="before">
+                    <field name="picking_code" invisible='0' />
+                    <widget name="web_ribbon" title="ĐÃ VÀO BÃI" bg_color="bg-success"
+                        invisible="picking_code != 'incoming'" />
+                </xpath>
+
                 <xpath expr="//div[@class='oe_chatter']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
@@ -79,7 +85,7 @@
                 </xpath>
                 <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
                     <field name="image_1920" widget="image" class="oe_avatar"
-                        options="{'zoom': true}" />
+                        options="{'size': [250, 250]}" />
                 </xpath>
 
                 <!-- <xpath expr="//page[@name='invoicing']" position="replace"></xpath> -->
@@ -227,9 +233,7 @@
                     </page>
                 </xpath>
                 <xpath expr="//form/sheet/div[@class='oe_title']" position="after">
-                    <field name="picking_code" invisible='1' />
-                    <widget name="web_ribbon" title="ĐÃ VÀO BÃI" bg_color="bg-success"
-                        invisible="picking_code != 'incoming'" />
+
                     <separator string="Thông tin xe" />
                     <div class="o_row" style="display: flex; align-items: flex-start;">
                         <div class="o_col-12" style="flex: 1;">

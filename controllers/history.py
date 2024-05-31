@@ -36,6 +36,8 @@ class History(http.Controller):
             _logger.error(
                 f'Error: Failed to authenticate - {session_data.get("error")}')
             return None
+
+        self.lock = threading.Lock()
         threaded = threading.Thread(
             target=self.threadCheckAlert
         )
@@ -81,12 +83,12 @@ class History(http.Controller):
         while True:
             for key in self.my_dict:
                 value = self.my_dict[key]
-                if self._defferentTime(value["datetime"], 2):
+                if self._defferentTime(value["datetime"], 4):
                     try:
                         self.run_Webhook(value["id"])
                     except Exception as e:
                         _logger.error(str(e))
-                    # self.my_dict.pop(key)
+                    self.my_dict.pop(key)
                     if not self.my_dict:
                         break
             time.sleep(1)
@@ -96,7 +98,16 @@ class History(http.Controller):
         if kw["code"] == "parking":
             return self._parkingHistoryHandle(kw)
 
-    @http.route('/api/history/alert/tag', type='json', auth='public', methods=['POST'])
+    @http.route('/api/history/test', type='http', auth='public', methods=['POST'], website=False, csrf=False)
+    def validate_test(self, **kw):
+        if kw["code"] == "parking":
+            a = ["1", "2", "3", "2000500C0FE1FCF5"]
+            for x in a:
+                kw["tid"] = x
+                self._parkingHistoryHandle(kw)
+        return "test Xong"
+
+    @http.route('/api/history/alert/tag', type='json', auth='public', methods=['POST'],  website=False, csrf=False)
     def alert_tag(self, **kw):
         if kw["code"] == "parking":
             return self.create_alert_tag(kw)
@@ -107,17 +118,33 @@ class History(http.Controller):
             name = "Thiếu thẻ người"
         if code == 2:
             name = "Sai mật khẩu thẻ " + kw["tag"]
-        request.env["alert.tag"].sudo().create({
+        result = request.env["alert.tag"].sudo().create({
             "code": code,
             "name": name,
             "product_id": kw["productId"]
         })
+        result.unlink()
         return Response(json.dumps({"message": "Tạo thành công"}), content_type='application/json;charset=utf-8', status=201)
 
-    @http.route('/api/history/alert/product', type='http', auth='public', methods=['GET'])
+    @http.route('/api/history/alert/product', type='http', auth='public', methods=['POST'],  website=False, csrf=False)
     def alert_get_product(self, **kw):
-        if kw["code"] == "parking":
-            return self.create_alert_tag(kw)
+        product = self._find_by_key('product.template', 'id', kw['productId'])
+        partner = product.contact_id
+        return Response(json.dumps({
+            "productId": product.id,
+            "nameNg": partner.name,
+            "nameXe": product.name,
+            "tidNg": partner.ref[8:],
+            "tidXe": product.default_code[8:],
+            "typeXe": product.categ_id.complete_name,
+            "imgXe": product.image_1920.decode(),
+            "imgNg": partner.image_1920.decode(),
+            "imgPath1": "None",
+            "imgPath2": "None",
+            "imgBienSo": product.image_1920_bien_so.decode(),
+            "createDateTime": "None",
+            "pickingCode": product.picking_code,
+        }), content_type='application/json;charset=utf-8', status=200)
 
     @http.route('/api/history/getbyid', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def getById(self, **kw):
@@ -134,10 +161,16 @@ class History(http.Controller):
         if product.image_1920_bien_so == False:
             product.image_1920_bien_so = "None"
         if moveHistory.image_1920_camera_truoc == False:
-            moveHistory.image_1920_camera_truoc = "None"
+            image_1920_camera_truoc = "None"
+        else:
+            image_1920_camera_truoc = moveHistory.image_1920_camera_truoc.decode()
+
         if moveHistory.image_1920_camera_sau == False:
-            moveHistory.image_1920_camera_sau = "None"
+            image_1920_camera_sau = "None"
+        else:
+            image_1920_camera_sau = moveHistory.image_1920_camera_sau.decode()
         return Response(json.dumps({
+            "productId": product.id,
             "nameNg": partner.name,
             "nameXe": product.name,
             "tidNg": partner.ref[8:],
@@ -145,8 +178,8 @@ class History(http.Controller):
             "typeXe": product.categ_id.complete_name,
             "imgXe": product.image_1920.decode(),
             "imgNg": partner.image_1920.decode(),
-            "imgPath1": moveHistory.image_1920_camera_truoc.decode(),
-            "imgPath2": moveHistory.image_1920_camera_sau.decode(),
+            "imgPath1": image_1920_camera_truoc,
+            "imgPath2": image_1920_camera_sau,
             "imgBienSo": product.image_1920_bien_so.decode(),
             "createDateTime": self._changeDate(moveHistory.create_date),
             "pickingCode": product.picking_code,
@@ -208,7 +241,6 @@ class History(http.Controller):
                 tid = self._check_product_list(partner.product_ids_public)
                 if tid != "None":
                     checkProduct = True
-
             if checkProduct:
                 product = self._find_by_key(
                     "product.template", "default_code", self.my_dict[tid]['tid'])
@@ -226,7 +258,9 @@ class History(http.Controller):
                     return Response(json.dumps({"message": "Xe " + message}), content_type='application/json;charset=utf-8', status=400)
 
         if checkProduct:  # Xe vào + thẻ người thẻ xe lối ra hợp lệ
+            self.lock.acquire()
             self.my_dict.pop(tid, "None")
+            self.lock.release()
             product.write({"picking_code": picking_code})
             imgTruoc, imgSau = self._imgTruocSauCamera(
                 kw["imgTruoc"], kw["imgSau"])
@@ -255,16 +289,16 @@ class History(http.Controller):
         if imgTruoc != "None":
             file = imgTruoc
             img_attachment = file.read()
-            imgTruoc = base64.b64encode(img_attachment)
+            imgTruocTemp = base64.b64encode(img_attachment)
         else:
-            imgTruoc = None
+            imgTruocTemp = None
         if imgSau != "None":
             file = imgSau
             img_attachment = file.read()
-            imgSau = base64.b64encode(img_attachment)
+            imgSauTemp = base64.b64encode(img_attachment)
         else:
-            imgSau = None
-        return imgTruoc, imgSau
+            imgSauTemp = None
+        return imgTruocTemp, imgSauTemp
 
     def _find_by_key(self, module, key, value):
         """Tìm kiếm sản phẩm theo default_code."""
@@ -294,14 +328,12 @@ class History(http.Controller):
             'image_1920_camera_sau': imgSau,
             'image_1920_camera_truoc': imgTruoc,
         })
-        result = request.env['stock.move.line'].sudo().search(
-            [('product_id', '=', idProduct), ('create_date', '=', fields.date.today())], limit=10, order="create_date desc")
-        _logger.info(result)
 
+        result = request.env['stock.move.line'].sudo().search(
+            [('product_id', '=', idProduct), ('create_date', '>=', fields.date.today())], limit=10, order="create_date desc")
         if len(result) > 9:
-            pass
-        for record in result:
-            _logger.info(record['create_date'])
+            _logger.info(result[9])
+            result[9].unlink()
         return move_history.id
 
     def _check_product_list(self, product_list):
