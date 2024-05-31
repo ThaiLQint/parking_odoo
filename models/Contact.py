@@ -38,9 +38,12 @@ class Contact(models.Model):
     employee = fields.Boolean(string="Cấp thẻ", default=False)
     ma_dinh_danh = fields.Char(string="ID nhân viên", required=False, store=True)
     # job_position = fields.Char(string="Job Position", required=True)
-    zalo = fields.Char(string="Zalo", required=True)
-    viper = fields.Char(string="Viper", required=True)
-    what_app = fields.Char(string="What's App", required=True)
+    zalo = fields.Char(string="Zalo")
+    viper = fields.Char(string="Viber")
+    what_app = fields.Char(string="What's App")
+    radio_zalo = fields.Boolean(string="Zalo", default=True)
+    radio_viper = fields.Boolean(string="Viber", default=False)
+    radio_what_app = fields.Boolean(string="What's App", default=False)
     date_expiration = fields.Datetime(string="Ngày hết hạn", required=True)
     
     product_ids_public = fields.Many2many("product.template", relation="product_template_res_partner_rel", column1="res_partner_id", column2="product_template_id", string="D/S xe dùng chung",
