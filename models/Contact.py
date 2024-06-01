@@ -41,6 +41,9 @@ class Contact(models.Model):
     zalo = fields.Char(string="Zalo")
     viper = fields.Char(string="Viber")
     what_app = fields.Char(string="What's App")
+    zalo_2 = fields.Char(string="Zalo", readonly=True)
+    viper_2 = fields.Char(string="Viber", readonly=True)
+    what_app_2 = fields.Char(string="What's App", readonly=True)
     radio_zalo = fields.Boolean(string="Zalo", default=True)
     radio_viper = fields.Boolean(string="Viber", default=False)
     radio_what_app = fields.Boolean(string="What's App", default=False)
@@ -146,3 +149,52 @@ class Contact(models.Model):
         message = "ghi epc|"+"0" + hex_arr[1:24] + "|"+hex_arr[24:]
         return message
     
+    @api.onchange('radio_zalo')
+    def onchange_radio_zalo(self):
+        if self.radio_zalo:
+            self.radio_viper = False
+            self.radio_what_app = False
+
+    @api.onchange('radio_viper')
+    def onchange_radio_viper(self):
+        if self.radio_viper:
+            self.radio_zalo = False
+            self.radio_what_app = False
+
+    @api.onchange('radio_what_app')
+    def onchange_radio_what_app(self):
+        if self.radio_what_app:
+            self.radio_zalo = False
+            self.radio_viper = False
+        
+    @api.model
+    def create(self, vals):
+        if 'zalo' in vals:
+            vals['zalo_2'] = vals['zalo']
+        if 'viper' in vals:
+            vals['viper_2'] = vals['viper']
+        if 'what_app' in vals:
+            vals['what_app_2'] = vals['what_app']
+        return super(Contact, self).create(vals)
+
+    def write(self, vals):
+        if 'zalo' in vals:
+            vals['zalo_2'] = vals['zalo']
+        if 'viper' in vals:
+            vals['viper_2'] = vals['viper']
+        if 'what_app' in vals:
+            vals['what_app_2'] = vals['what_app']
+        _logger.info(vals)
+        return super(Contact, self).write(vals)
+
+    @api.onchange('zalo')
+    def _onchange_zalo(self):
+        self.zalo_2 = self.zalo
+
+    @api.onchange('viper')
+    def _onchange_viper(self):
+        self.viper_2 = self.viper
+
+    @api.onchange('what_app')
+    def _onchange_what_app(self):
+        self.what_app_2 = self.what_app

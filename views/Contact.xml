@@ -73,19 +73,16 @@
 
                 <!-- Image Avatar -->
                 <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
-                    <field name="image_1920" widget="capture_image" on_change="1"
-                        class="oe_avatar"
-                        options="{'size': [250, 250]}"
-                    />
+                    <field name="image_1920" widget="capture_image" on_change="1" class="oe_avatar" options="{'size': [250, 250]}" />
                 </xpath>
-                
+
                 <xpath expr="//form/sheet/group/group" position="after">
                     <group>
                         <field name="ma_dinh_danh" placeholder="e.g. 31195100312" on_change="1" modifiers="{&quot;required&quot;: true}" />
                         <field name="ref" placeholder="e.g. 31195100312" on_change="1" />
-                        <field name="zalo" string="Zalo" invisible="not radio_zalo" />
-                        <field name="viper" string="Viber" invisible="not radio_viper"/>
-                        <field name="what_app" string="What's App" invisible="not radio_what_app"/>
+                        <field name="zalo_2" string="Zalo" invisible="not radio_zalo"/>
+                        <field name="viper_2" string="Viber" invisible="not radio_viper"/>
+                        <field name="what_app_2" string="What's App" invisible="not radio_what_app"/>
                     </group>
                 </xpath>
 
@@ -166,7 +163,7 @@
 
                 <xpath expr="//page[@name='internal_notes']" position="inside">
                     <div>
-                        <h2>Sản phẩm chính chủ</h2>
+                        <separator class="fs-2" string="Xe chính chủ"/>
                         <field name="product_ids_private">
                             <kanban offset="0" limit="4" total="50" create="false" delete="false">
                                 <templates>
@@ -212,7 +209,7 @@
                         </field>
                     </div>
                     <div>
-                        <h2>Sản phẩm dùng chung</h2>
+                        <separator class="fs-2" string="Xe dùng chung"/>
                         <field name="product_ids_public">
                             <kanban offset="0" limit="4" total="50" create="false" delete="false">
                                 <templates>
@@ -252,7 +249,6 @@
                                                 </div>
                                             </div>
                                         </group>
-
                                     </t>
                                 </templates>
                             </kanban>
@@ -265,14 +261,14 @@
                 </xpath>
 
                 <xpath expr="//page[@name='manager_info']" position="inside">
-                    <div>
+                    <sheet>
                         <group>
                             <group>
                                 <field name="ref" />
                                 <field name="barcode" string="Mật khẩu" password="true"></field>
                             </group>
                         </group>
-                    </div>
+                    </sheet>
                 </xpath>
 
                 <xpath expr="//page[@name='manager_info']" position="after">
@@ -281,13 +277,25 @@
 
                 <xpath expr="//page[@name='social_network']" position="inside">
                     <div>
-                        <group>
-                            <group>
-                                <field name="radio_zalo" />
-                                <field name="radio_viper" />
-                                <field name="radio_what_app" />
-                            </group>
-                        </group>
+                        <sheet>
+                            <div class="text-nowrap">
+                                <span class="fw-bold">Zalo</span>
+                                <field class="ms-2" name="zalo" string="Zalo" invisible="not radio_zalo" />
+                                <field class="ms-2" name="radio_zalo" />
+                            </div>
+
+                            <div class="text-nowrap">
+                                <span class="fw-bold">Viber</span>
+                                <field class="ms-2" name="viper" string="Viber" invisible="not radio_viper"/>
+                                <field class="ms-2" name="radio_viper" />
+                            </div>
+
+                            <div class="text-nowrap">
+                                <span class="fw-bold">What's App</span>
+                                <field class="ms-2" name="what_app" string="What's App" invisible="not radio_what_app"/>
+                                <field class="ms-2" name="radio_what_app" />
+                            </div>
+                        </sheet>
                     </div>
                 </xpath>
 
