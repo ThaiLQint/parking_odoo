@@ -33,6 +33,7 @@
         "views/product_color_main.xml",
         "views/nsp_menu_setting.xml",     
         "views/hiden_view.xml",     
+        "views/User.xml",     
         "security/ir.model.access.csv",     
     ],
     'qweb': [],

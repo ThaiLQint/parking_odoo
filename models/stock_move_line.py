@@ -3,7 +3,6 @@ import logging
 from odoo import fields, models, http
 _logger = logging.getLogger(__name__)
 
-
 def find_location_empty(self):
     # Tìm danh sách vị trí trống trong bãi lấy danh sách tên của bãi
     locations_empty = self.env["stock.location"].search([
