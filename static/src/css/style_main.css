@@ -1,0 +1,60 @@
+.text {
+    text-align: center;
+    align-items:center;
+    padding-top: 5px;
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+    margin: 0 auto; /* Căn giữa hình ảnh */
+}
+
+.avatar-hover:hover {
+    /* Thêm hiệu ứng hover ở đây */
+    /* Ví dụ: thay đổi kích thước */
+    transform: scale(1.1); /* để phóng to avatar khi rê chuột vào */
+    transition: transform 0.3s ease; /* tạo hiệu ứng mềm mại */
+}
+
+.image-zoom-hover {
+    /* Thiết lập kích thước ban đầu */
+    transition: transform 0.9s;
+}
+
+    /* Định nghĩa màu cho label có chức năng như button */
+.btn_color .label {
+    background-color: #007bff; /* Màu nền */
+    color: #ffffff; /* Màu chữ */
+    padding: 5px 10px; /* Đặt padding để tạo ra khoảng cách xung quanh nút */
+    border-radius: 4px; /* Làm tròn các góc của nút */
+    cursor: pointer; /* Hiển thị con trỏ khi di chuột qua nút */
+}
+
+/* Định nghĩa hover state cho label */
+.btn_color label:hover {
+    background-color: #0056b3; /* Màu nền khi di chuột qua */
+}
+
+
+/* Customize kích thước của trường name */
+.name-field {
+    width: 10px; /* Số này có thể điều chỉnh tùy theo nhu cầu của bạn */
+    font-weight: 400;
+    color: blueviolet;
+    font-weight: 600;
+}
+
+.oe_title {
+    width: 15cm;
+    width: 15cm;
+    padding-bottom: 1rem;
+    /* height: 50px; */
+}
+.image-field {
+    max-width: 100%;
+}
+
+
+.o_kanban_record_bottom{
+    display: flex; 
+    justify-content: space-around; 
+    align-items: flex-start; 
+    padding: 10px;
+}

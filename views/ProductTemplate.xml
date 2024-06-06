@@ -139,12 +139,18 @@
                                                                     class="o_kanban_record_bottom_left"
                                                                     style="flex-grow: 1; display: flex; flex-direction: column;">
                                                                     <field name="name"
-                                                                        style="margin-bottom: 5px; font-weight:bold"></field>
-                                                                    <field name="ma_dinh_danh"
-                                                                        style="margin-bottom: 5px;"></field>
-                                                                    <field name="ref"
-                                                                        style="margin-bottom: 5px;"></field>
-
+                                                                        style="margin-bottom: 5px; font-weight:bold"
+                                                                        class="text-nowrap name-container"></field>
+                                                                    <div>
+                                                                        <strong>ID: </strong>
+                                                                        <field name="ma_dinh_danh"
+                                                                            attrs="{'invisible': [('ma_dinh_danh','=',False)]}" />
+                                                                    </div>
+                                                                    <div>
+                                                                        <strong>Mã thẻ: </strong>
+                                                                        <field name="ref"
+                                                                            attrs="{'invisible': [('ref','=',False)]}" />
+                                                                    </div>
                                                                 </div>
                                                                 <div class="delete-button text-end"
                                                                     style="margin-left: 10px;">
@@ -203,23 +209,22 @@
 
                 <xpath expr="//form/sheet/notebook/page[@name='recordxe']" position="after">
                     <page name="inout_history" string="Lịch sử RA/VÀO">
-                        <field name="move_history_ids" class="format-fie">
-                            <tree create="0" edit="0" default_order="create_date desc" offset="0"
-                                limit="10">
-                                <field name="create_date"></field>
-                                <field name="product_id"></field>
-                                <field name="image_1920_xe" widget="image"></field>
-                                <field name="port"></field>
-                                <field name="contact_id"></field>
-                                <field name="picking_code" widget="badge"
+                        <field name="move_history_ids">
+                            <tree create="0" edit="0" default_order="create_date desc" class="text">
+                                <field name="create_date" class="text"></field>
+                                <field name="product_id" class="text"></field>
+                                <field name="image_1920_camera_truoc" class="text" widget="image"
+                                    options="{'size': [150, 150]}"></field>
+                                <field name="port" string="Cổng" class="text"></field>
+                                <field name="contact_id" class="text"></field>
+                                <field name="picking_code" class="text-center" widget="badge"
                                     decoration-muted="picking_code == 'outgoing'"
-                                    decoration-success="picking_code == 'incoming'" />
+                                    decoration-success="picking_code == 'incoming'"
+                                    style="font-size:20px" />
                             </tree>
                         </field>
                     </page>
                 </xpath>
-
-
                 <xpath expr="//form/sheet/notebook/page[@name='inout_history']" position="after">
                     <page name="manager_info" string="Thông tin quản lý">
                         <sheet>
@@ -239,11 +244,12 @@
                         <div class="o_col-12" style="flex: 1;">
                             <group>
                                 <field name='categ_id' widget="many2one"
-                                    options="{'no_create':False, 'no_create_edit':False, 'no_open': True}" />
+                                    options="{'no_create':True, 'no_create_edit':False, 'no_open': True}" />
                                 <label for="color_id" string="Màu xe" />
                                 <div class="o_row" style="display: flex;">
-                                    <field name="html_color" class="oe_inline" string=""
-                                        widget="color" />
+                                    <span>
+                                        <field name="html_color" string="" widget="color" />
+                                    </span>
                                     <span>
                                         <field name="color_id" widget="many2one"
                                             options="{'no_create':True, 'no_create_edit':True, 'no_open': True}" />
@@ -309,8 +315,10 @@
                             </b>
                         </span>
                     </div>
+
                 </xpath>
             </field>
         </record>
+
     </data>
 </odoo>

@@ -61,39 +61,6 @@
             }
         }
     }}
-
-    .avatar-hover:hover {
-        /* Thêm hiệu ứng hover ở đây */
-        /* Ví dụ: thay đổi kích thước */
-        transform: scale(1.1); /* để phóng to avatar khi rê chuột vào */
-        transition: transform 0.3s ease; /* tạo hiệu ứng mềm mại */
-    }
-
-    .image-zoom-hover {
-        /* Thiết lập kích thước ban đầu */
-        transition: transform 0.9s;
-    }
-    
-    // .image-zoom-hover:hover {
-    //     /* Thêm hiệu ứng zoom */
-    //     transform: scale(1.1);  
-    //     // Nếu dùng scale thì ko xài đơn vị cho nó, nếu xài nó mất effect ban đầu
-    // }
-
-        /* Định nghĩa màu cho label có chức năng như button */
-    .btn_color .label {
-        background-color: #007bff; /* Màu nền */
-        color: #ffffff; /* Màu chữ */
-        padding: 5px 10px; /* Đặt padding để tạo ra khoảng cách xung quanh nút */
-        border-radius: 4px; /* Làm tròn các góc của nút */
-        cursor: pointer; /* Hiển thị con trỏ khi di chuột qua nút */
-    }
-
-    /* Định nghĩa hover state cho label */
-    .btn_color label:hover {
-        background-color: #0056b3; /* Màu nền khi di chuột qua */
-    }
-
     // .image-click-zoom.clicked {
     //     transform: scale(2); /* Tăng kích thước lên 2 lần khi được click */
     //     position: fixed; /* Đảm bảo hình ảnh sẽ hiển thị trên cùng của trang */

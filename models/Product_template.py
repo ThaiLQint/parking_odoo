@@ -39,24 +39,24 @@ class Product_template(models.Model):
          'BIỂN SỐ ĐÃ TỒN TẠI!!')
     ]
 
-    name = fields.Char(string="Biển số")
-    # location_id = fields.Many2one(
-    #     "stock.location", string="Vị trí", compute="_compute_location_id")
+    name = fields.Char(string="Biển số", store=True)
+    location_id = fields.Many2one(
+        "stock.location", string="Vị trí", compute="_compute_location_id")
     contact_id = fields.Many2one(
-        'res.partner', string='Chủ sở hữu', required=True)
+        'res.partner', string='Chủ sở hữu', required=True, store=True)
     barcode = fields.Char(readonly=False)
     default_code = fields.Char(string="Mã thẻ", readonly=False)
     user_ids = fields.Many2many(
-        'res.partner',  string="Người sử dụng", readonly=False, ondelete='cascade')
+        'res.partner',  string="Người sử dụng", readonly=False, ondelete='cascade', store=True)
     domain = fields.Char(compute="_compute_domain", readonly=True)
     # ------------------------------------------------
 
-    color_id = fields.Many2one('product.color.main', string='Màu xe')
+    color_id = fields.Many2one('product.color.main', string='Màu xe', store=True)
     html_color = fields.Char(
-        related='color_id.html_color', readonly=True, string='Màu hiển thị')
+        related='color_id.html_color', readonly=True, string='Màu hiển thị', store=True)
 
     categ_id = fields.Many2one(
-        'product.category', 'Hãng xe',
+        'product.category', 'Hãng xe', store=True,
         change_default=True, domain=[("parent_id.name", "!=", "All")])
 
     so_loai = fields.Char(string="Mã loại xe", readonly=False)
@@ -64,7 +64,6 @@ class Product_template(models.Model):
     so_khung = fields.Char(string="Số khung", store=True)
 
     check_doi_the = fields.Boolean(string="Đã đổi thẻ", default=False)
-    check_in = fields.Boolean(string="Đã vào bãi", default=False)
 
     avatar_128 = fields.Image(
         string="avatar 128", compute='_compute_avatar_128', max_width=128, max_height=128)
@@ -227,5 +226,4 @@ class Product_template(models.Model):
             return "LỖI: KHÔNG THỂ TẠO UUID DO BỊ ĐÃ TỒN TẠI [1" + hex_arr[1:24]+"]!!"
         message = "ghi epc|"+"1" + hex_arr[1:24] + "|"+hex_arr[24:]
         return message
-# ==============================
-
+# ===============================
