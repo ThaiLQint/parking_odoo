@@ -24,13 +24,14 @@
                     <field name="sel_groups_1_10_11" invisible="1" />
                 </xpath>
                 <xpath expr="//sheet" position="inside">
+                    <!-- <field name="groups_id"/> -->
                     <separator string="My NSP" />
                     <div class="o_row" style="display: flex;">
-                        <label for="in_group_50" string="Khách hàng" />
-                        <field name="in_group_50" readonly="sel_groups_1_10_11 != 1"
+                        <label for="in_group_167" string="Khách hàng" />
+                        <field name="in_group_167" readonly="sel_groups_1_10_11 != 1"
                         />
-                        <label for="in_group_51" string="NSP Admin" />
-                        <field name="in_group_51" readonly="sel_groups_1_10_11 != 1"
+                        <label for="in_group_168" string="NSP Admin" />
+                        <field name="in_group_168" readonly="sel_groups_1_10_11 != 1"
                             class='oe_inline' />
 
                     </div>

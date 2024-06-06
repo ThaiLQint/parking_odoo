@@ -79,7 +79,7 @@
 
         <record id="automation_menu" model="ir.actions.act_window">
             <field name="name">Automation Rule </field>
-            <field name="res_model">base.automation</field>
+            <field name="res_model">ir.module.category</field>
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
