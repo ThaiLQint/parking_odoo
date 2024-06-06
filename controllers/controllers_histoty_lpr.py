@@ -311,7 +311,10 @@ class ControllerHistoryLPR(http.Controller):
                 image_1920_bs_camera = None
             else:
                 image_1920_bs_camera = bien_so_realtime['jpg']
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7bc57abf3be0637b987b128c965cd2898e393e12
             stock_move_history = http.request.env["stock.move.line"].sudo().create(
                 {
                     'move_history_id_before': product_template.move_history_id.id,
@@ -467,5 +470,8 @@ class ControllerHistoryLPR(http.Controller):
             "image_1920_xe": product_template.image_1920.decode(),
             "image_1920_bs_dk": product_template.image_1920_bien_so.decode(),
             "image_1920_camera_sau": image_1920_camera_sau,
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7bc57abf3be0637b987b128c965cd2898e393e12
         }, ensure_ascii=False)

@@ -1,8 +1,7 @@
 import logging
 
-from odoo import fields, models, http, api
+from odoo import fields, models, http
 _logger = logging.getLogger(__name__)
-
 
 def find_location_empty(self):
     # Tìm danh sách vị trí trống trong bãi lấy danh sách tên của bãi
@@ -63,7 +62,6 @@ class stock_move_line(models.Model):
     date_sub_in_out = fields.Char(string="TG gửi xe")
     
     create_date = fields.Datetime(string="Thời gian tạo")
-    
     
     def create(self, vals):
         new_record = super(stock_move_line, self).create(vals)

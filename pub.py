@@ -5,7 +5,10 @@ import paho.mqtt.client as mqtt
 def on_publish(client, userdata, mid):
     print("sent a message")
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7bc57abf3be0637b987b128c965cd2898e393e12
 mqttClient = mqtt.Client("odoo_server")
 mqttClient.on_publish = on_publish
 mqttClient.username_pw_set(username="Nhan", password="01212861566nhan")

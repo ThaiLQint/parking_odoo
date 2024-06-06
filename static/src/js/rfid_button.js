@@ -193,7 +193,6 @@ export class ButtonFormController extends FormController {
       title: title,
       body: _t(content),
     });
-
     document.getElementById("rfid_btn").disabled = false;
   }
 
