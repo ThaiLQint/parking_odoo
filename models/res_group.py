@@ -57,7 +57,6 @@ class GroupsNSP(models.Model):
 
     @api.model
     def _update_user_groups_view(self):
-        _logger.info("kkkkkkkk")
         
         """ Modify the view with xmlid ``base.user_groups_view``, which inherits
             the user form view, and introduces the reified group fields.
@@ -87,6 +86,7 @@ class GroupsNSP(models.Model):
             sorted_tuples = sorted(self.get_groups_by_application(),
                                    key=lambda t: t[0].xml_id != 'base.module_category_user_type')
             for app, kind, gs, category_name in sorted_tuples:  # we process the user type first
+               
                 attrs = {}
                 # hide groups in categories 'Hidden' and 'Extra' (except for group_no_one)
                 if app.xml_id in self._get_hidden_extra_categories():
@@ -123,29 +123,29 @@ class GroupsNSP(models.Model):
                     # add duplicate invisible field so default values are saved on create
                     if attrs.get('groups') == 'base.group_no_one':
                         xml0.append(E.field(name=field_name, **dict(attrs, invisible="1", groups='!base.group_no_one')))
-
                 else:
                     # application separator with boolean fields
                     app_name = app.name or 'Other'
-                    xml4.append(E.separator(string=app_name, **attrs))
-                    left_group, right_group = [], []
-                    attrs['readonly'] = user_type_readonly
-                    # we can't use enumerate, as we sometime skip groups
-                    group_count = 0
-                    for g in gs:
-                        if g.name == "NSP_USER" or g.name == "NSP_ADMIN":
-                            field_name = name_boolean_group(g.id)
-                            dest_group = left_group if group_count % 2 == 0 else right_group
-                            if g == group_no_one:
-                                # make the group_no_one invisible in the form view
-                                dest_group.append(E.field(name=field_name, invisible="1", **attrs))
-                            else:
-                                dest_group.append(E.field(name=field_name, **attrs))
-                            # add duplicate invisible field so default values are saved on create
-                            xml0.append(E.field(name=field_name, **dict(attrs, invisible="1", groups='!base.group_no_one')))
-                            group_count += 1
-                    xml4.append(E.group(*left_group))
-                    xml4.append(E.group(*right_group))
+                    if app_name == 'My NSP':
+                        xml4.append(E.separator(string=app_name, **attrs))
+                        left_group, right_group = [], []
+                        attrs['readonly'] = user_type_readonly
+                        # we can't use enumerate, as we sometime skip groups
+                        group_count = 0
+                        for g in gs:
+                            if g.name == "NSP_USER" or g.name == "NSP_ADMIN":
+                                field_name = name_boolean_group(g.id)
+                                dest_group = left_group if group_count % 2 == 0 else right_group
+                                if g == group_no_one:
+                                    # make the group_no_one invisible in the form view
+                                    dest_group.append(E.field(name=field_name, invisible="1", **attrs))
+                                else:
+                                    dest_group.append(E.field(name=field_name, **attrs))
+                                # add duplicate invisible field so default values are saved on create
+                                xml0.append(E.field(name=field_name, **dict(attrs, invisible="1", groups='!base.group_no_one')))
+                                group_count += 1
+                        xml4.append(E.group(*left_group))
+                        xml4.append(E.group(*right_group))
 
             xml4.append({'class': "o_label_nowrap"})
             user_type_invisible = f'{user_type_field_name} != {group_employee.id}' if user_type_field_name else None
@@ -171,10 +171,11 @@ class GroupsNSP(models.Model):
 
             xml = E.field(
                 *(xml0),
-                E.group(*(xml1), groups="base.group_no_one"),
-                E.group(*(xml2), invisible=user_type_invisible),
-                E.group(*(xml3), invisible=user_type_invisible),
-                E.group(*(xml4), invisible=user_type_invisible, groups="base.group_no_one"), name="groups_id", position="replace")
+                # E.group(*(xml1), groups="base.group_no_one"),
+                # E.group(*(xml2), invisible=user_type_invisible),
+                # E.group(*(xml3), invisible=user_type_invisible),
+                E.group(*(xml4), invisible=user_type_invisible, groups="base.group_no_one"), name="groups_id", position="replace"
+                )
             xml.addprevious(etree.Comment("GENERATED AUTOMATICALLY BY GROUPS"))
 
         # serialize and update the view
