@@ -25,7 +25,7 @@
     "application": True,
     # always loaded
     'data': [
-        "security/access_user.xml",     
+        "security/access_user.xml",
         "security/ir.model.access.csv",     
         "views/AlerTag.xml",
         "views/Contact.xml",

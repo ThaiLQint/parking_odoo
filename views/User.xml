@@ -6,8 +6,36 @@
             <field name="model">res.users</field>
             <field name="inherit_id" ref="base.view_users_form" />
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='login']" position="after">
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="active_partner" required="0" readonly="1" invisible="1" />
+                    <field string="Companies count" name="companies_count" invisible="1" />
+                    <field name="avatar_128" invisible="1" />
+                    <field name="tz_offset" invisible="1" />
+                    <field name="active" invisible="1" />
+                    <field name="share" invisible="1" />
+                    <group name="status" string="Status" invisible="1">
+                        <field name="company_id" options="{'no_create': True}" readonly="0"
+                            groups="base.group_multi_company" />
+                    </group>
+                    <field name="user_id" invisible="1" />
+                    <field name="id" invisible="1" />
+                    <field name="email" invisible="1" />
+                    <field name="active" required="0" readonly="1" invisible="1" />
+                    <field name="sel_groups_1_10_11" invisible="1" />
                 </xpath>
+                <xpath expr="//sheet" position="inside">
+                    <separator string="My NSP" />
+                    <div class="o_row" style="display: flex;">
+                        <label for="in_group_50" string="Khách hàng" />
+                        <field name="in_group_50" readonly="sel_groups_1_10_11 != 1"
+                        />
+                        <label for="in_group_51" string="NSP Admin" />
+                        <field name="in_group_51" readonly="sel_groups_1_10_11 != 1"
+                            class='oe_inline' />
+
+                    </div>
+                </xpath>
+                <xpath expr="//notebook" position="replace" />
             </field>
         </record>
     </data>

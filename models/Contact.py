@@ -62,12 +62,12 @@ class Contact(models.Model):
     'contact_id', 
     'partner_id', 
     string='Danh sách liên hệ',
-    domain="[('id', '!=', id)]",
+    domain="[('id', '!=', id)]", store=True
     )
     
-    vehicle = fields.Many2one("res.partner", string="Vehicle")
+    vehicle = fields.Many2one("res.partner", string="Vehicle", store=True)
 
-    vehicles = fields.One2many('res.partner', 'vehicle', string='Phương Tiện')
+    vehicles = fields.One2many('res.partner', 'vehicle', string='Phương Tiện', store=True)
     
     image_1920 = fields.Image(string="Ảnh đại diện", max_width=1024, max_height=768)
     image_1920_cmnd_cccd_truoc = fields.Image(
