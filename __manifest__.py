@@ -25,6 +25,8 @@
     "application": True,
     # always loaded
     'data': [
+        "security/access_user.xml",     
+        "security/ir.model.access.csv",     
         "views/AlerTag.xml",
         "views/Contact.xml",
         "views/ProductTemplate.xml",
@@ -34,7 +36,6 @@
         "views/nsp_menu_setting.xml",     
         "views/hiden_view.xml",     
         "views/User.xml",     
-        "security/ir.model.access.csv",     
     ],
     'qweb': [],
     'installable': True,
