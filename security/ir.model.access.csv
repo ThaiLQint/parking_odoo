@@ -1,9 +1,13 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 access_product_color,Access Product Color 2,model_product_color_main,base.group_user,1,1,1,1
-"access_contact_readonly","contact read only","model_res_partner",group_contact_vehicle_readonly,1,0,0,0
-"access_vehicle_readonly","vehicle read only","model_product_template",group_contact_vehicle_readonly,1,0,0,0
+"access_user_admin","vehicle read only","model_product_template",user_access_admin,1,1,1,1
 
-"access_vehicle_readonly","vehicle read only","model_product_template",group_contact_vehicle_readonly,1,0,0,0
+"access_security_1","contact read only","model_res_partner",security_readonly_list,1,0,0,0
+"access_security_2","vehicle read only","model_product_template",security_readonly_list,1,0,0,0
+
+"access_operator_1","operator","model_res_partner",user_access_operator,1,1,0,0
+"access_operator_2","operator","model_product_template",user_access_operator,1,1,0,0
+
 
 
