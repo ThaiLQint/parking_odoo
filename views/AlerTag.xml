@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="aler_tag_view_form" model="ir.ui.view">
+            <field name="name">alert.tag.form</field>
+            <field name="model">alert.tag</field>
+            <field name="arch" type="xml">
+                <form string="Alert tag">
+                    <sheet
+                        style="border: 0px solid #ccc;
+                    margin-left: 200px;margin-right: 200px; margin-bottom: 200px;">
+                        <field name="name" />
+                        <field name="product_id" widget="many2one_avatar" />
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="alert_tag_tree_view" model="ir.ui.view">
+            <field name="name">alert.tag.tree</field>
+            <field name="model">alert.tag</field>
+            <field name="arch" type="xml">
+                <tree string="Alert Tag">
+                    <field name="name" />
+                    <field name="product_id" widget="many2one_avatar" />
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>
