@@ -15,5 +15,5 @@ from . import actionsServer
 from . import baseAutomation
 from . import alert
 
-# from . import res_groups
+from . import res_group
 # from . import res_config_settings
