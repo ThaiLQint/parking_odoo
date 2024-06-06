@@ -177,7 +177,6 @@ class History(http.Controller):
             "tidXe": product.default_code[8:],
             "typeXe": product.categ_id.complete_name,
             "imgXe": product.image_1920.decode(),
-            "imgNg": partner.image_1920.decode(),
             "imgPath1": image_1920_camera_truoc,
             "imgPath2": image_1920_camera_sau,
             "imgBienSo": product.image_1920_bien_so.decode(),

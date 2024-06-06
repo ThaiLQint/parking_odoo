@@ -6,7 +6,7 @@ import json
 import math
 
 from datetime import datetime
-from odoo.http import request
+from odoo.http import request, Response
 
 _logger = logging.getLogger(__name__)
 
@@ -20,7 +20,6 @@ class Webhoook(http.Controller):
             for actionServer in result.action_server_ids:
                 if actionServer.webhook_url == kw['webhook_url']:
                     return {"code": 200}
-
             tempVals = {
                 "binding_model_id": False,
                 "name": "Send Webhook Nhân",
@@ -60,7 +59,7 @@ class Webhoook(http.Controller):
                 "sequence": 7,
                 "base_automation_id": result.id
             }
-            _logger.info(tempVals)
             result.write({'action_server_ids': [(0, 'virtual_17', tempVals)]})
-            return {"code": 201}
-        return {"code": 400, "message": "code dịch vụ không họp lệ!"}
+            return Response(json.dumps({"message": "Tạo thành công"}), content_type='application/json;charset=utf-8', status=201)
+        return Response(json.dumps({"message": "Đăng ký dịch vụ không họp lệ!"}), content_type='application/json;charset=utf-8', status=400)
+
