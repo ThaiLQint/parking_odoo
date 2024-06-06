@@ -63,7 +63,7 @@
         <!-- Cập nhật menuItem để sử dụng hành động mới -->
         <menuitem id="menu_user" name="User List"
             parent="menu_nsp_config" action="action_show_users"
-            sequence="25" />
+            sequence="25"/>
 
         <menuitem id="stock_move_setting_menu" name="Moves History" parent="menu_nsp_config"
             sequence="10" action="stock_move_action" groups="base.group_system" />
@@ -78,8 +78,8 @@
             action="app_nsp_alert_tag" />
 
         <record id="automation_menu" model="ir.actions.act_window">
-            <field name="name">Danh muc</field>
-            <field name="res_model">ir.module.category</field>
+            <field name="name">Automation Rule </field>
+            <field name="res_model">base.automation</field>
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
