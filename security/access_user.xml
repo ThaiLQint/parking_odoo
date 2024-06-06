@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record id="name_cate_group_1" model="ir.module.category">
-        <field name="name">My NSP</field>
+    <!-- LƯU Ý: Tạo Group mới không được trùng lặp id và ghi đè lên gourp cũ 
+     ID group quyền (parent) phải khác nhau khi thêm mới -->
+    <record id="cate_groups_nsp" model="ir.module.category">
+        <field name="name">NSP System</field>
         <field name="sequence">5</field>
     </record>
-    <record id="group_contact_vehicle_readonly" model="res.groups">
-        <field name="name">NSP_USER</field>
+    <record id="user_access_admin" model="res.groups">
+        <field name="name">ADMIN</field>
         <field name="category_id"
-            ref="parking_odoo.name_cate_group_1" />
+            ref="parking_odoo.cate_groups_nsp" />
     </record>
 
-    <record id="user_access_admin" model="res.groups">
-        <field name="name">NSP_ADMIN</field>
+    <record id="security_readonly_list" model="res.groups">
+        <field name="name">SECURITY</field>
         <field name="category_id"
-            ref="parking_odoo.name_cate_group_1" />
+            ref="parking_odoo.cate_groups_nsp" />
+    </record>
+
+
+    <record id="user_access_operator" model="res.groups">
+        <field name="name">OPERATOR</field>
+        <field name="category_id"
+            ref="parking_odoo.cate_groups_nsp" />
     </record>
 
 </odoo>
