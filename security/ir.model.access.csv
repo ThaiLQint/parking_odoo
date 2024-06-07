@@ -3,4 +3,6 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_product_color,Access Product Color 2,model_product_color_main,base.group_user,1,1,1,1
 access_alert,Access Alert,model_alert_tag,base.group_user,1,1,1,1
 
+"security_account","Security","model_res_partner","",1,0,0,0
+access_security,Base Security,model_res_partner,base.group_user,1,0,0,0
 

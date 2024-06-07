@@ -184,7 +184,6 @@ class Contact(models.Model):
             vals['viper_2'] = vals['viper']
         if 'what_app' in vals:
             vals['what_app_2'] = vals['what_app']
-        _logger.info(vals)
         return super(Contact, self).write(vals)
 
     @api.onchange('zalo')

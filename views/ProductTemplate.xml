@@ -55,7 +55,7 @@
 
             <field name="arch" type="xml">
                 <xpath expr="//sheet/field[@name='product_variant_count']" position="before">
-                    <field name="picking_code" invisible='0' />
+                    <field name="picking_code" invisible='1' />
                     <widget name="web_ribbon" title="ĐÃ VÀO BÃI" bg_color="bg-success"
                         invisible="picking_code != 'incoming'" />
                 </xpath>
