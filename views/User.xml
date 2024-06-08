@@ -18,29 +18,29 @@
                     <attribute name="invisible">1</attribute>
                 </xpath>
 
-                <xpath expr="//label" position="replace" />
-
+                <xpath expr="//label[@for='name']" position="replace" />
+                <xpath expr="//label[@for='login']" position="replace" />
                 <xpath expr="//field[@name='name']" position="replace">
                     <group>
-                            <label for="name" string="Full name" />
-                            <h1 class="oe_inline">
-                                <field name="name" placeholder="e.g. Pham An" required="1" />
-                            </h1>
-                        <div>
-                            <label for="phone" string="Số điện thoại:" />
-                            <h2 class="oe_inline">
-                                <field name="phone" placeholder="Số điện thoại của bạn" />
-                            </h2>
-                        </div>
+                        <label for="name" string="Full name" />
+                        <h1 class="oe_inline">
+                            <field name="name" placeholder="e.g. Pham An" required="1" />
+                        </h1>
                     </group>
                 </xpath>
-                <xpath expr="//field[@name='login']" position="after">
+                <xpath expr="//field[@name='login']" position="replace">
                     <group>
-                        <label for="phone" string="Số điện thoại:" />
-                        <h2 class="oe_inline">
-                            <field name="phone" placeholder="Số điện thoại của bạn" />
-                        </h2>
+                        <label for="login" string="Tên đăng nhập:" />
+                        <h3 class="oe_inline">
+                            <field name="login" store="True" />
+                        </h3>
                     </group>
+                    <label for="phone" string="Số điện thoại:" />
+                    <field name="phone" placeholder="Số điện thoại của bạn" readonly="True" />
+                    <span>
+                        <label for="zalo" string="Zalo liên hệ:" />
+                        <field name="zalo" placeholder="Số zalo của bạn" />
+                    </span>
                 </xpath>
             </field>
         </record>

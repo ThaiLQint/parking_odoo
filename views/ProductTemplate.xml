@@ -217,6 +217,7 @@
                                     options="{'size': [150, 150]}"></field>
                                 <field name="port" string="Cổng" class="text"></field>
                                 <field name="contact_id" class="text"></field>
+                                <!-- <field name="picking_code"></field> -->
                                 <field name="picking_code" class="text-center" widget="badge"
                                     decoration-muted="picking_code == 'outgoing'"
                                     decoration-success="picking_code == 'incoming'"

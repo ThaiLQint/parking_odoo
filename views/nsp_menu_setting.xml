@@ -34,6 +34,16 @@
         <menuitem id="menu_vehicle" name="Vehicle" parent="nsp_menu_root" sequence="10"
             action="action_vehicle" />
 
+        <record id="report_menu" model="ir.actions.act_window">
+            <field name="name">Reporting</field>
+            <field name="res_model">stock.picking.type</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <menuitem id="menu_reporting" name="Reporting" parent="nsp_menu_root" sequence="15"
+            action="report_menu" />
+
         <menuitem id="menu_nsp_config" name="Configuration" parent="nsp_menu_root" sequence="100" />
 
         <record id="color_setting_action" model="ir.actions.act_window">
@@ -44,7 +54,7 @@
         </record>
 
         <menuitem id="parking_config_settings_menu" name="Color" parent="menu_nsp_config"
-            sequence="1" action="color_setting_action" />
+            sequence="27" action="color_setting_action" />
 
         <record id="stock_move_action" model="ir.actions.act_window">
             <field name="name">Moves History</field>
@@ -61,9 +71,9 @@
         </record>
 
         <!-- Cập nhật menuItem để sử dụng hành động mới -->
-        <menuitem id="menu_user" name="User List"
+        <menuitem id="menu_user" name="Nhân viên"
             parent="menu_nsp_config" action="action_show_users"
-            sequence="25"/>
+            sequence="25" />
 
         <menuitem id="stock_move_setting_menu" name="Moves History" parent="menu_nsp_config"
             sequence="10" action="stock_move_action" groups="base.group_system" />
@@ -79,11 +89,20 @@
 
         <record id="automation_menu" model="ir.actions.act_window">
             <field name="name">Automation Rule </field>
+            <field name="res_model">base.automation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">inline</field>
+        </record>
+        <menuitem id="menu_autom" name="Automation Rule" parent="menu_nsp_config" sequence="20"
+            action="automation_menu" />
+
+        <record id="cauhinhbaixe_menu" model="ir.actions.act_window">
+            <field name="name">Cấu hình bãi xe </field>
             <field name="res_model">ir.module.category</field>
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
-        <menuitem id="menu_autom" name="Automation Rule" parent="menu_nsp_config" sequence="20"
-            action="automation_menu" />
+        <menuitem id="menu_baixe" name="Cấu hình bãi xe" parent="menu_nsp_config" sequence="1"
+            action="cauhinhbaixe_menu" />
     </data>
 </odoo>
