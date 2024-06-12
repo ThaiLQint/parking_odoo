@@ -63,19 +63,18 @@
         <!-- Cập nhật menuItem để sử dụng hành động mới -->
         <menuitem id="menu_user" name="User List"
             parent="menu_nsp_config" action="action_show_users"
-            sequence="25"/>
+            sequence="25" />
 
         <menuitem id="stock_move_setting_menu" name="Moves History" parent="menu_nsp_config"
             sequence="10" action="stock_move_action" groups="base.group_system" />
-
-        <record id="app_nsp_alert_tag" model="ir.actions.act_window">
-            <field name="name">Alert Tag</field>
-            <field name="res_model">alert.tag</field>
-            <field name="view_mode">form,tree</field>
+        <record id="setting_nsp_menu" model="ir.actions.act_window">
+            <field name="name">Setting NSP</field>
+            <field name="res_model">setting.nsp.branch</field>
+            <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
-        <menuitem id="menu_alert" name="Alert Tag" parent="menu_nsp_config" sequence="0"
-            action="app_nsp_alert_tag" />
+        <menuitem id="menu_setting_nsp" name="Cấu hình bãi xe" parent="menu_nsp_config" sequence="0"
+            action="setting_nsp_menu" />
 
         <record id="automation_menu" model="ir.actions.act_window">
             <field name="name">Automation Rule </field>

@@ -36,6 +36,7 @@
         "views/nsp_menu_setting.xml",     
         "views/hiden_view.xml",     
         "views/User.xml",     
+        "views/SettingNSP.xml",     
     ],
     'qweb': [],
     'installable': True,

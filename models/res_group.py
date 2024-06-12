@@ -63,7 +63,6 @@ class GroupsNSP(models.Model):
         """
         # remove the language to avoid translations, it will be handled at the view level
         self = self.with_context(lang=None)
-
         # We have to try-catch this, because at first init the view does not
         # exist but we are already creating some basic groups.
         view = self.env.ref('base.user_groups_view', raise_if_not_found=False)
@@ -126,7 +125,7 @@ class GroupsNSP(models.Model):
                 else:
                     # application separator with boolean fields
                     app_name = app.name or 'Other'
-                    if app_name == 'My NSP':
+                    if app_name == 'NSP System':
                         xml4.append(E.separator(string=app_name, **attrs))
                         left_group, right_group = [], []
                         attrs['readonly'] = user_type_readonly
@@ -134,8 +133,9 @@ class GroupsNSP(models.Model):
                         group_count = 0
                         for g in gs:
                             _logger.info(g.name)
-                            if g.name == "SECURITY" or g.name == "ADMIN" or g.name == "OPERATOR":
+                            if g.name == "ADMIN" or g.name == "SECURITY" or g.name == "OPERATOR" :
                                 field_name = name_boolean_group(g.id)
+                                
                                 dest_group = left_group if group_count % 2 == 0 else right_group
                                 if g == group_no_one:
                                     # make the group_no_one invisible in the form view

@@ -10,6 +10,7 @@ class ResUsers(models.Model):
 
     @api.model
     def create(self, vals):
+        _logger.info(vals)
         users = super(ResUsers, self).create(vals)
         return users
 

@@ -14,6 +14,15 @@ from . import product_color_values
 from . import actionsServer
 from . import baseAutomation
 from . import alert
+from . import settingNspBranch
+from . import settingNspParking
+from . import settingNspOffice
+from . import settingNspLaneIn
+from . import settingNspLaneOut
+from . import settingNspDeviceIn
+from . import settingNspDeviceOut
+
+
 
 from . import res_group
 # from . import res_config_settings

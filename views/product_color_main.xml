@@ -6,8 +6,7 @@
             <field name="model">product.color.main</field>
             <field name="arch" type="xml">
                 <form string="Product color">
-                    <sheet style="border: 0px solid #ccc;
-                    margin-left: 200px;margin-right: 200px; margin-bottom: 200px;">
+                    <sheet style="border: 0px solid #ccc">
                         <notebook>
                             <page string="TẠO MÀU MỚI" name="color_values">
                                 <group>

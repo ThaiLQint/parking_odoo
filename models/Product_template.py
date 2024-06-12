@@ -44,6 +44,8 @@ class Product_template(models.Model):
         "stock.location", string="Vị trí", compute="_compute_location_id")
     contact_id = fields.Many2one(
         'res.partner', string='Chủ sở hữu', required=True, store=True)
+    contact_id_in_out = fields.Integer(
+         string='Id contact in out', readonly=True)
     barcode = fields.Char(readonly=False)
     default_code = fields.Char(string="Mã thẻ", readonly=False)
     user_ids = fields.Many2many(
@@ -96,7 +98,7 @@ class Product_template(models.Model):
         index=True,
         help='The stock operation where the packing has been made')
 
-    picking_code = fields.Selection(
+    picking_code = fields.Selection( string ="Ra vào",
         related='picking_id.picking_type_id.code', store=True, readonly=False, default="outgoing")
     # Hàm lọc của contact_id va partner_ids:
     def _compute_domain(self):
