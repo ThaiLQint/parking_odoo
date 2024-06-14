@@ -55,7 +55,7 @@ class Contact(models.Model):
     product_ids_private = fields.One2many("product.template", "contact_id", string="D/S xe chính chủ",
                                         readonly=True)
 
-    partner_id = fields.Many2one("res.partner", string="Liên hệ")
+    partner_id = fields.Many2one("res.partner", string="Liên hệ", store=True)
     partner_ids = fields.Many2many(
     'res.partner', 
     'contact_partner_rel', 
