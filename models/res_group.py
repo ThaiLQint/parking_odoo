@@ -134,7 +134,8 @@ class GroupsNSP(models.Model):
                         group_count = 0
                         for g in gs:
                             _logger.info(g.name)
-                            if g.name == "ADMIN" or g.name == "SECURITY" or g.name == "OPERATOR" or g.name == "MANAGER":
+                            # or g.name == "SECURITY" or g.name == "OPERATOR" or g.name == "MANAGER"
+                            if g.name != "USER" :
                                 field_name = name_boolean_group(g.id)
                                 dest_group = left_group if group_count % 2 == 0 else right_group
                                 if g == group_no_one:

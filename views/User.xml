@@ -24,7 +24,9 @@
                     <group>
                         <label for="name" string="Full name" />
                         <h1 class="oe_inline">
-                            <field name="name" placeholder="e.g. Pham An" required="1" />
+                            <field name="name" placeholder="e.g. Pham An" required="1"
+                                style="font-weight:bold"
+                            />
                         </h1>
                     </group>
                 </xpath>
@@ -35,12 +37,46 @@
                             <field name="login" store="True" />
                         </h3>
                     </group>
-                    <label for="phone" string="Số điện thoại:" />
-                    <field name="phone" placeholder="Số điện thoại của bạn" readonly="True" />
-                    <span>
-                        <label for="zalo" string="Zalo liên hệ:" />
-                        <field name="zalo" placeholder="Số zalo của bạn" />
-                    </span>
+                    <group>
+                        <label for="phone" string="Số điện thoại:" />
+                        <h4 class="oe_inline">
+                            <field name="phone" placeholder="Số điện thoại của bạn"/>
+                        </h4>
+                    </group>
+                </xpath>
+
+                <xpath expr="//page[@name='access_rights']" position="after">
+                    <page name="social_network" string="Your media"
+                        help="Bạn có thể chọn một phương tiện liên hệ chính!">
+                        <div>
+                            <sheet>
+                                <notification
+                                    class="border rounded-3 "
+                                    style="border: 1px solid #ccc; background-color: #f0f0f0; padding: 10px;">
+                                    Bạn có thể chọn một phương tiện liên hệ chính!
+                                </notification>
+                                <empty-line>&#10;</empty-line>
+                                <hr />
+                                <div class="text-nowrap">
+                                    <span class="fw-bold">Zalo</span>
+                                    <field class="ms-2" name="zalo" string="Zalo" />
+                                    <field class="ms-2" name="radio_zalo" />
+                                </div>
+
+                                <div class="text-nowrap">
+                                    <span class="fw-bold">Viber</span>
+                                    <field class="ms-2" name="viper" string="Viber" />
+                                    <field class="ms-2" name="radio_viper" />
+                                </div>
+
+                                <div class="text-nowrap">
+                                    <span class="fw-bold">What's App</span>
+                                    <field class="ms-2" name="what_app" string="What's App" />
+                                    <field class="ms-2" name="radio_what_app" />
+                                </div>
+                            </sheet>
+                        </div>
+                    </page>
                 </xpath>
             </field>
         </record>

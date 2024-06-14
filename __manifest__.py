@@ -27,6 +27,7 @@
     'data': [
         "views/User.xml",     
         "security/access_user.xml",
+        "security/record_rule.xml",
         "security/ir.model.access.csv",     
         "views/AlerTag.xml",
         "views/Contact.xml",
@@ -40,7 +41,6 @@
     'qweb': [],
     'installable': True,
     'application': True,
-    
     'auto_install': True,
     'assets': {
         'web.assets_backend':

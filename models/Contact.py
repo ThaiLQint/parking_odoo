@@ -54,7 +54,7 @@ class Contact(models.Model):
         
     product_ids_private = fields.One2many("product.template", "contact_id", string="D/S xe chính chủ",
                                         readonly=True)
-
+    isUserCreateCheck = fields.Boolean(default=False)
     partner_id = fields.Many2one("res.partner", string="Liên hệ")
     partner_ids = fields.Many2many(
     'res.partner', 
@@ -118,13 +118,25 @@ class Contact(models.Model):
     #             product.write({'user_ids': [(3, self.id)]})
     
     @api.model
-   
     def create(self, vals):
         vals['date_expiration'] = fields.Datetime.now() + \
             relativedelta(months=1)
         new_record = super(Contact, self).create(vals)
-        self.env["res.users"].create({'image_1920': vals['image_1920'], 'name': vals['name'], 'email': vals['email'],
-                                      'login': vals['email'], 'company_id': 1, 'sel_groups_1_10_11': 11, 'active': True, 'partner_id': new_record.id, 'password': vals['phone']})
+        if(vals['isUserCreateCheck'] == True):
+            return new_record
+        _logger.info("HELLO")
+        id_user_role = self.env["res.groups"].search(['|',
+        ('full_name', '=', 'NSP System / USER'), 
+        ('full_name', '=', 'User types / Internal User')], limit=2)
+        if id_user_role[0].full_name == 'NSP System / USER':
+            idUserNSP = id_user_role[0].id
+            idUserInternal = id_user_role[1].id
+        else:
+            idUserNSP = id_user_role[1].id
+            idUserInternal = id_user_role[0].id
+        self.env["res.users"].create({
+            'in_group_'+str(idUserNSP):True,'image_1920': vals['image_1920'], 'name': vals['name'], 'email': vals['email'],
+                                      'login': vals['email'], 'company_id': 1, 'sel_groups_1_10_11': idUserInternal, 'active': True, 'partner_id': new_record.id, 'password': vals['phone']})
         return new_record
     
     @api.constrains('barcode')
@@ -166,26 +178,6 @@ class Contact(models.Model):
         if self.radio_what_app:
             self.radio_zalo = False
             self.radio_viper = False
-        
-    @api.model
-    def create(self, vals):
-        if 'zalo' in vals:
-            vals['zalo_2'] = vals['zalo']
-        if 'viper' in vals:
-            vals['viper_2'] = vals['viper']
-        if 'what_app' in vals:
-            vals['what_app_2'] = vals['what_app']
-        return super(Contact, self).create(vals)
-
-    def write(self, vals):
-        if 'zalo' in vals:
-            vals['zalo_2'] = vals['zalo']
-        if 'viper' in vals:
-            vals['viper_2'] = vals['viper']
-        if 'what_app' in vals:
-            vals['what_app_2'] = vals['what_app']
-        _logger.info(vals)
-        return super(Contact, self).write(vals)
 
     @api.onchange('zalo')
     def _onchange_zalo(self):

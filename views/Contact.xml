@@ -82,6 +82,7 @@
 
                 <xpath expr="//form/sheet/group/group" position="after">
                     <group>
+                        <field name="isUserCreateCheck" invisible="1"/>
                         <field name="ma_dinh_danh" placeholder="e.g. 31195100312" on_change="1"
                             modifiers="{&quot;required&quot;: true}" />
                         <field name="ref" placeholder="e.g. 31195100312" on_change="1" />
@@ -316,21 +317,19 @@
                             <div class="text-nowrap">
                                 <span class="fw-bold">Zalo</span>
                                 <field class="ms-2" name="zalo" string="Zalo"
-                                    invisible="not radio_zalo" />
+                                />
                                 <field class="ms-2" name="radio_zalo" />
                             </div>
 
                             <div class="text-nowrap">
                                 <span class="fw-bold">Viber</span>
-                                <field class="ms-2" name="viper" string="Viber"
-                                    invisible="not radio_viper" />
+                                <field class="ms-2" name="viper" string="Viber" />
                                 <field class="ms-2" name="radio_viper" />
                             </div>
 
                             <div class="text-nowrap">
                                 <span class="fw-bold">What's App</span>
-                                <field class="ms-2" name="what_app" string="What's App"
-                                    invisible="not radio_what_app" />
+                                <field class="ms-2" name="what_app" string="What's App" />
                                 <field class="ms-2" name="radio_what_app" />
                             </div>
                         </sheet>
