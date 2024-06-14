@@ -25,16 +25,11 @@
     "application": True,
     # always loaded
     'data': [
-<<<<<<< HEAD
         "views/User.xml",     
         "security/access_user.xml",
         "security/record_rule.xml",
         "security/ir.model.access.csv",     
         "views/AlerTag.xml",
-=======
-        "security/access_user.xml",     
-        "security/ir.model.access.csv",     
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
         "views/Contact.xml",
         "views/ProductTemplate.xml",
         "views/StockLocation.xml",
@@ -42,10 +37,6 @@
         "views/product_color_main.xml",
         "views/nsp_menu_setting.xml",     
         "views/hiden_view.xml",     
-<<<<<<< HEAD
-=======
-        "views/AlerTag.xml",     
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
     ],
     'qweb': [],
     'installable': True,

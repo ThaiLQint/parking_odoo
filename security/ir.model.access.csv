@@ -13,7 +13,6 @@ access_product_color,Access Product Color 2,model_product_color_main,base.group_
 "access_user_admin","vehicle","model_product_template",user_access_admin,1,1,1,1
 "access_user_admin_1","contact","model_res_partner",user_access_admin,1,1,1,1
 
-<<<<<<< HEAD
 access_manager,"manager reporting","model_res_partner",user_access_manager,1,1,1,0
 access_manager_pro,"manager reporting pro","model_product_template",user_access_manager,1,1,1,0
 access_manager_col,"manager color","model_product_color_main",user_access_manager,1,1,1,1
@@ -41,9 +40,3 @@ access_oper_pro,"oper product","model_product_template",user_access_operator,1,1
 access_oper_cont,"oper contact","model_res_partner",user_access_operator,1,1,1,0
 access_oper_move,"oper move hist","model_stock_move_line",user_access_operator,1,1,1,0
 access_manager_col,"manager color","model_product_color_main",user_access_operator,1,0,1,1
-=======
-user_access,Access Contact res,base.model_res_partner,user_access,1,0,0,0
-user_access_manager,Access manager res,base.model_res_partner,user_access_manager,1,1,1,1
-user_access_manager_1,Access manager res,product.model_product_template,user_access_manager,1,1,1,1
-user_access_security,user_access_security,base.model_res_partner,user_access_security,1,0,0,0
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4

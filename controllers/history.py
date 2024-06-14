@@ -97,7 +97,6 @@ class History(http.Controller):
         if kw["code"] == "parking":
             return self._parkingHistoryHandle(kw)
 
-<<<<<<< HEAD
     @http.route('/api/history/alert/tag', type='json', auth='public', methods=['POST'],  website=False, csrf=False)
     def alert_tag(self, **kw):
         if kw["code"] == "parking":
@@ -123,16 +122,6 @@ class History(http.Controller):
         partner = product.contact_id
         return Response(json.dumps({
             "productId": product.id,
-=======
-    @http.route('/api/history/getbyid', type='http', auth='public', methods=['POST'], website=False, csrf=False)
-    def getById(self, **kw):
-        moveHistory = self._find_by_key("stock.move.line", "id", kw["id"])
-        if not moveHistory:
-            return json.dumps({"code": 400, "message": "Lịch sử di chuyển không tìm thấy"})
-        partner = moveHistory.contact_id
-        product = moveHistory.product_id
-        return json.dumps({
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
             "nameNg": partner.name,
             "nameXe": product.name,
             "tidNg": partner.ref[8:],
@@ -140,7 +129,6 @@ class History(http.Controller):
             "typeXe": product.categ_id.complete_name,
             "imgXe": product.image_1920.decode(),
             "imgNg": partner.image_1920.decode(),
-<<<<<<< HEAD
             "imgPath1": "None",
             "imgPath2": "None",
             "imgBienSo": product.image_1920_bien_so.decode(),
@@ -176,14 +164,6 @@ class History(http.Controller):
             "imgBienSo": product_image_1920_bien_so,
             "pickingCode": product.picking_code,
         }), content_type='application/json;charset=utf-8', status=200)
-=======
-            "imgPath1": moveHistory.image_1920_camera_truoc.decode(),
-            "imgPath2": moveHistory.image_1920_camera_sau.decode(),
-            "imgBienSo": product.image_1920_bien_so.decode(),
-            "createDateTime": self._changeDate(moveHistory.create_date),
-            "pickingCode": product.picking_code,
-        })
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
 
     def _changeDate(self, date_in):
         user_tz = pytz.timezone(str(http.request.env.user.tz or pytz.utc))
@@ -253,7 +233,6 @@ class History(http.Controller):
                         message = "đã VÀO"
                     else:
                         message = "không hợp lệ!!"
-<<<<<<< HEAD
 
                     return Response(json.dumps({"message": "Xe " + message}), content_type='application/json;charset=utf-8', status=400)
 
@@ -261,15 +240,6 @@ class History(http.Controller):
             self.lock.acquire()
             self.my_dict.pop(tid, "None")
             self.lock.release()
-=======
-                    return json.dumps({"code": 400, "message": "Xe " + message})
-
-        if checkProduct:  # Xe vào + thẻ người thẻ xe lối ra hợp lệ
-            my_dict.pop(tid, "None")
-            product.write({"picking_code": picking_code})
-            imgTruoc, imgSau = self._imgTruocSauCamera(
-                kw["imgTruoc"], kw["imgSau"])
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
             id = 0
             if picking_code == "incoming":
                 id = product.contact_id.id
@@ -293,7 +263,6 @@ class History(http.Controller):
             return Response(json.dumps({"message": "Xe không hợp lệ!!"}), content_type='application/json;charset=utf-8', status=400)
 
     def _imgTruocSauCamera(self, imgTruoc, imgSau):
-<<<<<<< HEAD
         img_attachment = imgTruoc.read()
         if not img_attachment:
             imgTruoc = None
@@ -305,20 +274,6 @@ class History(http.Controller):
             imgSau = None
         else:
             imgSau = base64.b64encode(img_attachment)
-=======
-        if imgTruoc != "None":
-            file = imgTruoc
-            img_attachment = file.read()
-            imgTruoc = base64.b64encode(img_attachment)
-        else:
-            imgTruoc = None
-        if imgSau != "None":
-            file = imgSau
-            img_attachment = file.read()
-            imgSau = base64.b64encode(img_attachment)
-        else:
-            imgSau = None
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
         return imgTruoc, imgSau
 
     def _find_by_key(self, module, key, value):
@@ -360,16 +315,4 @@ class History(http.Controller):
         for product in product_list:
             if self.my_dict.get(product["default_code"], "None") != "None":
                 return product["default_code"]
-<<<<<<< HEAD
         return "None"
-=======
-        return "None"
-
-    def _defferentTime(self, datetime):
-        difference = datetime.now() - datetime
-        # Lấy tổng số giây
-        total_seconds = difference.total_seconds()
-        if (total_seconds < 5):
-            return False
-        return True
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4

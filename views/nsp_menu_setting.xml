@@ -74,7 +74,6 @@
         <menuitem id="nsp_menu_root" name="NSP" sequence="15" action="app_nsp_action"
             groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin" />
 
-<<<<<<< HEAD
         <menuitem id="menu_contact" name="Contact" parent="nsp_menu_root" sequence="5"
             action="action_contact_list"
             groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin" />
@@ -82,11 +81,6 @@
         <menuitem id="menu_vehicle" name="Vehicle" parent="nsp_menu_root" sequence="10"
             action="action_vehicle"
             groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin" />
-=======
-        <menuitem id="menu_contact" name="Contact" parent="nsp_menu_root" sequence="5" action="action_contact_list"/>
-
-        <menuitem id="menu_vehicle" name="Vehicle" parent="nsp_menu_root" sequence="10" action="action_vehicle"/>
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
 
         <record id="report_menu" model="ir.actions.act_window">
             <field name="name">Reporting</field>
@@ -112,14 +106,10 @@
             <field name="target">current</field>
         </record>
 
-<<<<<<< HEAD
         <menuitem
             id="parking_config_settings_menu" name="Color" parent="menu_nsp_config"
             sequence="27" action="color_setting_action"
             groups="user_access_manager,user_access_admin" />
-=======
-        <menuitem id="parking_config_settings_menu" name="Color" parent="menu_nsp_config" sequence="1" action="color_setting_action"/>
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
 
         <record id="stock_move_action"
             model="ir.actions.act_window">
@@ -128,7 +118,6 @@
             <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
-<<<<<<< HEAD
 
         <record id="action_show_users"
             model="ir.actions.server">
@@ -164,25 +153,6 @@
         </record>
         <menuitem id="menu_autom" name="Automation Rule" parent="menu_nsp_config" sequence="20"
             action="automation_menu" groups="user_access_manager,user_access_admin" />
-=======
-        <menuitem id="stock_move_setting_menu" name="Moves History" parent="menu_nsp_config" sequence="10" action="stock_move_action" groups="base.group_system" />
-
-        <record id="app_nsp_alert_tag" model="ir.actions.act_window">
-            <field name="name">Alert Tag</field>
-            <field name="res_model">alert.tag</field>
-            <field name="view_mode">form,tree</field>
-            <field name="target">current</field>
-        </record>
-        <menuitem id="menu_alert" name="Alert Tag" parent="menu_nsp_config" sequence="0" action="app_nsp_alert_tag"/>
-
-        <record id="automation_menu" model="ir.actions.act_window">
-            <field name="name">Automation Rules</field>
-            <field name="res_model">base.automation</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="target">current</field>
-        </record>
-        <menuitem id="menu_alert" name="Automation Rule" parent="menu_nsp_config" sequence="20" action="automation_menu"/>
->>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
 
     </data>
 </odoo>
