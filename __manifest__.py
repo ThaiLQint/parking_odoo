@@ -26,6 +26,7 @@
     # always loaded
     'data': [
         "security/access_user.xml",
+        "security/record_rule.xml",
         "security/ir.model.access.csv",     
         "views/AlerTag.xml",
         "views/Contact.xml",

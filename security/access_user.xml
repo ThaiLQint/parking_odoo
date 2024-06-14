@@ -8,6 +8,8 @@
     </record>
     <record id="user_access_admin" model="res.groups">
         <field name="name">ADMIN</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_erp_manager'))]" />
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
         <field name="category_id"
             ref="parking_odoo.cate_groups_nsp" />
     </record>
@@ -18,13 +20,20 @@
             ref="parking_odoo.cate_groups_nsp" />
     </record>
 
-
     <record id="user_access_operator" model="res.groups">
         <field name="name">OPERATOR</field>
         <field name="category_id"
             ref="parking_odoo.cate_groups_nsp" />
     </record>
 
+    <record id="user_access_manager" model="res.groups">
+        <field name="name">MANAGER</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_erp_manager'))]" />
+        <!-- <field name="domain_force" eval=""> </field> 
+         , (4, ref('parking_odoo.group_product_color_main'))-->
+        <field name="category_id"
+            ref="parking_odoo.cate_groups_nsp" />
+    </record>
 </odoo>
 
 <!-- access_user_nsp_admin,Access User NSP

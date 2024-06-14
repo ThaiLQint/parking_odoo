@@ -85,10 +85,9 @@
                         <field name="ma_dinh_danh" placeholder="e.g. 31195100312" on_change="1"
                             modifiers="{&quot;required&quot;: true}" />
                         <field name="ref" placeholder="e.g. 31195100312" on_change="1" />
-                        <field name="zalo" string="Zalo" invisible="not radio_zalo" readonly="1" />
-                        <field name="viper" string="Viber" invisible="not radio_viper" readonly="1" />
-                        <field name="what_app" string="What's App" invisible="not radio_what_app"
-                            readonly="1" />
+                        <field name="zalo" string="Zalo" invisible="not radio_zalo" readonly="1"/>
+                        <field name="viper" string="Viber" invisible="not radio_viper" readonly="1"/>
+                        <field name="what_app" string="What's App" invisible="not radio_what_app" readonly="1"/>
                     </group>
                 </xpath>
 
@@ -312,29 +311,27 @@
                 </xpath>
 
                 <xpath expr="//page[@name='social_network']" position="inside">
-                    <div>
-                        <sheet>
-                            <div class="text-nowrap">
-                                <span class="fw-bold">Zalo</span>
-                                <field class="ms-2" name="radio_zalo" />
-                                <field class="ms-2" name="zalo" string="Zalo"
-                                    readonly="not radio_zalo" />
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3">
+                        <div class="col d-flex flex-nowrap">
+                            <field class="ms-2" name="radio_zalo"/>
+                            <div class="ms-2">
+                                <field class="ms-2 w-75" name="list_zalo_id"/>
                             </div>
+                        </div>
 
-                            <div class="text-nowrap">
-                                <span class="fw-bold">Viber</span>
-                                <field class="ms-2" name="radio_viper" />
-                                <field class="ms-2" name="viper" string="Viber"
-                                    readonly="not radio_viper" />
+                        <div class="col d-flex flex-nowrap">
+                            <field class="ms-2" name="radio_viper" />
+                            <div class="ms-2">
+                                <field class="ms-2 w-75" name="list_viber_id"/>
                             </div>
+                        </div>
 
-                            <div class="text-nowrap">
-                                <span class="fw-bold">What's App</span>
-                                <field class="ms-2" name="radio_what_app" />
-                                <field class="ms-2" name="what_app" string="What's App"
-                                    readonly="not radio_what_app" />
+                        <div class="col d-flex flex-nowrap">
+                            <field class="ms-2" name="radio_what_app" />
+                            <div class="ms-2">
+                                <field class="ms-2 w-75" name="list_what_app_id"/>
                             </div>
-                        </sheet>
+                        </div>
                     </div>
                 </xpath>
 

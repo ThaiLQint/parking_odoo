@@ -12,6 +12,53 @@ _logger = logging.getLogger(__name__)
 
 
 class Webhoook(http.Controller):
+    @http.route('/api/load/nsp/config', type='http', auth='public', methods=['POST'], website=False, csrf=False)
+    def load_config(self, **kw):
+        if kw.get("code") != "parking":
+            return Response(json.dumps({"message": "Dịch vụ không hỗ trợ!"}), content_type='application/json;charset=utf-8', status=400)
+        branches = request.env['setting.nsp.branch'].sudo().search([])
+        if not branches:
+            return Response(json.dumps({"message": "Chi nhánh không tìm thấy"}), content_type='application/json;charset=utf-8', status=400)
+        branch_data = [self._prepare_branch_data(
+            branch) for branch in branches]
+
+        return Response(json.dumps(branch_data), content_type='application/json;charset=utf-8', status=200)
+
+    def _prepare_branch_data(self, branch):
+        parking_data = [self._prepare_parking_data(
+            parking) for parking in branch.parking_ids]
+        return {
+            "id": branch.id,
+            "name": branch.name,
+            "listParking": parking_data
+        }
+
+    def _prepare_parking_data(self, parking):
+        office_data = [self._prepare_office_data(
+            office) for office in parking.office_ids]
+        return {
+            "id": parking.id,
+            "name": parking.name,
+            "listOffice": office_data
+        }
+
+    def _prepare_office_data(self, office):
+        lane_in_data = [{"id": lane_in.id, "name": lane_in.name, "listDevice": self._prepare_device_data(lane_in)}
+                        for lane_in in office.lane_in_ids]
+        lane_out_data = [{"id": lane_out.id, "name": lane_out.name, "listDevice": self._prepare_device_data(lane_out)}
+                         for lane_out in office.lane_out_ids]
+        return {
+            "id": office.id,
+            "name": office.name,
+            "listLaneIn": lane_in_data,
+            "listLaneOut": lane_out_data
+        }
+
+    def _prepare_device_data(self, lane_in):
+        device_data = [{"id": device.id, "name": device.name}
+                       for device in lane_in.device_ids]
+        return device_data
+
     @http.route('/api/init/device', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def register(self, **kw):
         if kw["code"] == "parking":
@@ -117,7 +164,7 @@ class Webhoook(http.Controller):
                 'name': kw['name'],
                 'webhook_url': kw['webhookUrl'],
                 'webhook_name': kw['webhookName'],
-                'lane_id':kw['laneId']
+                'lane_id': kw['laneId']
             })
         else:
             resultSetting = request.env[module].sudo().create({

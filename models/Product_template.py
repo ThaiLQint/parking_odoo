@@ -23,7 +23,7 @@ def check_exist_xe(bien_so, ma_dinh_danh):
         domain=['|', ('default_code', '=', ma_dinh_danh),
                 ("name", "=", bien_so)],
         limit=1)
-    if not xe:
+    if not xe:  
         return 1
     if (xe.default_code == ma_dinh_danh):
         return -1

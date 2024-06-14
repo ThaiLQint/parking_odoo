@@ -12,7 +12,7 @@
                             <field name="name" />
                             <field name="id" invisible="1" />
                             <field name="parking_ids" widget="parking_setting_one2many">
-                                <tree string="Setting NSP Bãi xe">
+                                <tree string="Setting NSP Bãi xe" context="{'group_by': 'create_date'}">
                                     <field name="create_date" />
                                     <field name="name" />
                                 </tree>
