@@ -12,8 +12,8 @@ from . import _test
 from . import product_color
 from . import product_color_values
 from . import actionsServer
-from . import alert
 from . import baseAutomation
+from . import alert
 
+from . import res_group
 # from . import res_config_settings
-# from . import product_template_color_line

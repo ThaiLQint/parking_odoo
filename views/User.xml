@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="user_form" model="ir.ui.view">
+            <field name="name">res.users.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
+                    <field name="image_1920" widget="capture_image" on_change="1" class="oe_avatar"
+                        options="{'size': [250, 250]}" />
+                </xpath>
+                <xpath expr="//page[@name='preferences']" position='attributes'>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position='replace' />
+                <xpath expr="//page[@name='security']" position='attributes'>
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//label[@for='name']" position="replace" />
+                <xpath expr="//label[@for='login']" position="replace" />
+                <xpath expr="//field[@name='name']" position="replace">
+                    <group>
+                        <label for="name" string="Full name" />
+                        <h1 class="oe_inline">
+                            <field name="name" placeholder="e.g. Pham An" required="1"
+                                style="font-weight:bold"
+                            />
+                        </h1>
+                    </group>
+                </xpath>
+                <xpath expr="//field[@name='login']" position="replace">
+                    <group>
+                        <label for="login" string="Tên đăng nhập:" />
+                        <h3 class="oe_inline">
+                            <field name="login" store="True" />
+                        </h3>
+                    </group>
+                    <group>
+                        <label for="phone" string="Số điện thoại:" />
+                        <h4 class="oe_inline mt-1">
+                            <field name="phone" placeholder="Số điện thoại của bạn" />
+                        </h4>
+                    </group>
+                </xpath>
+
+                <xpath expr="//page[@name='access_rights']" position="after">
+                    <page name="social_network" string="Your media"
+                        help="Bạn có thể chọn một phương tiện liên hệ chính!">
+                        <div>
+                            <sheet>
+                                <notification
+                                    class="border rounded-3 "
+                                    style="border: 1px solid #ccc; background-color: #f0f0f0; padding: 10px;">
+                                    Bạn có thể chọn một phương tiện liên hệ chính!
+                                </notification>
+                                <empty-line>&#10;</empty-line>
+                                <hr />
+                                <div class="text-nowrap">
+                                    <span class="fw-bold">Zalo</span>
+                                    <field class="ms-2" name="zalo" string="Zalo"/>
+                                    <field class="ms-2" name="radio_zalo" />
+                                </div>
+
+                                <div class="text-nowrap">
+                                    <span class="fw-bold">Viber</span>
+                                    <field class="ms-2" name="viper" string="Viber"/>
+                                    <field class="ms-2" name="radio_viper" />
+                                </div>
+
+                                <div class="text-nowrap">
+                                    <span class="fw-bold">What's App</span>
+                                    <field class="ms-2" name="what_app" string="What's App"/>
+                                    <field class="ms-2" name="radio_what_app" />
+                                </div>
+                            </sheet>
+                        </div>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

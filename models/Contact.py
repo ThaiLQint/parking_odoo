@@ -38,13 +38,13 @@ class Contact(models.Model):
     employee = fields.Boolean(string="Cấp thẻ", default=False)
     ma_dinh_danh = fields.Char(string="ID nhân viên", required=False, store=True)
     # job_position = fields.Char(string="Job Position", required=True)
-    zalo = fields.Char(string="Zalo")
-    viper = fields.Char(string="Viber")
-    what_app = fields.Char(string="What's App")
-    zalo_2 = fields.Char(string="Zalo", readonly=True)
-    viper_2 = fields.Char(string="Viber", readonly=True)
-    what_app_2 = fields.Char(string="What's App", readonly=True)
-    radio_zalo = fields.Boolean(string="Zalo", default=True)
+    zalo = fields.Char(string="Zalo", compute='_compute_zalo', store=True)
+    list_zalo_id = fields.One2many('zalo', 'contact_ids', string='List Zalo')
+    viper = fields.Char(string="Viber", compute='_compute_viber', store=True)
+    list_viber_id = fields.One2many('viber', 'contact_ids', string='List Viber')
+    what_app = fields.Char(string="What's App", compute='_compute_what_app' , store=True)
+    list_what_app_id = fields.One2many('what_app', 'contact_ids',string="List What's App")
+    radio_zalo = fields.Boolean(default=True)
     radio_viper = fields.Boolean(string="Viber", default=False)
     radio_what_app = fields.Boolean(string="What's App", default=False)
     date_expiration = fields.Datetime(string="Ngày hết hạn", required=True)
@@ -62,12 +62,12 @@ class Contact(models.Model):
     'contact_id', 
     'partner_id', 
     string='Danh sách liên hệ',
-    domain="[('id', '!=', id)]",
+    domain="[('id', '!=', id)]", store=True
     )
     
-    vehicle = fields.Many2one("res.partner", string="Vehicle")
+    vehicle = fields.Many2one("res.partner", string="Vehicle", store=True)
 
-    vehicles = fields.One2many('res.partner', 'vehicle', string='Phương Tiện')
+    vehicles = fields.One2many('res.partner', 'vehicle', string='Phương Tiện', store=True)
     
     image_1920 = fields.Image(string="Ảnh đại diện", max_width=1024, max_height=768)
     image_1920_cmnd_cccd_truoc = fields.Image(
@@ -123,8 +123,8 @@ class Contact(models.Model):
         vals['date_expiration'] = fields.Datetime.now() + \
             relativedelta(months=1)
         new_record = super(Contact, self).create(vals)
-        self.env["res.users"].create({'image_1920': vals['image_1920'], 'name': vals['name'], 'email': vals['email'],
-                                     'login': vals['email'], 'company_id': 1, 'sel_groups_1_10_11': 11, 'active': True, 'partner_id': new_record.id, 'password': vals['phone']})
+        # self.env["res.users"].create({'image_1920': vals['image_1920'], 'name': vals['name'], 'email': vals['email'],
+        #                              'login': vals['email'], 'company_id': 1, 'sel_groups_1_10_11': 11, 'active': True, 'partner_id': new_record.id, 'password': vals['phone']})
         return new_record
     
     @api.constrains('barcode')
@@ -166,34 +166,43 @@ class Contact(models.Model):
         if self.radio_what_app:
             self.radio_zalo = False
             self.radio_viper = False
-        
-    @api.model
-    def create(self, vals):
-        if 'zalo' in vals:
-            vals['zalo_2'] = vals['zalo']
-        if 'viper' in vals:
-            vals['viper_2'] = vals['viper']
-        if 'what_app' in vals:
-            vals['what_app_2'] = vals['what_app']
-        return super(Contact, self).create(vals)
+    
+    @api.depends('list_zalo_id.name')
+    def _compute_zalo(self):
+        for partner in self:
+            zalo_names = partner.list_zalo_id.mapped('name')
+            partner.zalo = ', '.join(zalo_names)
 
-    def write(self, vals):
-        if 'zalo' in vals:
-            vals['zalo_2'] = vals['zalo']
-        if 'viper' in vals:
-            vals['viper_2'] = vals['viper']
-        if 'what_app' in vals:
-            vals['what_app_2'] = vals['what_app']
-        return super(Contact, self).write(vals)
+    @api.depends('list_viber_id.name')
+    def _compute_viber(self):
+        for partner in self:
+            viber_names = partner.list_viber_id.mapped('name')
+            partner.viper = ', '.join(viber_names)
+    
+    @api.depends('list_what_app_id.name')
+    def _compute_what_app(self):
+        for partner in self:
+            what_app_names = partner.list_what_app_id.mapped('name')
+            partner.what_app = ', '.join(what_app_names)
 
-    @api.onchange('zalo')
-    def _onchange_zalo(self):
-        self.zalo_2 = self.zalo
+class Zalo(models.Model):
+    _name = 'zalo'
+    _description = 'Zalo'
 
-    @api.onchange('viper')
-    def _onchange_viper(self):
-        self.viper_2 = self.viper
+    name = fields.Char(string="Zalo", required=True)
+    contact_ids = fields.Many2one('res.partner', string='Contact', required=True)
 
-    @api.onchange('what_app')
-    def _onchange_what_app(self):
-        self.what_app_2 = self.what_app
+class Viber(models.Model):
+    _name = 'viber'
+    _description = 'Viber'
+
+    name = fields.Char(string="Viber", required=True)
+    contact_ids = fields.Many2one('res.partner', string='Contact', required=True)
+
+class WhatApp(models.Model):
+    _name = 'what_app'
+    _description = 'What App'
+
+    name = fields.Char(string="What App", required=True)
+    contact_ids = fields.Many2one('res.partner', string='Contact', required=True)
+

@@ -1,8 +1,22 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 
 access_product_color,Access Product Color 2,model_product_color_main,base.group_user,1,1,1,1
-access_alert,Access Alert,model_alert_tag,base.group_user,1,1,1,1
+access_user_zalo,Access User Zalo,model_zalo,base.group_user,1,1,1,1
+access_user_viber,Access User Viber,model_viber,base.group_user,1,1,1,1
+access_user_what_app,Access User What App,model_what_app,base.group_user,1,1,1,1
 
-"security_account","Security","model_res_partner","",1,0,0,0
-access_security,Base Security,model_res_partner,base.group_user,1,0,0,0
+"access_user_admin","vehicle","model_product_template",user_access_admin,1,1,1,1
+"access_user_admin_1","contact","model_res_partner",user_access_admin,1,1,1,1
 
+access_manager,"manager reporting","model_res_partner",user_access_manager,1,1,1,0
+access_manager_pro,"manager reporting pro","model_product_template",user_access_manager,1,1,1,0
+access_manager_col,"manager color","model_product_color_main",user_access_manager,1,1,1,1
+access_manager_user_model,"manager user list","model_res_users",user_access_manager,1,0,0,0
+
+access_security,"access security vehicle","model_product_template",security_readonly_list,1,0,0,0
+access_security_cont,"access security contact","model_res_partner",security_readonly_list,1,0,0,0
+
+access_oper_pro,"oper product","model_product_template",user_access_operator,1,1,1,0
+access_oper_cont,"oper contact","model_res_partner",user_access_operator,1,1,1,0
+access_oper_move,"oper move hist","model_stock_move_line",user_access_operator,1,1,1,0
+access_manager_col,"manager color","model_product_color_main",user_access_operator,1,0,1,1
