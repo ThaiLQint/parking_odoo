@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="parking.SettingListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary">
+        <xpath expr="//table" position="attributes">
+        </xpath>
+    </t>
+</templates>

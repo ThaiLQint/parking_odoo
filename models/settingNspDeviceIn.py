@@ -14,4 +14,4 @@ class SettingNspDeviceIn(models.Model):
     webhook_url = fields.Char(string="Webhook URL")
     webhook_name = fields.Char(string="Webhook Name")
     lane_id = fields.Many2one(
-        "setting.nsp.lane.in", string="Cổng vào")
+        "setting.nsp.lane.in", string="Cổng vào",  ondelete='cascade')

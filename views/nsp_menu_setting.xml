@@ -10,6 +10,50 @@
             <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
         </record>
 
+        <record id="action_contact_list1" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.lane.out</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list2" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.lane.in</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list3" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.parking</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list4" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.office</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list5" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.device.out</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list6" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.device.in</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+
+
         <record id="action_vehicle" model="ir.actions.act_window">
             <field name="name">Vehicle</field>
             <field name="res_model">product.template</field>
@@ -33,6 +77,19 @@
 
         <menuitem id="menu_vehicle" name="Vehicle" parent="nsp_menu_root" sequence="10"
             action="action_vehicle" />
+
+        <menuitem id="menu_contact6" name="Thiết bị In" parent="nsp_menu_root" sequence="5"
+            action="action_contact_list6" />
+        <menuitem id="menu_contact5" name="Thiết bị Ra" parent="nsp_menu_root" sequence="5"
+            action="action_contact_list5" />
+        <menuitem id="menu_contact3" name="Parking" parent="nsp_menu_root" sequence="5"
+            action="action_contact_list3" />
+        <menuitem id="menu_contact4" name="office" parent="nsp_menu_root" sequence="5"
+            action="action_contact_list4" />
+        <menuitem id="menu_contact2" name="lane in" parent="nsp_menu_root" sequence="5"
+            action="action_contact_list2" />
+        <menuitem id="menu_contact1" name="lane out" parent="nsp_menu_root" sequence="5"
+            action="action_contact_list1" />
 
         <menuitem id="menu_nsp_config" name="Configuration" parent="nsp_menu_root" sequence="100" />
 

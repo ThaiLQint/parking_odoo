@@ -23,8 +23,9 @@ class NspBranchFormController extends FormController {
 
     this.dialogService = useService("dialog");
   }
-  save(){
+  save(params){
     console.log("save")
+    super.save(params)
   }
   // addParkingId() {
   //   self = this;

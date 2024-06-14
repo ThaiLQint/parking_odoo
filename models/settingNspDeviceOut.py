@@ -14,4 +14,4 @@ class SettingNspDeviceOut(models.Model):
     webhook_url = fields.Char(string="Webhook URL")
     webhook_name = fields.Char(string="Webhook Name")
     lane_id = fields.Many2one(
-        "setting.nsp.lane.out", string="Cổng Ra")
+        "setting.nsp.lane.out", string="Cổng Ra",  ondelete='cascade')
