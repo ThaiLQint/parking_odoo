@@ -10,6 +10,9 @@ access_setting_nsp_device_in,Access Setting NSP Device In,model_setting_nsp_devi
 access_setting_nsp_device_out,Access Setting NSP Device Out,model_setting_nsp_device_out,base.group_user,1,1,1,1
 
 access_product_color,Access Product Color 2,model_product_color_main,base.group_user,1,1,1,1
+access_user_zalo,Access User Zalo,model_zalo,base.group_user,1,1,1,1
+access_user_viber,Access User Viber,model_viber,base.group_user,1,1,1,1
+access_user_what_app,Access User What App,model_what_app,base.group_user,1,1,1,1
 "access_user_admin","vehicle","model_product_template",user_access_admin,1,1,1,1
 "access_user_admin_1","contact","model_res_partner",user_access_admin,1,1,1,1
 
