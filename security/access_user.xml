@@ -34,6 +34,12 @@
         <field name="category_id"
             ref="parking_odoo.cate_groups_nsp" />
     </record>
+
+    <record id="user_access" model="res.groups">
+        <field name="name">USER</field>
+        <field name="category_id"
+            ref="parking_odoo.cate_groups_nsp" />
+    </record>
 </odoo>
 
 <!-- access_user_nsp_admin,Access User NSP

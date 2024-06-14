@@ -39,8 +39,8 @@
                     </group>
                     <group>
                         <label for="phone" string="Số điện thoại:" />
-                        <h4 class="oe_inline mt-1">
-                            <field name="phone" placeholder="Số điện thoại của bạn" />
+                        <h4 class="oe_inline">
+                            <field name="phone" placeholder="Số điện thoại của bạn"/>
                         </h4>
                     </group>
                 </xpath>

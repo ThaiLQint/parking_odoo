@@ -7,12 +7,25 @@ _logger = logging.getLogger(__name__)
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
+    # is_admin_or_manager = fields.Boolean(
+    #     compute='_compute_is_admin_or_manager',
+    #     store=True
+    # )
 
     @api.model
     def create(self, vals):
         _logger.info(vals)
+        vals['email'] = vals['login']
+        vals['isUserCreateCheck'] = True
         users = super(ResUsers, self).create(vals)
         return users
+    def write(self, vals):
+        # Code before write: 'self' has the old values
+        _logger.info(vals)
+        record = super(ResUsers, self).write(vals)
+        # Code after write: can use 'self' with the updated
+        # values
+        return record
 
     def _action_show2(self):
         _logger.info(self)

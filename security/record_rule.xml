@@ -6,13 +6,17 @@
             <field name="model_id" ref="parking_odoo.model_res_partner" />
             <field name="groups"
                 eval="[(6, 0, [ref('security_readonly_list'), ref('user_access_operator')])]" />
-            <field name="domain_force">[('user_id','in',[False,user.id])]</field>
+            <field name="domain_force">['|', ('user_id', 'in', [False, user.id]),
+                ('user_id', '=', False)]</field>
             <field name="perm_read" eval="True" />
             <field name="perm_write" eval="False" />
             <field name="perm_create" eval="False" />
             <field name="perm_unlink" eval="False" />
         </record>
-        <!-- <record id="fleet_rule_service_visibility_user" model="ir.rule">
+
+    </data>
+</odoo>
+<!-- <record id="fleet_rule_service_visibility_user" model="ir.rule">
             <field name="name">User can only see his/her vehicle's services</field>
             <field name="model_id" ref="model_fleet_vehicle_log_services"/>
             <field name="groups" eval="[(4, ref('fleet_group_user'))]"/>
@@ -32,6 +36,3 @@
             <field name="perm_unlink" eval="True"/>
             <field name="domain_force">[('vehicle_id.driver_id','=',user.partner_id.id)]</field>
         </record> -->
-
-    </data>
-</odoo>

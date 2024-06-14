@@ -54,8 +54,8 @@ class Contact(models.Model):
         
     product_ids_private = fields.One2many("product.template", "contact_id", string="D/S xe chính chủ",
                                         readonly=True)
-
-    partner_id = fields.Many2one("res.partner", string="Liên hệ", store=True)
+    isUserCreateCheck = fields.Boolean(default=False)
+    partner_id = fields.Many2one("res.partner", string="Liên hệ")
     partner_ids = fields.Many2many(
     'res.partner', 
     'contact_partner_rel', 
@@ -118,13 +118,25 @@ class Contact(models.Model):
     #             product.write({'user_ids': [(3, self.id)]})
     
     @api.model
-   
     def create(self, vals):
         vals['date_expiration'] = fields.Datetime.now() + \
             relativedelta(months=1)
         new_record = super(Contact, self).create(vals)
-        # self.env["res.users"].create({'image_1920': vals['image_1920'], 'name': vals['name'], 'email': vals['email'],
-        #                              'login': vals['email'], 'company_id': 1, 'sel_groups_1_10_11': 11, 'active': True, 'partner_id': new_record.id, 'password': vals['phone']})
+        if(vals['isUserCreateCheck'] == True):
+            return new_record
+        _logger.info("HELLO")
+        id_user_role = self.env["res.groups"].search(['|',
+        ('full_name', '=', 'NSP System / USER'), 
+        ('full_name', '=', 'User types / Internal User')], limit=2)
+        if id_user_role[0].full_name == 'NSP System / USER':
+            idUserNSP = id_user_role[0].id
+            idUserInternal = id_user_role[1].id
+        else:
+            idUserNSP = id_user_role[1].id
+            idUserInternal = id_user_role[0].id
+        self.env["res.users"].create({
+            'in_group_'+str(idUserNSP):True,'image_1920': vals['image_1920'], 'name': vals['name'], 'email': vals['email'],
+                                      'login': vals['email'], 'company_id': 1, 'sel_groups_1_10_11': idUserInternal, 'active': True, 'partner_id': new_record.id, 'password': vals['phone']})
         return new_record
     
     @api.constrains('barcode')

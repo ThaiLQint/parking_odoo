@@ -116,7 +116,9 @@ class GroupsNSP(models.Model):
                         # we can't use enumerate, as we sometime skip groups
                         group_count = 0
                         for g in gs:
-                            if g.name == "ADMIN" or g.name == "SECURITY" or g.name == "OPERATOR" or g.name == "MANAGER":
+                            _logger.info(g.name)
+                            # or g.name == "SECURITY" or g.name == "OPERATOR" or g.name == "MANAGER"
+                            if g.name != "USER" :
                                 field_name = name_boolean_group(g.id)
                                 
                                 dest_group = left_group if group_count % 2 == 0 else right_group

@@ -25,6 +25,7 @@
     "application": True,
     # always loaded
     'data': [
+        "views/User.xml",     
         "security/access_user.xml",
         "security/record_rule.xml",
         "security/ir.model.access.csv",     
@@ -36,13 +37,10 @@
         "views/product_color_main.xml",
         "views/nsp_menu_setting.xml",     
         "views/hiden_view.xml",     
-        "views/User.xml",     
-        "views/SettingNSP.xml",     
     ],
     'qweb': [],
     'installable': True,
     'application': True,
-    
     'auto_install': True,
     'assets': {
         'web.assets_backend':
