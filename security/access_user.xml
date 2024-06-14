@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+<<<<<<< HEAD
     <!-- LƯU Ý: Tạo Group mới không được trùng lặp id và ghi đè lên gourp cũ 
      ID group quyền (parent) phải khác nhau khi thêm mới -->
     <record id="cate_groups_nsp" model="ir.module.category">
@@ -46,8 +47,32 @@
 Admin,model_res_partner,parking_odoo.user_access_manager,1,1,1,0 -->
 <!-- 
 
+=======
+    <!-- Định nghĩa nhóm User -->
+    <record id="user_access" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="base.module_category_nsp"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Định nghĩa nhóm NSP Admin -->
+    <record id="user_access_manager" model="res.groups">
+        <field name="name">NSP Admin</field>
+        <field name="category_id" ref="base.module_category_nsp"/>
+        <field name="implied_ids" eval="[(4, ref('user_access'))]"/>
+        <!-- Nhóm này thuộc những user là admin hoặc super user -->
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- Định nghĩa nhóm NSP Security -->
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
     <record id="user_access_security" model="res.groups">
         <field name="name">NSP Security</field>
         <field name="category_id" ref="base.module_category_nsp"/>
         <field name="implied_ids" eval="[(4, ref('user_access'))]"/>
+<<<<<<< HEAD
     </record> -->
+=======
+    </record>
+</odoo>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4

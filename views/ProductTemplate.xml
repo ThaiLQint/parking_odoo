@@ -83,17 +83,30 @@
                 <xpath expr="//form/sheet/notebook" position="attributes">
                     <attribute name="invisible">0</attribute>
                 </xpath>
+<<<<<<< HEAD
                 <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
                     <field name="image_1920" widget="image" class="oe_avatar"
                         options="{'size': [250, 250]}" />
                 </xpath>
 
+=======
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                 <!-- <xpath expr="//page[@name='invoicing']" position="replace"></xpath> -->
+
                 <xpath expr="//page[@name='general_information']" position="replace"></xpath>
                 <xpath expr="//page[@name='sales']" position="replace"></xpath>
                 <xpath expr="//page[@name='purchase']" position="replace"></xpath>
                 <xpath expr="//page[@name='variants']" position="replace"></xpath>
                 <xpath expr="//page[@name='inventory']" position="replace"></xpath>
+
+                <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
+                    <field name="image_1920" class="oe_avatar" widget="image" options="{'size': [250, 250]}"></field>
+                </xpath>
+
+                <xpath expr="//sheet/field[@name='product_variant_count']" position="before">
+                    <field name="picking_code" invisible='1' />
+                    <widget name="web_ribbon" title="ĐÃ VÀO BÃI" bg_color="bg-success" invisible="picking_code != 'incoming'" />
+                </xpath>
 
                 <xpath expr="//form/sheet/notebook">
                     <page string="Thông tin chung" name="general_information">
@@ -124,6 +137,7 @@
                                                                 border: 1px solid #ccc; 
                                                                 box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); 
                                                                 border-radius: 5px;">
+<<<<<<< HEAD
                                                         <div
                                                             t-attf-class="oe_kanban_content oe_kanban_global_click">
                                                             <div class="o_kanban_record_bottom"
@@ -150,6 +164,23 @@
                                                                         <strong>Mã thẻ: </strong>
                                                                         <field name="ref"
                                                                             attrs="{'invisible': [('ref','=',False)]}" />
+=======
+                                                        <div t-attf-class="oe_kanban_content oe_kanban_global_click">
+                                                            <div class="o_kanban_record_bottom">
+                                                                <div class="o_kanban_record_bottom_right" style="margin-right: 10px;">
+                                                                    <field name="image_1920" widget="image" class="oe_avatar avatar-hover" />
+                                                                </div>
+
+                                                                <div class="o_kanban_record_bottom_left" style="flex-grow: 1; display: flex; flex-direction: column;">
+                                                                    <field name="name" style="margin-bottom: 5px; font-weight:bold" class="text-nowrap name-container"></field>
+                                                                    <div>
+                                                                        <strong>ID: </strong>
+                                                                        <field name="ma_dinh_danh" attrs="{'invisible': [('ma_dinh_danh','=',False)]}" />
+                                                                    </div>
+                                                                    <div>
+                                                                        <strong>Mã thẻ: </strong>
+                                                                        <field name="ref" attrs="{'invisible': [('ref','=',False)]}" />
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                                                     </div>
                                                                 </div>
                                                                 <div class="delete-button text-end"
@@ -213,6 +244,7 @@
                             <tree create="0" edit="0" default_order="create_date desc" class="text">
                                 <field name="create_date" class="text"></field>
                                 <field name="product_id" class="text"></field>
+<<<<<<< HEAD
                                 <field name="image_1920_camera_truoc" class="text" widget="image"
                                     options="{'size': [150, 150]}"></field>
                                 <field name="port" string="Cổng" class="text"></field>
@@ -222,6 +254,12 @@
                                     decoration-muted="picking_code == 'outgoing'"
                                     decoration-success="picking_code == 'incoming'"
                                     style="font-size:20px" />
+=======
+                                <field name="image_1920_camera_truoc" class="text" widget="image" options="{'size': [150, 150]}"></field>
+                                <field name="port" string="Cổng" class="text"></field>
+                                <field name="contact_id" class="text"></field>
+                                <field name="picking_code" class="text-center" widget="badge" decoration-muted="picking_code == 'outgoing'" decoration-success="picking_code == 'incoming'" style="font-size:20px"/>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                             </tree>
                         </field>
                     </page>
@@ -238,6 +276,7 @@
                         </sheet>
                     </page>
                 </xpath>
+
                 <xpath expr="//form/sheet/div[@class='oe_title']" position="after">
 
                     <separator string="Thông tin xe" />
@@ -248,6 +287,12 @@
                                     options="{'no_create':True, 'no_create_edit':False, 'no_open': True}" />
                                 <label for="color_id" string="Màu xe" />
                                 <div class="o_row" style="display: flex;">
+<<<<<<< HEAD
+=======
+                                    <span>
+                                        <field name="html_color" string="" widget="color"/>
+                                    </span>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                     <span>
                                         <field name="html_color" string="" widget="color" />
                                     </span>

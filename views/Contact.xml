@@ -74,6 +74,9 @@
                     <!-- Danh sách xe  -->
                 </xpath>
 
+                <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{'size': [200, 200]}"/>
+                </xpath>
                 <!-- Image Avatar -->
                 <xpath expr="//form/sheet/field[@name='image_1920']" position="replace">
                     <field name="image_1920" widget="capture_image" on_change="1" class="oe_avatar"
@@ -82,6 +85,7 @@
 
                 <xpath expr="//form/sheet/group/group" position="after">
                     <group>
+<<<<<<< HEAD
                         <field name="isUserCreateCheck" invisible="1"/>
                         <field name="ma_dinh_danh" placeholder="e.g. 31195100312" on_change="1"
                             modifiers="{&quot;required&quot;: true}" />
@@ -89,6 +93,18 @@
                         <field name="zalo" string="Zalo" invisible="not radio_zalo" />
                         <field name="viper" string="Viber" invisible="not radio_viper" />
                         <field name="what_app" string="What's App" invisible="not radio_what_app" />
+=======
+                        <field name="ma_dinh_danh" placeholder="e.g. 31195100312" on_change="1" modifiers="{&quot;required&quot;: true}" />
+                        <field name="ref" placeholder="e.g. 31195100312" on_change="1" />
+
+
+                        <field name="zalo" string="Zalo" invisible="not radio_zalo" class="fa fa-zalo">
+
+                        </field>
+
+                        <field name="viper" string="Viber" invisible="not radio_viper"/>
+                        <field name="what_app" string="What's App" invisible="not radio_what_app"/>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                     </group>
                 </xpath>
 
@@ -120,6 +136,7 @@
                     <field name="partner_ids" class="ms-3">
                         <kanban create="false" delete="false">
                             <templates>
+<<<<<<< HEAD
                                 <t t-name="kanban-box">
                                     <!-- Display fields of each partner_id in separate card -->
                                     <group class="o_kanban_record d-flex flex-column"
@@ -163,6 +180,38 @@
                                             </div>
                                         </div>
                                     </group>
+=======
+                                <t t-name="kanban-box" style="width: 240px; 
+                                                                height: 120px; 
+                                                                padding: 10px; 
+                                                                margin: 10px; 
+                                                                border: 1px solid #ccc; 
+                                                                box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); 
+                                                                border-radius: 5px;">
+
+                                    <div class="row flex-grow-1 oe_kanban_global_click">
+                                        <div class="o_kanban_record_bottom">
+                                            <div class="o_kanban_record_bottom_right" style="margin-right: 10px;">
+                                                <field name="image_1920" widget="image" class="oe_avatar avatar-hover" />
+                                            </div>
+                                            <div class="o_kanban_record_bottom_left" style="flex-grow: 1; display: flex; flex-direction: column;">
+                                                <field name="name" style="margin-bottom: 5px; font-weight:bold" class="text-nowrap name-container"></field>
+                                                <div>
+                                                    <strong>ID: </strong>
+                                                    <field name="ma_dinh_danh" attrs="{'invisible': [('ma_dinh_danh','=',False)]}" />
+                                                </div>
+                                                <div>
+                                                    <strong>Mã thẻ: </strong>
+                                                    <field name="ref" attrs="{'invisible': [('ref','=',False)]}" />
+                                                </div>
+
+                                            </div>
+                                            <div class="delete-button text-end" style="margin-right: 10px;">
+                                                <a type="delete" name="delete_button" class="fa fa-trash" />
+                                            </div>
+                                        </div>
+                                    </div>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                 </t>
                             </templates>
                         </kanban>
@@ -179,12 +228,17 @@
 
                 <xpath expr="//page[@name='internal_notes']" position="inside">
                     <div>
+<<<<<<< HEAD
                         <separator class="fs-2" string="Xe chính chủ" />
+=======
+                        <separator string="Xe chính chủ" style="font-size:20px"/>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                         <field name="product_ids_private">
                             <kanban offset="0" limit="4" total="50" create="false" delete="false">
                                 <templates>
                                     <t t-name="kanban-box">
                                         <field name="picking_code" invisible="1" />
+<<<<<<< HEAD
                                         <group invisible="picking_code == 'outgoing'"
                                             t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-success"
                                             style="width: 80%; height: 100%;">
@@ -195,18 +249,32 @@
                                                     <div class="o_kanban_record_bottom_left">
                                                         <field name="image_1920" widget="image"
                                                             style="width: 100% ; height: 100%" />
+=======
+
+                                        <group invisible="picking_code == 'outgoing'" t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-success" style="width: 80%; height: 100%;">
+
+                                            <div class="row row-cols-1 text-center">
+                                                <div class="col mt-2">
+                                                    <div class="o_kanban_record_bottom_left">
+                                                        <field name="image_1920" widget="image" style="width: 100% ; height: 100%" />
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                                     </div>
                                                 </div>
 
                                                 <div class="col mt-3 mb-3 fs-2 fw-bold">
                                                     <div class="o_kanban_record_bottom_right">
+<<<<<<< HEAD
                                                         <field name="name"
                                                             decoration-black="picking_code == 'outgoing'"
                                                             decoration-white="picking_code == 'incoming'" />
+=======
+                                                        <field name="name" decoration-black="picking_code == 'outgoing'" decoration-white="picking_code == 'incoming'" />
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                                     </div>
                                                 </div>
                                             </div>
                                         </group>
+<<<<<<< HEAD
                                         <group invisible="picking_code == 'incoming'"
                                             t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-secondary"
                                             style="width: 80%; height: 100%;">
@@ -217,14 +285,26 @@
                                                     <div class="o_kanban_record_bottom_left">
                                                         <field name="image_1920" widget="image"
                                                             style="width: 100% ; height: 100%" />
+=======
+                                        <group invisible="picking_code == 'incoming'" t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-secondary" style="width: 80%; height: 100%;">
+
+                                            <div class="row row-cols-1 text-center">
+                                                <div class="col mt-2">
+                                                    <div class="o_kanban_record_bottom_left">
+                                                        <field name="image_1920" widget="image" style="width: 100% ; height: 100%" />
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                                     </div>
                                                 </div>
 
                                                 <div class="col mt-3 mb-3 fs-2 fw-bold">
                                                     <div class="o_kanban_record_bottom_right">
+<<<<<<< HEAD
                                                         <field name="name"
                                                             decoration-black="picking_code == 'outgoing'"
                                                             decoration-white="picking_code == 'incoming'" />
+=======
+                                                        <field name="name" decoration-black="picking_code == 'outgoing'" decoration-white="picking_code == 'incoming'" />
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                                     </div>
                                                 </div>
                                             </div>
@@ -235,12 +315,17 @@
                         </field>
                     </div>
                     <div>
+<<<<<<< HEAD
                         <separator class="fs-2" string="Xe dùng chung" />
+=======
+                        <separator string="Xe dùng chung" style="font-size:20px"/>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                         <field name="product_ids_public">
                             <kanban offset="0" limit="4" total="50" create="false" delete="false">
                                 <templates>
                                     <t t-name="kanban-box">
                                         <field name="picking_code" invisible="1" />
+<<<<<<< HEAD
                                         <group invisible="picking_code == 'outgoing'"
                                             t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-success"
                                             style="width: 80%; height: 100%;">
@@ -251,18 +336,31 @@
                                                     <div class="o_kanban_record_bottom_left">
                                                         <field name="image_1920" widget="image"
                                                             style="width: 100% ; height: 100%" />
+=======
+                                        <group invisible="picking_code == 'outgoing'" t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-success" style="width: 80%; height: 100%;">
+
+                                            <div class="row row-cols-1 text-center">
+                                                <div class="col mt-2">
+                                                    <div class="o_kanban_record_bottom_left">
+                                                        <field name="image_1920" widget="image" style="width: 100% ; height: 100%" />
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                                     </div>
                                                 </div>
 
                                                 <div class="col mt-3 mb-3 fs-2 fw-bold">
                                                     <div class="o_kanban_record_bottom_right">
+<<<<<<< HEAD
                                                         <field name="name"
                                                             decoration-black="picking_code == 'outgoing'"
                                                             decoration-white="picking_code == 'incoming'" />
+=======
+                                                        <field name="name" decoration-black="picking_code == 'outgoing'" decoration-white="picking_code == 'incoming'" />
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                                     </div>
                                                 </div>
                                             </div>
                                         </group>
+<<<<<<< HEAD
                                         <group invisible="picking_code == 'incoming'"
                                             t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-secondary"
                                             style="width: 80%; height: 100%;">
@@ -273,18 +371,34 @@
                                                     <div class="o_kanban_record_bottom_left">
                                                         <field name="image_1920" widget="image"
                                                             style="width: 100% ; height: 100%" />
+=======
+                                        <group invisible="picking_code == 'incoming'" t-attf-class="oe_kanban_content oe_kanban_global_click d-flex justify-content-center border bg-secondary" style="width: 80%; height: 100%;">
+
+                                            <div class="row row-cols-1 text-center">
+                                                <div class="col mt-2">
+                                                    <div class="o_kanban_record_bottom_left">
+                                                        <field name="image_1920" widget="image" style="width: 100% ; height: 100%" />
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                                     </div>
                                                 </div>
 
                                                 <div class="col mt-3 mb-3 fs-2 fw-bold">
                                                     <div class="o_kanban_record_bottom_right">
+<<<<<<< HEAD
                                                         <field name="name"
                                                             decoration-black="picking_code == 'outgoing'"
                                                             decoration-white="picking_code == 'incoming'" />
+=======
+                                                        <field name="name" decoration-black="picking_code == 'outgoing'" decoration-white="picking_code == 'incoming'" />
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                                     </div>
                                                 </div>
                                             </div>
                                         </group>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                                     </t>
                                 </templates>
                             </kanban>
@@ -297,14 +411,22 @@
                 </xpath>
 
                 <xpath expr="//page[@name='manager_info']" position="inside">
+<<<<<<< HEAD
                     <sheet>
+=======
+                    <div>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                         <group>
                             <group>
                                 <field name="ref" />
                                 <field name="barcode" string="Mật khẩu" password="true"></field>
                             </group>
                         </group>
+<<<<<<< HEAD
                     </sheet>
+=======
+                    </div>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                 </xpath>
 
                 <xpath expr="//page[@name='manager_info']" position="after">
@@ -312,6 +434,7 @@
                 </xpath>
 
                 <xpath expr="//page[@name='social_network']" position="inside">
+<<<<<<< HEAD
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3">
                         <div class="col d-flex flex-nowrap">
                             <field class="ms-2" name="radio_zalo"/>
@@ -333,6 +456,16 @@
                                 <field class="ms-2 w-75" name="list_what_app_id"/>
                             </div>
                         </div>
+=======
+                    <div>
+                        <group>
+                            <group>
+                                <field name="radio_zalo" />
+                                <field name="radio_viper" />
+                                <field name="radio_what_app" />
+                            </group>
+                        </group>
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
                     </div>
                 </xpath>
 

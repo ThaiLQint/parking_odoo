@@ -55,4 +55,8 @@ class ActionsServer(models.Model):
             _logger.warning("Webhook call failed: %s", e)
         except Exception as e:  # noqa: BLE001
             raise UserError(
+<<<<<<< HEAD
                 _("Wow, your webhook call failed with a really unusual error: %s", e)) from e
+=======
+                _("Wow, your webhook call failed with a really unusual error: %s", e)) from e
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4

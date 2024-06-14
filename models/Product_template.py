@@ -228,4 +228,8 @@ class Product_template(models.Model):
             return "LỖI: KHÔNG THỂ TẠO UUID DO BỊ ĐÃ TỒN TẠI [1" + hex_arr[1:24]+"]!!"
         message = "ghi epc|"+"1" + hex_arr[1:24] + "|"+hex_arr[24:]
         return message
+<<<<<<< HEAD
 # ===============================
+=======
+# ===============================
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4

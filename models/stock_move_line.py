@@ -1,6 +1,6 @@
 import logging
 
-from odoo import fields, models, http
+from odoo import fields, models, http, api
 _logger = logging.getLogger(__name__)
 
 def find_location_empty(self):
@@ -62,6 +62,7 @@ class stock_move_line(models.Model):
     date_sub_in_out = fields.Char(string="TG gửi xe")
     
     create_date = fields.Datetime(string="Thời gian tạo")
+    
     
     def create(self, vals):
         new_record = super(stock_move_line, self).create(vals)

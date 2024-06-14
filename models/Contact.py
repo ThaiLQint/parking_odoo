@@ -38,6 +38,7 @@ class Contact(models.Model):
     employee = fields.Boolean(string="Cấp thẻ", default=False)
     ma_dinh_danh = fields.Char(string="ID nhân viên", required=False, store=True)
     # job_position = fields.Char(string="Job Position", required=True)
+<<<<<<< HEAD
     zalo = fields.Char(string="Zalo", compute='_compute_zalo', store=True)
     list_zalo_id = fields.One2many('zalo', 'contact_ids', string='List Zalo')
     viper = fields.Char(string="Viber", compute='_compute_viber', store=True)
@@ -48,6 +49,15 @@ class Contact(models.Model):
     radio_viper = fields.Boolean(string="Viber", default=False)
     radio_what_app = fields.Boolean(string="What's App", default=False)
     date_expiration = fields.Datetime(string="Ngày hết hạn", required=True)
+=======
+    zalo = fields.Char(string="Zalo", required=True)
+    viper = fields.Char(string="Viper" )
+    what_app = fields.Char(string="What's App")
+    radio_zalo = fields.Boolean(string="Zalo", default=True)
+    radio_viper = fields.Boolean(string="Viper", default=False)
+    radio_what_app = fields.Boolean(string="What's App", default=False)
+    date_expiration = fields.Datetime(string="Ngày hết hạn")
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
     
     product_ids_public = fields.Many2many("product.template", relation="product_template_res_partner_rel", column1="res_partner_id", column2="product_template_id", string="D/S xe dùng chung",
                                         readonly=True)

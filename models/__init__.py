@@ -14,6 +14,7 @@ from . import product_color_values
 from . import actionsServer
 from . import baseAutomation
 from . import alert
+<<<<<<< HEAD
 from . import settingNspBranch
 from . import settingNspParking
 from . import settingNspOffice
@@ -21,6 +22,9 @@ from . import settingNspLaneIn
 from . import settingNspLaneOut
 from . import settingNspDeviceIn
 from . import settingNspDeviceOut
+=======
+# from . import nsp_odoo
+>>>>>>> 05080c2809e0608d7a52ee5ee0a45618a7c4c4f4
 
 
 
