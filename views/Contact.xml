@@ -86,9 +86,9 @@
                         <field name="ma_dinh_danh" placeholder="e.g. 31195100312" on_change="1"
                             modifiers="{&quot;required&quot;: true}" />
                         <field name="ref" placeholder="e.g. 31195100312" on_change="1" />
-                        <field name="zalo_2" string="Zalo" invisible="not radio_zalo" />
-                        <field name="viper_2" string="Viber" invisible="not radio_viper" />
-                        <field name="what_app_2" string="What's App" invisible="not radio_what_app" />
+                        <field name="zalo" string="Zalo" invisible="not radio_zalo" />
+                        <field name="viper" string="Viber" invisible="not radio_viper" />
+                        <field name="what_app" string="What's App" invisible="not radio_what_app" />
                     </group>
                 </xpath>
 
