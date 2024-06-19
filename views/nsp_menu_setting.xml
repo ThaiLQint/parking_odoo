@@ -10,8 +10,51 @@
             <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
         </record>
 
-        <record
-            id="action_vehicle" model="ir.actions.act_window">
+        <record id="action_contact_list1" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.lane.out</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list2" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.lane.in</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list3" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.parking</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list4" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.office</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list5" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.device.out</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+        <record id="action_contact_list6" model="ir.actions.act_window">
+            <field name="name">Contact List</field>
+            <field name="res_model">setting.nsp.device.in</field>
+            <field name="view_mode">tree</field>
+            <field name="target">current</field>
+            <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
+        </record>
+
+
+        <record id="action_vehicle" model="ir.actions.act_window">
             <field name="name">Vehicle</field>
             <field name="res_model">product.template</field>
             <field name="view_mode">kanban,tree,form</field>
@@ -22,7 +65,7 @@
         <record
             id="app_nsp_action" model="ir.actions.act_window">
             <field name="name">NSP Service</field>
-            <field name="res_model">stock.picking.type</field>
+            <field name="res_model">product.product</field>
             <field name="view_mode">kanban,tree,form</field>
             <field name="target">current</field>
             <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
@@ -32,18 +75,15 @@
             id="nsp_menu_root" name="NSP" sequence="15" action="app_nsp_action"
             groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin,user_access" />
 
-        <menuitem
-            id="menu_contact" name="Contact" parent="nsp_menu_root" sequence="5"
+        <menuitem id="menu_contact" name="Contact" parent="nsp_menu_root" sequence="5"
             action="action_contact_list"
             groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin,user_access" />
 
-        <menuitem
-            id="menu_vehicle" name="Vehicle" parent="nsp_menu_root" sequence="10"
+        <menuitem id="menu_vehicle" name="Vehicle" parent="nsp_menu_root" sequence="10"
             action="action_vehicle"
             groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin,user_access" />
 
-        <record
-            id="report_menu" model="ir.actions.act_window">
+        <record id="report_menu" model="ir.actions.act_window">
             <field name="name">Reporting</field>
             <field name="res_model">product.product</field>
             <field name="view_mode">kanban,tree,form</field>
@@ -97,41 +137,23 @@
         <menuitem
             id="stock_move_setting_menu" name="Moves History" parent="menu_nsp_config"
             sequence="10" action="stock_move_action" groups="base.group_system" />
-
-        <record
-            id="app_nsp_alert_tag" model="ir.actions.act_window">
-            <field name="name">Alert Tag</field>
-            <field name="res_model">alert.tag</field>
-            <field name="view_mode">form,tree</field>
+        <record id="setting_nsp_menu" model="ir.actions.act_window">
+            <field name="name">Setting NSP</field>
+            <field name="res_model">setting.nsp.branch</field>
+            <field name="view_mode">tree,form</field>
             <field name="target">current</field>
         </record>
-        <menuitem id="menu_alert"
-            name="Alert Tag" parent="menu_nsp_config" sequence="0"
-            action="app_nsp_alert_tag" />
+        <menuitem id="menu_setting_nsp" name="Cấu hình bãi xe" parent="menu_nsp_config" sequence="0"
+            action="setting_nsp_menu" />
 
         <record id="automation_menu" model="ir.actions.act_window">
             <field name="name">Automation Rule </field>
             <field name="res_model">base.automation</field>
             <field name="view_mode">tree,form</field>
-            <field name="target">current</field>
+            <field name="target">inline</field>
         </record>
-        <menuitem id="menu_autom"
-            name="Automation Rule" parent="menu_nsp_config" sequence="20"
+        <menuitem id="menu_autom" name="Automation Rule" parent="menu_nsp_config" sequence="20"
             action="automation_menu" groups="user_access_manager,user_access_admin" />
 
-        <record
-            id="cauhinhbaixe_menu" model="ir.actions.act_window">
-            <field name="name">Cấu hình bãi xe </field>
-            <field name="res_model">ir.module.category</field>
-            <field name="view_mode">tree,form</field>
-            <field name="target">current</field>
-        </record>
-        <menuitem id="menu_baixe"
-            name="Cấu hình bãi xe" parent="menu_nsp_config" sequence="1"
-            action="cauhinhbaixe_menu" groups="user_access_manager,user_access_admin" />
-
-        <menuitem
-            id="menu_baixe" name="Cấu hình bãi xe" parent="menu_nsp_config" sequence="1"
-            action="cauhinhbaixe_menu" groups="user_access_manager,user_access_admin" />
     </data>
 </odoo>

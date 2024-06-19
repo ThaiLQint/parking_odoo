@@ -14,7 +14,7 @@ class  ProductColorValue(models.Model):
     name = fields.Char(string="Tên màu", )
     html_color = fields.Char(string="Mã màu",
                              )
-    # placeholder="Nhập mã màu..."
+    # placeholder="Nhập mã màu..."  
     
     # @api.model
     # def create(self, vals):

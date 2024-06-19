@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="parking_odoo.setting_nsp_form_view" t-inherit="web.FormView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//t[@archInfo='archInfo']" position="before">
+            <!-- <div class="o_form_sheet_bg" style="border: 0px solid #ccc; max-width: 600px; margin-left: auto; margin-right: auto;">
+                <div class="o_form_sheet position-relative">
+                    <div class="o_inner_group grid">
+                        <div class="o_wrap_field d-flex d-sm-contents flex-column mb-3 mb-sm-0">
+                            <div class="o_cell o_wrap_label flex-grow-1 flex-sm-grow-0 w-100 text-break text-900">
+                                <label class="o_form_label" for="name_0">Chi Nhánh</label>
+                            </div>
+                          
+                            <div class="o_cell o_wrap_input flex-grow-1 flex-sm-grow-0 text-break" style="width: 100%;">
+                                <div name="name" class="o_field_widget o_required_modifier o_field_char">
+                                    <input class="o_input" id="name_0" t-att-value="model.root.data.name" type="text" autocomplete="off" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="o_inner_group grid">
+                        <div class="o_wrap_field d-flex d-sm-contents flex-column mb-3 mb-sm-0">
+                            <div class="o_cell o_wrap_label flex-grow-1 flex-sm-grow-0 w-100 text-break text-900">
+                                <label class="o_form_label" for="parking_ids_0">Bãi xe</label>
+                            </div>
+                            <div class="o_cell o_wrap_input flex-grow-1 flex-sm-grow-0 text-break" style="width: 100%;">
+                                <div name="parking_ids" class="o_field_widget o_required_modifier o_field_char">
+                                    <button type="button" class="btn btn-secondary" t-on-click="addParkingId">Thêm bãi xe</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion" id="accordionExample" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+                        <t t-foreach="model.root.data.parking_ids.records" t-as="item" t-key="item.id">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button"
+                                        name="name" data-bs-toggle="collapse"
+                                        t-attf-data-bs-target="##{item.id}"
+                                        t-att-aria-controls="item.id" aria-expanded="false"
+                                        t-out="item.data.name"
+                                >
+                                    </button>
+                                </h2>
+                                <div t-att-id="item.id" class="accordion-collapse collapse"
+                                    aria-labelledby="headingTwo"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <strong>This is the second item's accordion body.</strong>
+                                        It is hidden by default, until the collapse plugin
+                                        adds the appropriate classes that we use to style
+                                        each element. These classes control the overall
+                                        appearance, as well as the showing and hiding via
+                                        CSS transitions. You can modify any of this with
+                                        custom CSS or overriding our default variables. It's
+                                        also worth noting that just about any HTML can go
+                                        within the <code>.accordion-body</code>, though the
+                                        transition does limit overflow. </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div> 
+                
+            </div>  -->
+        </xpath>
+    </t>
+</templates>

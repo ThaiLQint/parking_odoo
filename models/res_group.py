@@ -4,33 +4,17 @@
 import binascii
 import contextlib
 import datetime
-import hmac
-import ipaddress
-import itertools
-import json
 import logging
-import os
-import time
-from collections import defaultdict
-from functools import wraps
-from hashlib import sha256
 from itertools import chain, repeat
 from markupsafe import Markup
 
-import babel.core
-import pytz
 from lxml import etree
 from lxml.builder import E
 from passlib.context import CryptContext
 from psycopg2 import sql
 
-from odoo import api, fields, models, tools, SUPERUSER_ID, _, Command
+from odoo import api, models, SUPERUSER_ID, _, Command
 from odoo.addons.base.models.ir_model import MODULE_UNINSTALL_FLAG
-from odoo.exceptions import AccessDenied, AccessError, UserError, ValidationError
-from odoo.http import request, DEFAULT_LANG
-from odoo.osv import expression
-from odoo.service.db import check_super
-from odoo.tools import is_html_empty, partition, collections, frozendict, lazy_property
 
 _logger = logging.getLogger(__name__)
 
@@ -63,7 +47,6 @@ class GroupsNSP(models.Model):
         """
         # remove the language to avoid translations, it will be handled at the view level
         self = self.with_context(lang=None)
-
         # We have to try-catch this, because at first init the view does not
         # exist but we are already creating some basic groups.
         view = self.env.ref('base.user_groups_view', raise_if_not_found=False)
@@ -137,6 +120,7 @@ class GroupsNSP(models.Model):
                             # or g.name == "SECURITY" or g.name == "OPERATOR" or g.name == "MANAGER"
                             if g.name != "USER" :
                                 field_name = name_boolean_group(g.id)
+                                
                                 dest_group = left_group if group_count % 2 == 0 else right_group
                                 if g == group_no_one:
                                     # make the group_no_one invisible in the form view

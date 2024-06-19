@@ -11,14 +11,13 @@ import threading
 import time
 _logger = logging.getLogger(__name__)
 
-
 class History(http.Controller):
     def __init__(self):
         self.my_dict = {}  # Khởi tạo dictionary rỗng
         url = 'http://localhost:8069'
-        db = 'parking'
-        username = 'hello'
-        password = '1'
+        db = 'nsp.t4tek.tk'
+        username = 'NhanDT'
+        password = '123456aA@'
 
         session_url = f'{url}/web/session/authenticate'
         data = {
@@ -98,20 +97,11 @@ class History(http.Controller):
         if kw["code"] == "parking":
             return self._parkingHistoryHandle(kw)
 
-    @http.route('/api/history/test', type='http', auth='public', methods=['POST'], website=False, csrf=False)
-    def validate_test(self, **kw):
-        if kw["code"] == "parking":
-            a = ["1", "2", "3", "2000500C0FE1FCF5"]
-            for x in a:
-                kw["tid"] = x
-                self._parkingHistoryHandle(kw)
-        return "test Xong"
-
     @http.route('/api/history/alert/tag', type='json', auth='public', methods=['POST'],  website=False, csrf=False)
     def alert_tag(self, **kw):
         if kw["code"] == "parking":
             return self.create_alert_tag(kw)
-
+        
     def create_alert_tag(self, kw):
         code = kw["codeAlert"]
         if code == 1:
@@ -148,27 +138,21 @@ class History(http.Controller):
 
     @http.route('/api/history/getbyid', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def getById(self, **kw):
-        moveHistory = self._find_by_key("stock.move.line", "id", kw["id"])
-        if not moveHistory:
-            return Response(json.dumps({"message": "Lịch sử di chuyển không tìm thấy"}), content_type='application/json;charset=utf-8', status=400)
-        partner = moveHistory.contact_id
-        product = moveHistory.product_id
-
+        product = self._find_by_key("product.template", "id", kw["productId"])
+        if not product:
+            return Response(json.dumps({"message": "Xe không tìm thấy [" + kw["productId"]+"]"}), content_type='application/json;charset=utf-8', status=400)
+        partner = self._find_by_key("res.partner", "id", kw["contactId"])
+        if not partner:
+            return Response(json.dumps({"message": "Liên hệ không tìm thấy [" + kw["contactId"]+"]"}), content_type='application/json;charset=utf-8', status=400)
         if product.image_1920 == False:
-            product.image_1920 = "None"
-        if partner.image_1920 == False:
-            product.image_1920 = "None"
-        if product.image_1920_bien_so == False:
-            product.image_1920_bien_so = "None"
-        if moveHistory.image_1920_camera_truoc == False:
-            image_1920_camera_truoc = "None"
+            product_image_1920 = "None"
         else:
-            image_1920_camera_truoc = moveHistory.image_1920_camera_truoc.decode()
+            product_image_1920 = product.image_1920.decode()
 
-        if moveHistory.image_1920_camera_sau == False:
-            image_1920_camera_sau = "None"
+        if product.image_1920_bien_so == False:
+            product_image_1920_bien_so = "None"
         else:
-            image_1920_camera_sau = moveHistory.image_1920_camera_sau.decode()
+            product_image_1920_bien_so = product.image_1920_bien_so.decode()
         return Response(json.dumps({
             "productId": product.id,
             "nameNg": partner.name,
@@ -176,12 +160,8 @@ class History(http.Controller):
             "tidNg": partner.ref[8:],
             "tidXe": product.default_code[8:],
             "typeXe": product.categ_id.complete_name,
-            "imgXe": product.image_1920.decode(),
-            "imgNg": partner.image_1920.decode(),
-            "imgPath1": image_1920_camera_truoc,
-            "imgPath2": image_1920_camera_sau,
-            "imgBienSo": product.image_1920_bien_so.decode(),
-            "createDateTime": self._changeDate(moveHistory.create_date),
+            "imgXe": product_image_1920,
+            "imgBienSo": product_image_1920_bien_so,
             "pickingCode": product.picking_code,
         }), content_type='application/json;charset=utf-8', status=200)
 
@@ -244,7 +224,6 @@ class History(http.Controller):
             if checkProduct:
                 product = self._find_by_key(
                     "product.template", "default_code", self.my_dict[tid]['tid'])
-
                 if product.picking_code == "incoming" and port == "Cổng Ra":
                     picking_code = "outgoing"
                 else:
@@ -261,44 +240,41 @@ class History(http.Controller):
             self.lock.acquire()
             self.my_dict.pop(tid, "None")
             self.lock.release()
-            product.write({"picking_code": picking_code})
-            imgTruoc, imgSau = self._imgTruocSauCamera(
-                kw["imgTruoc"], kw["imgSau"])
             id = 0
             if picking_code == "incoming":
                 id = product.contact_id.id
             elif picking_code == "outgoing":
                 id = partner.id
-
+            contact_id_in_out = id
+            product.write({"picking_code": picking_code, 'contact_id_in_out': contact_id_in_out}) 
+            imgTruoc, imgSau = self._imgTruocSauCamera(
+                kw["imgTruoc"], kw["imgSau"])
             idHistory = self._handle_history(
                 id, product.id, port, product.move_history_id["id"], picking_code, imgTruoc, imgSau)
             if picking_code == "incoming":
                 message = "VÀO họp lệ"
-                check_in = True
             elif picking_code == "outgoing":
                 message = "RA họp lệ"
-                check_in = False
             else:
                 message = "không hợp lệ!!"
-            product.write({"move_history_id": idHistory, "check_in": check_in})
-            return Response(json.dumps({"message": "Xe " + message}), content_type='application/json;charset=utf-8', status=200)
+            product.write({"move_history_id": idHistory})
+            return Response(json.dumps({"id": idHistory, "message": "Xe " + message}), content_type='application/json;charset=utf-8', status=200)
         else:
             return Response(json.dumps({"message": "Xe không hợp lệ!!"}), content_type='application/json;charset=utf-8', status=400)
 
     def _imgTruocSauCamera(self, imgTruoc, imgSau):
-        if imgTruoc != "None":
-            file = imgTruoc
-            img_attachment = file.read()
-            imgTruocTemp = base64.b64encode(img_attachment)
+        img_attachment = imgTruoc.read()
+        if not img_attachment:
+            imgTruoc = None
         else:
-            imgTruocTemp = None
-        if imgSau != "None":
-            file = imgSau
-            img_attachment = file.read()
-            imgSauTemp = base64.b64encode(img_attachment)
+            imgTruoc = base64.b64encode(img_attachment)
+
+        img_attachment = imgSau.read()
+        if not img_attachment:
+            imgSau = None
         else:
-            imgSauTemp = None
-        return imgTruocTemp, imgSauTemp
+            imgSau = base64.b64encode(img_attachment)
+        return imgTruoc, imgSau
 
     def _find_by_key(self, module, key, value):
         """Tìm kiếm sản phẩm theo default_code."""
@@ -317,7 +293,6 @@ class History(http.Controller):
             [("complete_name", "=", "WH/Stock")], limit=1)
         move_history = request.env['stock.move.line'].sudo().create({
             'move_history_id_before': move_history_id,
-            'bien_so_realtime': "default",
             'product_id': idProduct,
             'picking_code': picking_code,
             'contact_id': idPartner,
@@ -330,10 +305,9 @@ class History(http.Controller):
         })
 
         result = request.env['stock.move.line'].sudo().search(
-            [('product_id', '=', idProduct), ('create_date', '>=', fields.date.today())], limit=10, order="create_date desc")
-        if len(result) > 9:
-            _logger.info(result[9])
-            result[9].unlink()
+            [('product_id', '=', idProduct)], limit=1000, order="create_date desc")
+        if len(result) > 999:
+            result[999].unlink()
         return move_history.id
 
     def _check_product_list(self, product_list):

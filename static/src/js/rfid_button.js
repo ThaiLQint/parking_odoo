@@ -28,7 +28,9 @@ function connect() {
   };
 }
 
-connect();
+//connect();
+
+
 // confirm_callback: function () {
 //
 // },
