@@ -21,7 +21,7 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
-                <xpath expr="//div[@name='button_box']" position="replace"></xpath>
+                <!-- <xpath expr="//div[@name='button_box']" position="replace"></xpath> -->
                 <xpath expr="//form" position="attributes">
                     <attribute name="js_class">rfid_button</attribute>
                 </xpath>

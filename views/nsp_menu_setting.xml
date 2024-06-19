@@ -27,16 +27,17 @@
             <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
         </record>
         <!-- Define the menu items -->
-        <menuitem id="nsp_menu_root" name="NSP" sequence="15" action="app_nsp_action"
-            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin" />
+        <menuitem
+            id="nsp_menu_root" name="NSP" sequence="15" action="app_nsp_action"
+            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin,user_access" />
 
         <menuitem id="menu_contact" name="Contact" parent="nsp_menu_root" sequence="5"
             action="action_contact_list"
-            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin" />
+            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin,user_access" />
 
         <menuitem id="menu_vehicle" name="Vehicle" parent="nsp_menu_root" sequence="10"
             action="action_vehicle"
-            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin" />
+            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin,user_access" />
 
         <record id="report_menu" model="ir.actions.act_window">
             <field name="name">Reporting</field>

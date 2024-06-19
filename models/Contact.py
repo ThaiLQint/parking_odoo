@@ -54,7 +54,7 @@ class Contact(models.Model):
         
     product_ids_private = fields.One2many("product.template", "contact_id", string="D/S xe chính chủ",
                                         readonly=True)
-    isUserCreateCheck = fields.Boolean(default=False)
+    isUserCreateCheck = fields.Boolean(default=False, string='User Create Check')
     partner_id = fields.Many2one("res.partner", string="Liên hệ")
     partner_ids = fields.Many2many(
     'res.partner', 
@@ -135,10 +135,31 @@ class Contact(models.Model):
             idUserNSP = id_user_role[1].id
             idUserInternal = id_user_role[0].id
         self.env["res.users"].create({
-            'in_group_'+str(idUserNSP):True,'image_1920': vals['image_1920'], 'name': vals['name'], 'email': vals['email'],
-                                      'login': vals['email'], 'company_id': 1, 'sel_groups_1_10_11': idUserInternal, 'active': True, 'partner_id': new_record.id, 'password': vals['phone']})
+            'in_group_'+str(idUserNSP):True,'image_1920': vals['image_1920'], 
+            'name': vals['name'], 
+            'email': vals['email'],
+            'login': vals['email'],
+            'company_id': 1, 
+            'sel_groups_1_10_11': idUserInternal,
+            'active': True, 
+            'partner_id': new_record.id, 
+            'password': vals['phone']})
+        
+        
+        
+        # Assign user to NSP System / USER group
+        # new_user_vals['in_group_' + str(idUserNSP)] = True
+
+        # Create the user
+        # new_user = self.env["res.users"].create(new_user_vals)
+        # _logger.info("New user created: %s", new_user.login)
         return new_record
     
+        # determine IDs for NSP User and Internal User groups
+        # idUserNSP = id_user_role.filtered(lambda r: r.full_name == 'NSP System / USER').id
+        # idUserInternal = id_user_role.filtered(lambda r: r.full_name == 'User types / Internal User').id
+        
+        
     @api.constrains('barcode')
     def _check_barcode_unicity(self):
         return 0

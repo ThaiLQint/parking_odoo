@@ -13,7 +13,7 @@
                 <xpath expr="//page[@name='preferences']" position='attributes'>
                     <attribute name="invisible">1</attribute>
                 </xpath>
-                <xpath expr="//div[@name='button_box']" position='replace' />
+                 <xpath expr="//div[@name='button_box']" position='replace' />
                 <xpath expr="//page[@name='security']" position='attributes'>
                     <attribute name="invisible">1</attribute>
                 </xpath>
@@ -27,6 +27,11 @@
                             <field name="name" placeholder="e.g. Pham An" required="1"
                                 style="font-weight:bold"
                             />
+                            <field name="in_group_7" invisible="1"/>
+                            <field name="in_group_8" invisible="1"/>
+                            <field name="in_group_9" invisible="1"/>
+                            <field name="in_group_3" invisible="1"/>
+
                         </h1>
                     </group>
                 </xpath>
