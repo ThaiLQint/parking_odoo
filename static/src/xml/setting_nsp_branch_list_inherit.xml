@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="parking_odoo.setting_nsp_list_view" t-inherit="web.ListView" t-inherit-mode="primary" owl="1">
+        <xpath expr="//t[@archInfo='archInfo']" position="before">
+            <!-- <div class="accordion" id="accordionBranch" style="max-width: 600px; margin-left: auto; margin-right: auto;">
+                
+                <t t-foreach="records" t-as="item" t-key="item.id">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwoBranch">
+                            <button class="accordion-button collapsed" type="button"
+                                name="name" data-bs-toggle="collapse"
+                                t-attf-data-bs-target="#branch#{item.id}"
+                                t-att-aria-controls="item.id" aria-expanded="false"
+                                t-out="item.name"
+                        >
+                            </button>
+                        </h2>
+                        <div t-attf-id="branch#{item.id}" class="accordion-collapse collapse"
+                            aria-labelledby="headingTwoBranch"
+                            data-bs-parent="#accordionBranch">
+                            <div>
+                                <div class="accordion" id="accordionParking" style="max-width: 600px; margin-left: 1rem; margin-top: 2px;">
+                                    <t t-foreach="item.listParking" t-as="parking" t-key="parking.id">
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="headingTwoParking">
+                                                <button class="accordion-button collapsed" type="button"
+                                                    name="name" data-bs-toggle="collapse"
+                                                    t-attf-data-bs-target="#parking#{parking.id}"
+                                                    t-att-aria-controls="parking.id" aria-expanded="false"
+                                                    t-out="parking.name"
+                                            >
+                                                </button>
+                                            </h2>
+                                            <div t-attf-id="parking#{parking.id}" class="accordion-collapse collapse"
+                                                aria-labelledby="headingTwoParking"
+                                                data-bs-parent="#accordionParking">
+                                                <div>
+                                                    <div class="accordion" id="accordionOffice" style="max-width: 600px; margin-left: 1rem;margin-top: 2px;">
+                                                        <t t-foreach="parking.listOffice" t-as="office" t-key="office.id">
+                                                            <div class="accordion-item">
+                                                                <h2 class="accordion-header" id="headingTwoOffice">
+                                                                    <button class="accordion-button collapsed" type="button"
+                                                                        name="name" data-bs-toggle="collapse"
+                                                                        t-attf-data-bs-target="#office#{office.id}"
+                                                                        t-att-aria-controls="office.id" aria-expanded="false"
+                                                                        t-out="office.name"
+                                                                >
+                                                                    </button>
+                                                                </h2>
+                                                                <div t-attf-id="office#{office.id}" class="accordion-collapse collapse"
+                                                                    aria-labelledby="headingTwoOffice"
+                                                                    data-bs-parent="#accordionOffice">
+                                                                    <div class="accordion-body">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </div> -->
+        </xpath>
+    </t>
+</templates>

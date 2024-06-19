@@ -12,7 +12,8 @@
                             <field name="name" />
                             <field name="id" invisible="1" />
                             <field name="parking_ids" widget="parking_setting_one2many">
-                                <tree string="Setting NSP Bãi xe" context="{'group_by': 'create_date'}">
+                                <tree string="Setting NSP Bãi xe"
+                                >
                                     <field name="create_date" />
                                     <field name="name" />
                                 </tree>
@@ -55,56 +56,100 @@
                             <field name="parking_id" invisible="0" />
                             <field name="id" invisible="1" />
                             <field name="lane_in_ids" invisible="0"
-                                widget="parking_setting_one2many" />
-                            <field name="lane_out_ids" invisible="0"
-                                widget="parking_setting_one2many" />
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
+                                widget="parking_setting_one2many">
+                                <form string="Setting NSP Cổng vào">
+                                    <sheet
+                                        style="border: 0px solid #ccc; max-width: 800px; margin-left: auto; margin-right: auto;"
+                                    >
+                                        <group>
+                                            <field name="name" />
+                                            <field name="office_id_in" invisible="0" />
+                                            <field name="laneInOut" invisible="1" />
+                                            <field name="id" invisible="1" />
+                                            <field name="device_ids"
+                                                widget="parking_setting_one2many" invisible="0">
+                                                <tree>
+                                                    <field name="create_date"></field>
+                                                    <field name="name" />
+                                                </tree>
+                                                <form string="Thiết bị">
+                                                    <sheet
+                                                        style="border: 0px solid #ccc; max-width: 800px; margin-left: auto; margin-right: auto;"
+                                                    >
+                                                        <group>
 
-        <record id="setting_nsp_lane_in_view_form" model="ir.ui.view">
-            <field name="name">setting.nsp.lane.in.form</field>
-            <field name="model">setting.nsp.lane.in</field>
-            <field name="arch" type="xml">
-                <form string="Setting NSP Cổng vào">
-                    <sheet
-                        style="border: 0px solid #ccc; max-width: 800px; margin-left: auto; margin-right: auto;"
-                    >
-                        <group>
-                            <field name="name" />
-                            <field name="office_id" invisible="0" />
-                            <field name="id" invisible="1" />
-                            <field name="device_ids" invisible="0">
-                                <tree create="0" edit="0">
-                                    <field name="create_date"></field>
-                                    <field name="name" />
-                                </tree>
+                                                            <field name="id_device" />
+                                                            <field name="name" />
+                                                            <field name="lane_id" invisible="0" />
+                                                        </group>
+                                                        <div class="o_row"
+                                                            style="display: flex;"
+                                                            invisible="name != 'CF_RU6403'">
+                                                            <!-- <label for="user_ids"
+                                                                    string="Người sử dụng:" /> -->
+                                                            <label for="antIn1" string="ANT1" />
+                                                            <field name="antIn1" />
+                                                            <label for="antIn2" string="ANT2" />
+                                                            <field name="antIn2" />
+                                                            <label for="antIn3" string="ANT3" />
+                                                            <field name="antIn3" />
+                                                            <label for="antIn4" string="ANT4" />
+                                                            <field name="antIn4" />
+                                                        </div>
+                                                    </sheet>
+                                                </form>
+                                            </field>
+                                        </group>
+                                    </sheet>
+                                </form>
+
                             </field>
-                        </group>
-                    </sheet>
-                </form>
-            </field>
-        </record>
-
-        <record id="setting_nsp_lane_out_view_form" model="ir.ui.view">
-            <field name="name">setting.nsp.lane.out.form</field>
-            <field name="model">setting.nsp.lane.out</field>
-            <field name="arch" type="xml">
-                <form string="Setting NSP Cổng ra">
-                    <sheet
-                        style="border: 0px solid #ccc; max-width: 800px; margin-left: auto; margin-right: auto;"
-                    >
-                        <group>
-                            <field name="name" />
-                            <field name="office_id" invisible="0" />
-                            <field name="id" invisible="1" />
-                            <field name="device_ids" invisible="0">
-                                <tree create="0" edit="0">
-                                    <field name="create_date"></field>
-                                    <field name="name" />
-                                </tree>
+                            <field name="lane_out_ids" invisible="0"
+                                context="{'default_laneInOut': 'out'}"
+                                widget="parking_setting_one2many">
+                                <form string="Setting NSP Cổng Ra">
+                                    <sheet
+                                        style="border: 0px solid #ccc; max-width: 800px; margin-left: auto; margin-right: auto;"
+                                    >
+                                        <group>
+                                            <field name="name" />
+                                            <field name="office_id_out" invisible="0" />
+                                            <field name="laneInOut" invisible="1" />
+                                            <field name="id" invisible="1" />
+                                            <field name="device_ids"
+                                                widget="parking_setting_one2many" invisible="0">
+                                                <tree>
+                                                    <field name="create_date"></field>
+                                                    <field name="name" />
+                                                </tree>
+                                                <form string="Thiết bị">
+                                                    <sheet
+                                                        style="border: 0px solid #ccc; max-width: 800px; margin-left: auto; margin-right: auto;"
+                                                    >
+                                                        <group>
+                                                            <field name="id_device"     />
+                                                            <field name="name" />
+                                                            <field name="lane_id" />
+                                                        </group>
+                                                        <div class="o_row" style="display: flex;"
+                                                            invisible="name != 'CF_RU6403'">
+                                                            <!-- <label for="user_ids"
+                                                                    string="Người sử dụng:" /> -->
+                                                            <label for="antOut1" string="ANT1" />
+                                                            <field name="antOut1" />
+                                                            <label for="antOut2" string="ANT2" />
+                                                            <field name="antOut2" />
+                                                            <label for="antOut3" string="ANT3" />
+                                                            <field name="antOut3" />
+                                                            <label for="antOut4" string="ANT4" />
+                                                            <field name="antOut4" />
+                                                        </div>
+                                                    </sheet>
+                                                </form>
+                                            </field>
+                                        </group>
+                                    </sheet>
+                                </form>
                             </field>
                         </group>
                     </sheet>
@@ -116,7 +161,7 @@
             <field name="name">setting.nsp.tree</field>
             <field name="model">setting.nsp.branch</field>
             <field name="arch" type="xml">
-                <tree string="Setting NSP">
+                <tree string="Setting NSP" js_class="nsp_branch_list_view">
                     <field name="create_date" />
                     <field name="name" />
                 </tree>

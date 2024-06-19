@@ -12,17 +12,55 @@ _logger = logging.getLogger(__name__)
 
 
 class Webhoook(http.Controller):
-    @http.route('/api/load/nsp/config', type='http', auth='public', methods=['POST'], website=False, csrf=False)
+
+    @ http.route('/api/load/nsp/config/view', type='json', auth='user', methods=['POST'], website=False, csrf=False)
+    def load_config_view(self, **kw):
+        if kw.get("code") != "parking":
+            return {"message": "Dịch vụ không hỗ trợ!"}
+        branches = request.env['setting.nsp.branch'].sudo().search([])
+        if not branches:
+            return {"message": "Chi nhánh không tìm thấy"}
+        branch_data = [self._prepare_branch_data(
+            branch) for branch in branches]
+        return {"message": "Success", "records": branch_data}
+
+    @ http.route('/api/load/nsp/config', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def load_config(self, **kw):
         if kw.get("code") != "parking":
             return Response(json.dumps({"message": "Dịch vụ không hỗ trợ!"}), content_type='application/json;charset=utf-8', status=400)
-        branches = request.env['setting.nsp.branch'].sudo().search([])
-        if not branches:
-            return Response(json.dumps({"message": "Chi nhánh không tìm thấy"}), content_type='application/json;charset=utf-8', status=400)
-        branch_data = [self._prepare_branch_data(
-            branch) for branch in branches]
-
-        return Response(json.dumps(branch_data), content_type='application/json;charset=utf-8', status=200)
+        device = request.env['setting.nsp.device'].sudo().search([
+            ("id_device", "=",  kw['idDevice'])
+        ], limit=1)
+        if not device:
+            return Response(json.dumps({"message": "Thiết bị không tìm thấy"}), content_type='application/json;charset=utf-8', status=400)
+        lane = device.lane_id
+        office = lane.office_id_out
+        if lane.laneInOut == "in":
+            office = lane.office_id_in
+        parking = office.parking_id
+        branch = parking.branch_id
+        jsonConfig = {
+            "id": branch.id,
+            "name": branch.name,
+            "parking": {
+                "id": parking.id,
+                "name": parking.name,
+                "office": {
+                    "id": office.id,
+                    "name": office.name,
+                    "lane": {
+                        "id": lane.id,
+                        "name": lane.name,
+                        "laneInOut": lane.laneInOut,
+                        "device": {
+                            "id": device.id_device,
+                            "name": device.name
+                        }
+                    }
+                }
+            }
+        }
+        return Response(json.dumps(jsonConfig), content_type='application/json;charset=utf-8', status=200)
 
     def _prepare_branch_data(self, branch):
         parking_data = [self._prepare_parking_data(
@@ -59,8 +97,8 @@ class Webhoook(http.Controller):
                        for device in lane_in.device_ids]
         return device_data
 
-    @http.route('/api/init/device', type='http', auth='public', methods=['POST'], website=False, csrf=False)
-    def register(self, **kw):
+    @ http.route('/api/register/device', type='http', auth='public', methods=['POST'], website=False, csrf=False)
+    def registerDevice(self, **kw):
         if kw["code"] == "parking":
             result = request.env['base.automation'].sudo().search(
                 [('name', '=', kw["webhookName"])], limit=1)

@@ -17,12 +17,8 @@ from . import alert
 from . import settingNspBranch
 from . import settingNspParking
 from . import settingNspOffice
-from . import settingNspLaneIn
-from . import settingNspLaneOut
-from . import settingNspDeviceIn
-from . import settingNspDeviceOut
-
-
+from . import settingNspLane
+from . import settingNspDevice
 
 from . import res_group
 # from . import res_config_settings
