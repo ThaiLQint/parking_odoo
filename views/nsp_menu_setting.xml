@@ -68,19 +68,6 @@
             sequence="27" action="color_setting_action"
             groups="user_access_manager,user_access_admin" />
 
-            <record id="color_setting_action2"
-            model="ir.actions.act_window">
-            <field name="name">Color</field>
-            <field name="res_model"></field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="target">current</field>
-        </record>
-
-        <menuitem
-            id="parking_config_settings_menu" name="Color" parent="menu_nsp_config"
-            sequence="27" action="color_setting_action"
-            groups="user_access_manager,user_access_admin" />
-
         <record id="stock_move_action"
             model="ir.actions.act_window">
             <field name="name">Moves History</field>
