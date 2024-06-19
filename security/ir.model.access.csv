@@ -4,10 +4,8 @@ access_alert_tag,Access Alert Tag,model_alert_tag,base.group_user,1,1,1,1
 access_setting_nsp_branch,Access Setting NSP Branch,model_setting_nsp_branch,base.group_user,1,1,1,1
 access_setting_nsp_parking,Access Setting NSP Parking,model_setting_nsp_parking,base.group_user,1,1,1,1
 access_setting_nsp_office,Access Setting NSP Office,model_setting_nsp_office,base.group_user,1,1,1,1
-access_setting_nsp_lane_in,Access Setting NSP Lane In,model_setting_nsp_lane_in,base.group_user,1,1,1,1
-access_setting_nsp_lane_out,Access Setting NSP Lane Out,model_setting_nsp_lane_out,base.group_user,1,1,1,1
-access_setting_nsp_device_in,Access Setting NSP Device In,model_setting_nsp_device_in,base.group_user,1,1,1,1
-access_setting_nsp_device_out,Access Setting NSP Device Out,model_setting_nsp_device_out,base.group_user,1,1,1,1
+access_setting_nsp_lane,Access Setting NSP Lane,model_setting_nsp_lane,base.group_user,1,1,1,1
+access_setting_nsp_device,Access Setting NSP Device,model_setting_nsp_device,base.group_user,1,1,1,1
 
 access_product_color,Access Product Color 2,model_product_color_main,base.group_user,1,1,1,1
 access_user_zalo,Access User Zalo,model_zalo,base.group_user,1,1,1,1
