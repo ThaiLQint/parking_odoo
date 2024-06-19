@@ -21,7 +21,7 @@
     'category': 'NSP',
     'version': '0.1',
     # any module necessary for this one to work correctly
-    'depends': ['contacts','stock', 'product', 'base', 'web'],
+    'depends': ['contacts','stock', 'product', 'base'],
     "application": True,
     # always loaded
     'data': [

@@ -14,10 +14,27 @@ class ResUsers(models.Model):
 
     @api.model
     def create(self, vals):
-        _logger.info(vals)
         vals['email'] = vals['login']
         vals['isUserCreateCheck'] = True
+        id_roles = self.env["res.groups"].search([
+        '|',
+            '|',
+                ('full_name', '=', "Technical / Mail Template Editor"),
+                ('full_name', '=', 'Extra Rights / Contact Creation'),
+            '|',
+                ('full_name', '=', 'Technical / Access to export feature'),
+                ('full_name', '=', 'Extra Rights / Technical Features'),
+        ], limit=6)
+        data_write = {"company_ids": [(4,1)],
+            "company_id": 1,
+            "sel_groups_1_10_11": 1,
+            "active":True}
+        for role in id_roles:
+            data_write['in_group_' + str(role.id)] = True
+                
+        _logger.info(data_write)
         users = super(ResUsers, self).create(vals)
+        users.write(data_write)
         return users
     def write(self, vals):
         # Code before write: 'self' has the old values
@@ -26,7 +43,7 @@ class ResUsers(models.Model):
         # Code after write: can use 'self' with the updated
         # values
         return record
-
+    
     def _action_show2(self):
         _logger.info(self)
         users = self.env['res.users'].sudo().search([])
