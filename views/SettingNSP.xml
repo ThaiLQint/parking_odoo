@@ -77,25 +77,10 @@
                                                         style="border: 0px solid #ccc; max-width: 800px; margin-left: auto; margin-right: auto;"
                                                     >
                                                         <group>
-
                                                             <field name="id_device" />
                                                             <field name="name" />
                                                             <field name="lane_id" invisible="0" />
                                                         </group>
-                                                        <div class="o_row"
-                                                            style="display: flex;"
-                                                            invisible="name != 'CF_RU6403'">
-                                                            <!-- <label for="user_ids"
-                                                                    string="Người sử dụng:" /> -->
-                                                            <label for="antIn1" string="ANT1" />
-                                                            <field name="antIn1" />
-                                                            <label for="antIn2" string="ANT2" />
-                                                            <field name="antIn2" />
-                                                            <label for="antIn3" string="ANT3" />
-                                                            <field name="antIn3" />
-                                                            <label for="antIn4" string="ANT4" />
-                                                            <field name="antIn4" />
-                                                        </div>
                                                     </sheet>
                                                 </form>
                                             </field>
@@ -131,19 +116,6 @@
                                                             <field name="name" />
                                                             <field name="lane_id" />
                                                         </group>
-                                                        <div class="o_row" style="display: flex;"
-                                                            invisible="name != 'CF_RU6403'">
-                                                            <!-- <label for="user_ids"
-                                                                    string="Người sử dụng:" /> -->
-                                                            <label for="antOut1" string="ANT1" />
-                                                            <field name="antOut1" />
-                                                            <label for="antOut2" string="ANT2" />
-                                                            <field name="antOut2" />
-                                                            <label for="antOut3" string="ANT3" />
-                                                            <field name="antOut3" />
-                                                            <label for="antOut4" string="ANT4" />
-                                                            <field name="antOut4" />
-                                                        </div>
                                                     </sheet>
                                                 </form>
                                             </field>
