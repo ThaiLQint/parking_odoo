@@ -29,8 +29,6 @@
     <record id="user_access_manager" model="res.groups">
         <field name="name">MANAGER</field>
         <field name="implied_ids" eval="[(4, ref('base.group_erp_manager'))]" />
-        <!-- <field name="domain_force" eval=""> </field> 
-         , (4, ref('parking_odoo.group_product_color_main'))-->
         <field name="category_id"
             ref="parking_odoo.cate_groups_nsp" />
     </record>
@@ -44,9 +42,7 @@
 
 <!-- access_user_nsp_admin,Access User NSP
 Admin,model_res_partner,parking_odoo.user_access_manager,1,1,1,0 -->
-<!-- 
-
-    <record id="user_access_security" model="res.groups">
+<!--     <record id="user_access_security" model="res.groups">
         <field name="name">NSP Security</field>
         <field name="category_id" ref="base.module_category_nsp"/>
         <field name="implied_ids" eval="[(4, ref('user_access'))]"/>
