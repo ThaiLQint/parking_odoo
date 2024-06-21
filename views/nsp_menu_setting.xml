@@ -29,7 +29,7 @@
         <!-- Define the menu items -->
         <menuitem
             id="nsp_menu_root" name="NSP" sequence="15" action="app_nsp_action"
-            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin" />
+            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin,user_access" />
 
         <menuitem id="menu_contact" name="Contact" parent="nsp_menu_root" sequence="5"
             action="action_contact_list"
