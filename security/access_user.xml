@@ -40,6 +40,27 @@
         <field name="category_id"
             ref="parking_odoo.cate_groups_nsp" />
     </record>
+
+    <record id="access_user_stock_picking" model="ir.model.access">
+        <field name="name">access_user_stock_picking</field>
+        <field name="model_id" ref="stock.model_stock_picking" />
+        <field name="group_id" ref="user_access" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
+    <record id="res_users_user_nsp" model="ir.model.access">
+        <field name="name">res_users group_user</field>
+        <field name="model_id" ref="parking_odoo.model_res_users" />
+        <field name="group_id" ref="user_access" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
 </odoo>
 
 <!-- access_user_nsp_admin,Access User NSP

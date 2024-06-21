@@ -21,7 +21,7 @@
         <record
             id="app_nsp_action" model="ir.actions.act_window">
             <field name="name">NSP Service</field>
-            <field name="res_model">product.product</field>
+            <field name="res_model">stock.picking.type</field>
             <field name="view_mode">kanban,tree,form</field>
             <field name="target">current</field>
             <field name="context">{'module' : 'parking_odoo', 'bin_size': False}</field>
@@ -29,7 +29,7 @@
         <!-- Define the menu items -->
         <menuitem
             id="nsp_menu_root" name="NSP" sequence="15" action="app_nsp_action"
-            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin,user_access" />
+            groups="user_access_manager,user_access_operator,security_readonly_list,user_access_admin" />
 
         <menuitem id="menu_contact" name="Contact" parent="nsp_menu_root" sequence="5"
             action="action_contact_list"

@@ -22,6 +22,19 @@
             <field name="perm_create" eval="0" />
             <field name="perm_unlink" eval="0" />
         </record>
+
+        <record id="portal_base_user" model="ir.rule">
+            <field name="name">User truy cập và xem đối tác</field>
+            <field name="model_id" ref="base.model_res_partner" />
+            <field name="groups" eval="[(4, ref('parking_odoo.user_access'))]" />
+            <field name="domain_force">['|',('id', 'in', user.partner_id.partner_ids.ids),
+                ('create_uid','=',user.id)]</field>
+            <field name="perm_read" eval="True" />
+            <field name="perm_write" eval="False" />
+            <field name="perm_create" eval="False" />
+            <field name="perm_unlink" eval="False" />
+        </record>
+
     </data>
 </odoo>
 
