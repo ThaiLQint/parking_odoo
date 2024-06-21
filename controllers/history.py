@@ -15,9 +15,9 @@ class History(http.Controller):
     def __init__(self):
         self.my_dict = {}  # Khởi tạo dictionary rỗng
         url = 'http://localhost:8069'
-        db = 'nsp.t4tek.tk'
-        username = 'NhanDT'
-        password = '123456aA@'
+        db = 'demo'
+        username = 'ad'
+        password = '1'
 
         session_url = f'{url}/web/session/authenticate'
         data = {

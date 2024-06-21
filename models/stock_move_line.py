@@ -24,7 +24,6 @@ class stock_move_line(models.Model):
     _inherit = 'stock.move.line'
     _rec_name = 'picking_code'
 
-    port = fields.Char("Cong")
     picking_id = fields.Many2one(
         'stock.picking', 'Transfer', auto_join=True,
         check_company=True,
