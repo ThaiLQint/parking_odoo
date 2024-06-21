@@ -6,10 +6,10 @@
             <field name="model_id" ref="parking_odoo.model_res_partner" />
             <field name="groups" eval="[(4, ref('parking_odoo.user_access'))]" />
             <field name="domain_force">[('user_ids.id', '=', user.id)]</field>
-            <field name="perm_read" eval="True" />
-            <field name="perm_write" eval="False" />
-            <field name="perm_create" eval="False" />
-            <field name="perm_unlink" eval="False" />
+            <field name="perm_read" eval="1" />
+            <field name="perm_write" eval="0" />
+            <field name="perm_create" eval="0" />
+            <field name="perm_unlink" eval="0" />
         </record>
 
         <record id="readonly_vehicle_user" model="ir.rule">
@@ -17,10 +17,10 @@
             <field name="model_id" ref="parking_odoo.model_product_template" />
             <field name="groups" eval="[(4, ref('parking_odoo.user_access'))]" />
             <field name="domain_force">[('contact_id', '=', user.partner_id.id)]</field>
-            <field name="perm_read" eval="True" />
-            <field name="perm_write" eval="False" />
-            <field name="perm_create" eval="False" />
-            <field name="perm_unlink" eval="False" />
+            <field name="perm_read" eval="1" />
+            <field name="perm_write" eval="0" />
+            <field name="perm_create" eval="0" />
+            <field name="perm_unlink" eval="0" />
         </record>
     </data>
 </odoo>
