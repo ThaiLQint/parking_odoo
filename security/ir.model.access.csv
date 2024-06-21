@@ -28,7 +28,7 @@ access_oper_move,"oper move hist","model_stock_move_line",user_access_operator,1
 access_manager_col,"manager color","model_product_color_main",user_access_operator,1,0,1,1
 
 user_access_xe,"user_access vehicle","model_product_template",user_access,1,0,0,0
-user_access_cont,"user_access contact","model_res_partner",user_access,1,0,git0,0
+user_access_cont,"user_access contact","model_res_partner",user_access,1,0,0,0
 user_access_user,"user_access user","model_res_users",user_access,1,0,0,0
 
 access_manager,"manager reporting","model_res_partner",user_access_manager,1,1,1,0
