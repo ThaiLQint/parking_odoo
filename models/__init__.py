@@ -18,6 +18,7 @@ from . import settingNspBranch
 from . import settingNspParking
 from . import settingNspOffice
 from . import settingNspLane
+from . import ir_ui_menu
 from . import settingNspDevice
 
 from . import res_group

@@ -84,16 +84,22 @@ class WebLogin(http.Controller):
         response.headers['Content-Security-Policy'] = "frame-ancestors 'self'"
         return response
 
-    def is_user_internal(self, uid):
-        return request.env['res.users'].browse(uid)._is_internal()
-
-    def get_contact_id(self, uid):
-        return request.env['res.users'].browse(uid).partner_id.id
+    def user_internal(self, uid):
+        user = request.env['res.users'].browse(uid)
+        result = request.env['ir.ui.menu'].sudo().search(
+            [("name", "=", "NSP")])
+        menuId = False
+        for menu in result.child_id:
+            if menu.name == "Contact" and menu.parent_id.id == result.id:
+                menuId = menu.id
+                break
+        return [user._is_internal(), user.partner_id.id, menuId]
 
     def _login_redirect(self, uid, redirect=None):
         _logger.info("aaaa")
-        if request.session.uid:  # fully logged 
-            return redirect or ('/web#id='+str(self.get_contact_id(uid))+'&model=res.partner&view_type=form' if self.is_user_internal(request.session.uid)
+        if request.session.uid:  # fully logged
+            result = self.user_internal(request.session.uid)
+            return redirect or ('/web#id='+str(result[1])+'&model=res.partner&view_type=form&menu_id='+str(result[2]) if result[0]
                                 else '/web/login_successful')
         # partial session (MFA)
         url = request.env(user=uid)['res.users'].browse(uid)._mfa_url()

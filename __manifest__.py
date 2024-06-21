@@ -37,7 +37,7 @@
         "views/SettingNSP.xml",
         "views/product_color_main.xml",
         "views/nsp_menu_setting.xml",     
-        # "views/hiden_view.xml",     
+        "views/hiden_view.xml",     
     ],
     'qweb': [],
     'installable': True,
