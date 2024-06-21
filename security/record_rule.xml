@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <odoo>
     <data>
-        <!-- Quy tắc cho người dùng xe chỉ có thể xem thông tin của chính họ -->
         <record id="rule_readonly_self_user" model="ir.rule">
             <field name="name">Người dùng xe chỉ có thể xem thông tin của chính họ.</field>
             <field name="model_id" ref="parking_odoo.model_res_partner" />
@@ -13,7 +12,6 @@
             <field name="perm_unlink" eval="0" />
         </record>
 
-        <!-- Quy tắc readonly cho thông tin xe của người dùng -->
         <record id="readonly_vehicle_user" model="ir.rule">
             <field name="name">Readonly vehicle self</field>
             <field name="model_id" ref="model_product_template" />

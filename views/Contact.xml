@@ -25,6 +25,10 @@
                 <xpath expr="//form" position="attributes">
                     <attribute name="js_class">rfid_button</attribute>
                 </xpath>
+
+                <xpath expr="//field[@name='company_type']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
                 <xpath expr="//widget[@name='web_ribbon']" position="after">
                     <field name="id" invisible='1' />
                     <!-- Cái này là của titile -->
