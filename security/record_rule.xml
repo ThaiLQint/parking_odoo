@@ -1,34 +1,22 @@
 <?xml version="1.0"?>
 <odoo>
     <data>
-        <!-- Quy tắc cho người dùng xe chỉ có thể xem thông tin của chính họ -->
         <record id="rule_readonly_self_user" model="ir.rule">
             <field name="name">Người dùng xe chỉ có thể xem thông tin của chính họ.</field>
             <field name="model_id" ref="parking_odoo.model_res_partner" />
             <field name="groups" eval="[(4, ref('parking_odoo.user_access'))]" />
-            <field name="domain_force">[('user_ids', 'in', user.id)]</field>
-            <field name="perm_read" eval="True" />
-            <field name="perm_write" eval="False" />
-            <field name="perm_create" eval="False" />
-            <field name="perm_unlink" eval="False" />
-        </record>
-        <record id="portal_base_user" model="ir.rule">
-            <field name="name">Người dùng portal demo</field>
-            <field name="model_id" ref="model_res_partner" />
-            <field name="groups" eval="[(4, ref('base.group_portal'))]" />
-            <field name="domain_force">[('user_ids', 'in', user.id)]</field>
+            <field name="domain_force">[('user_ids.id', '=', user.id)]</field>
             <field name="perm_read" eval="True" />
             <field name="perm_write" eval="False" />
             <field name="perm_create" eval="False" />
             <field name="perm_unlink" eval="False" />
         </record>
 
-        <!-- Quy tắc readonly cho thông tin xe của người dùng -->
         <record id="readonly_vehicle_user" model="ir.rule">
             <field name="name">Readonly vehicle self</field>
             <field name="model_id" ref="parking_odoo.model_product_template" />
             <field name="groups" eval="[(4, ref('parking_odoo.user_access'))]" />
-            <field name="domain_force">[('user_ids', 'in', user.id)]</field>
+            <field name="domain_force">[('contact_id', '=', user.partner_id.id)]</field>
             <field name="perm_read" eval="True" />
             <field name="perm_write" eval="False" />
             <field name="perm_create" eval="False" />
