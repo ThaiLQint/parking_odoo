@@ -1,5 +1,5 @@
 import logging
-from odoo import models, _
+from odoo import models, _, fields
 import uuid
 from odoo.exceptions import UserError
 import json
@@ -10,6 +10,7 @@ _logger = logging.getLogger(__name__)
 
 class ActionsServer(models.Model):
     _inherit = 'ir.actions.server'
+    id_device = fields.Char(string="Id Device", store=True)
 
     def create(self, vals):
         """ Create a contextual action for each server action. """

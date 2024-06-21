@@ -37,11 +37,7 @@
         "views/SettingNSP.xml",
         "views/product_color_main.xml",
         "views/nsp_menu_setting.xml",     
-<<<<<<< HEAD
-        "views/hiden_view.xml",     
-=======
         "views/hidden_module.xml",     
->>>>>>> 9b3ca33894675031a5c1604e22ad08d6576adbe8
     ],
     'qweb': [],
     'installable': True,
