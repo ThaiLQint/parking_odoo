@@ -170,6 +170,8 @@ class Contact(models.Model):
         # values
         return record
 
+    
+    
     def createUUID(self):
         hex_arr = uuid.uuid4().hex
         check_epc_user = self.search(
