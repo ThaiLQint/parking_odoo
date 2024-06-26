@@ -8,32 +8,93 @@
                 <t t-set="navbar_text_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.navbar_text_color')"></t>
                 <style type="text/css">
                    .o_main_navbar {
+                        user-select: none !important;
                         background: <t t-esc="navbar_background_color"/> !important;
                         color: <t t-esc="navbar_text_color"/> !important;
                         border-bottom:1px solid <t t-esc="navbar_background_color"/> !important
                     }
                     .o_main_navbar .o_menu_sections .o_nav_entry, .o_main_navbar .o_menu_sections .dropdown-toggle{
+                        user-select: none !important;
                         background: transparent !important;
                         color: <t t-esc="navbar_text_color"/> !important;
                         border: 1px solid transparent !important;
                     }
                     .o_main_navbar .o_menu_brand, .o_main_navbar .o_navbar_apps_menu .dropdown-toggle, .o_main_navbar .o_nav_entry, .o_main_navbar .dropdown-toggle {
+                        user-select: none !important;
+                        color: <t t-esc="navbar_text_color"/> !important;
+                    }
+                    .o_main_navbar .o_menu_sections .o_nav_entry:hover, .o_main_navbar .o_menu_sections .dropdown-toggle:hover {
+                        user-select: none !important;
+                        background: rgba(0, 0, 0, 0.08) !important;
+                    }
+                    .o_main_navbar .o_menu_sections .o_nav_entry:hover, .o_main_navbar .o_menu_sections .dropdown-toggle:active {
+                        user-select: none !important;
+                        background: rgba(0, 0, 0, 0.08) !important;
+                    }
+                    .dropdown-item {
+                        user-select: none !important;
+                        color: <t t-esc="navbar_text_color"/> !important;
+                    }
+                    .dropdown-item:hover, .dropdown-item:focus {
+                        user-select: none !important;
                         color: <t t-esc="navbar_text_color"/> !important;
                     }
                     
-                    .o_main_navbar .o_menu_sections .o_nav_entry:focus, .o_main_navbar .o_menu_sections .dropdown-toggle:focus {
-                        background: rgba(0, 0, 0, 0.08) !important;
+                    .dropdown-item.active, .dropdown-item:active {
+                        color: <t t-esc="navbar_text_color"/> !important;
                     }
                     
                     .o_main_navbar .o_menu_sections .o_nav_entry:active, .o_main_navbar .o_menu_sections .dropdown-toggle:active {
                         background: rgba(0, 0, 0, 0.08) !important;
                     }
                     .btn-primary {
+                        user-select: none !important;
                         color: <t t-esc="navbar_text_color"/> !important;
                         background-color: <t t-esc="navbar_background_color"/> !important;
                         border-color: <t t-esc="navbar_background_color"/> !important;
                     }
-                       
+                    
+                    .btn-outline-primary {
+                        user-select: none !important;
+                        color: <t t-esc="navbar_background_color"/> !important;
+                        border-color: <t t-esc="navbar_background_color"/> !important;
+                    }
+                    
+                    .btn-outline-primary:hover {
+                        color: <t t-esc="navbar_text_color"/> !important;
+                        background-color: <t t-esc="navbar_background_color"/> !important;
+                        border-color: <t t-esc="navbar_background_color"/> !important;
+                    }
+
+                    .btn-check:focus + .btn-outline-primary, .btn-outline-primary:focus {
+                        box-shadow: 0 0 0 0.25rem rgba(113, 99, 158, 0.5);
+                    }
+                    
+                    .btn-check:checked + .btn-outline-primary, .btn-check:active + .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
+                        color: <t t-esc="navbar_text_color"/> !important;
+                        background-color:  <t t-esc="navbar_background_color"/> !important;
+                        border-color: <t t-esc="navbar_background_color"/> !important;
+                    }
+                    .o_button_icon {
+                        user-select: none !important;
+                        color:  <t t-esc="navbar_background_color"/> !important;
+                    }
+                    .o_field_statinfo .o_stat_value {
+                        user-select: none !important;
+                        color: <t t-esc="navbar_background_color"/> !important;
+                    }
+                    .form-check-input:checked {
+                        background-color: <t t-esc="navbar_background_color"/> !important;
+                        border-color: <t t-esc="navbar_background_color"/> !important;
+                    }
+                    .btn-link {
+                        user-select: none !important;
+                        color: <t t-esc="navbar_background_color"/> !important;
+                    }
+                    .text-600 {
+                        user-select: none !important;
+                        color: <t t-esc="navbar_background_color"/> !important;
+                    }
                 </style>
             </xpath>
         </template>
