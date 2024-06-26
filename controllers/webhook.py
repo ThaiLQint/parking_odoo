@@ -13,6 +13,16 @@ _logger = logging.getLogger(__name__)
 
 class Webhoook(http.Controller):
 
+    @ http.route('/api/remove/webhook/device', type='http', auth='user', methods=['POST'], website=False, csrf=False)
+    def remove_webhook_device(self, **kw):
+        if kw['code'] != "parking":
+            return Response(json.dumps({"message": "Dịch vụ không hỗ trợ!"}), content_type='application/json;charset=utf-8', status=400)
+        actionServerDevice = request.env['ir.actions.server'].sudo().search([('id_device', '=', kw['idDevice'])])
+        if not actionServerDevice:
+            return Response(json.dumps({"message": "Thiết bị không tìm thấy"}), content_type='application/json;charset=utf-8', status=400)
+        actionServerDevice.unlink()
+        return Response(json.dumps({"message": "Success"}), content_type='application/json;charset=utf-8', status=200)
+
     @ http.route('/api/load/nsp/config/view', type='json', auth='user', methods=['POST'], website=False, csrf=False)
     def load_config_view(self, **kw):
         if kw.get("code") != "parking":

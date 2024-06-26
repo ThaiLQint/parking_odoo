@@ -4,12 +4,12 @@
      ID group quyền (parent) phải khác nhau khi thêm mới -->
     <record id="cate_groups_nsp" model="ir.module.category">
         <field name="name">NSP System</field>
-        <field name="sequence">5</field>
+        <field name="sequence">500</field>
     </record>
     <record id="user_access_admin" model="res.groups">
         <field name="name">ADMIN</field>
         <field name="implied_ids" eval="[(4, ref('base.group_erp_manager'))]" />
-        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+        <!-- <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" /> -->
         <field name="category_id"
             ref="parking_odoo.cate_groups_nsp" />
     </record>

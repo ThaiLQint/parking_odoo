@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Kế thừa web.layout để thêm thẻ <style> -->
+    <data>
+        <template id="layout_inherit" inherit_id="web.layout">
+            <xpath expr="//head" position="inside">
+                <t t-set="navbar_background_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.navbar_background_color')"></t>
+                <t t-set="navbar_text_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.navbar_text_color')"></t>
+                <style type="text/css">
+                   .o_main_navbar {
+                        background: <t t-esc="navbar_background_color"/> !important;
+                        color: <t t-esc="navbar_text_color"/> !important;
+                        border-bottom:1px solid <t t-esc="navbar_background_color"/> !important
+                    }
+                    .o_main_navbar .o_menu_sections .o_nav_entry, .o_main_navbar .o_menu_sections .dropdown-toggle{
+                        background: transparent !important;
+                        color: <t t-esc="navbar_text_color"/> !important;
+                        border: 1px solid transparent !important;
+                    }
+                    .o_main_navbar .o_menu_brand, .o_main_navbar .o_navbar_apps_menu .dropdown-toggle, .o_main_navbar .o_nav_entry, .o_main_navbar .dropdown-toggle {
+                        color: <t t-esc="navbar_text_color"/> !important;
+                    }
+                    
+                    .o_main_navbar .o_menu_sections .o_nav_entry:focus, .o_main_navbar .o_menu_sections .dropdown-toggle:focus {
+                        background: rgba(0, 0, 0, 0.08) !important;
+                    }
+                    
+                    .o_main_navbar .o_menu_sections .o_nav_entry:active, .o_main_navbar .o_menu_sections .dropdown-toggle:active {
+                        background: rgba(0, 0, 0, 0.08) !important;
+                    }
+                    .btn-primary {
+                        color: <t t-esc="navbar_text_color"/> !important;
+                        background-color: <t t-esc="navbar_background_color"/> !important;
+                        border-color: <t t-esc="navbar_background_color"/> !important;
+                    }
+                       
+                </style>
+            </xpath>
+        </template>
+    </data>
+</odoo>

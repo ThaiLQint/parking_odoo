@@ -14,33 +14,33 @@ _logger = logging.getLogger(__name__)
 class History(http.Controller):
     def __init__(self):
         self.my_dict = {}  # Khởi tạo dictionary rỗng
-        url = 'http://localhost:8069'
-        db = 'nsp.t4tek.tk'
-        username = 'NhanDT'
-        password = '123456aA@'
+        # url = 'http://localhost:8069'
+        # db = 'nsp.t4tek.tk'
+        # username = 'NhanDT'
+        # password = '123456aA@'
 
-        session_url = f'{url}/web/session/authenticate'
-        data = {
-            'params': {
-                'db': db,
-                'login': username,
-                'password': password,
-            }
-        }
-        session_response = requests.post(session_url, json=data)
-        session_data = session_response.json()
-        if session_data.get('result') and session_response.cookies.get('session_id'):
-            self.session_id = session_response.cookies['session_id']
-        else:
-            _logger.error(
-                f'Error: Failed to authenticate - {session_data.get("error")}')
-            return None
+        # session_url = f'{url}/web/session/authenticate'
+        # data = {
+        #     'params': {
+        #         'db': db,
+        #         'login': username,
+        #         'password': password,
+        #     }
+        # }
+        # session_response = requests.post(session_url, json=data)
+        # session_data = session_response.json()
+        # if session_data.get('result') and session_response.cookies.get('session_id'):
+        #     self.session_id = session_response.cookies['session_id']
+        # else:
+        #     _logger.error(
+        #         f'Error: Failed to authenticate - {session_data.get("error")}')
+        #     return None
 
-        self.lock = threading.Lock()
-        threaded = threading.Thread(
-            target=self.threadCheckAlert
-        )
-        threaded.start()
+        # self.lock = threading.Lock()
+        # threaded = threading.Thread(
+        #     target=self.threadCheckAlert
+        # )
+        # threaded.start()
 
     def _defferentTime(self, datetime, second):
         difference = datetime.now() - datetime
