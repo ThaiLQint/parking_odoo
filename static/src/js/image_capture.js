@@ -88,7 +88,6 @@ export class ImageCapture extends Component {
     };
   }
 
-
   getUrl(previewFieldName) {
     if (!this.props.reload && this.lastURL) {
       return this.lastURL;

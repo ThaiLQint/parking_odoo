@@ -47,6 +47,8 @@ export class ButtonFormController extends FormController {
   }
 
   onClickDKxe() {
+    var style = getComputedStyle(document.body)
+    console.log("aaa"+style.getPropertyValue('o-community-color') ) // #336699
     const self = this;
     if (self.model.root.data.id == false) {
       this.showAlerDialog("THÔNG BÁO", "CHƯA TẠO THÔNG TIN!!");

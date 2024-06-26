@@ -4,12 +4,12 @@
      ID group quyền (parent) phải khác nhau khi thêm mới -->
     <record id="cate_groups_nsp" model="ir.module.category">
         <field name="name">NSP System</field>
-        <field name="sequence">5</field>
+        <field name="sequence">500</field>
     </record>
     <record id="user_access_admin" model="res.groups">
         <field name="name">ADMIN</field>
         <field name="implied_ids" eval="[(4, ref('base.group_erp_manager'))]" />
-        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" />
+        <!-- <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]" /> -->
         <field name="category_id"
             ref="parking_odoo.cate_groups_nsp" />
     </record>
@@ -38,6 +38,17 @@
         <field name="category_id"
             ref="parking_odoo.cate_groups_nsp" />
     </record>
+
+    <record id="access_user_stock_picking" model="ir.model.access">
+        <field name="name">access_user_stock_picking</field>
+        <field name="model_id" ref="stock.model_stock_picking" />
+        <field name="group_id" ref="user_access" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="0" />
+        <field name="perm_create" eval="0" />
+        <field name="perm_unlink" eval="0" />
+    </record>
+
 </odoo>
 
 <!-- access_user_nsp_admin,Access User NSP

@@ -46,7 +46,7 @@ class Product_template(models.Model):
         'res.partner', string='Chủ sở hữu', required=True, store=True)
     contact_id_in_out = fields.Integer(
          string='Id contact in out', readonly=True)
-    barcode = fields.Char(readonly=False)
+    barcode = fields.Char(string="Mật khẩu", readonly=False)
     default_code = fields.Char(string="Mã thẻ", readonly=False)
     user_ids = fields.Many2many(
         'res.partner',  string="Người sử dụng", readonly=False, ondelete='cascade', store=True)

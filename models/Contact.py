@@ -62,11 +62,9 @@ class Contact(models.Model):
     'contact_id', 
     'partner_id', 
     string='Danh sách liên hệ',
-    domain="[('id', '!=', id)]", store=True
-    )
+    domain="[('id', '!=', id)]", store=True)
     
     vehicle = fields.Many2one("res.partner", string="Vehicle", store=True)
-
     vehicles = fields.One2many('res.partner', 'vehicle', string='Phương Tiện', store=True)
     
     image_1920 = fields.Image(string="Ảnh đại diện", max_width=1024, max_height=768)
@@ -172,6 +170,8 @@ class Contact(models.Model):
         # values
         return record
 
+    
+    
     def createUUID(self):
         hex_arr = uuid.uuid4().hex
         check_epc_user = self.search(
@@ -238,4 +238,3 @@ class WhatApp(models.Model):
 
     name = fields.Char(string="What App", required=True)
     contact_ids = fields.Many2one('res.partner', string='Contact', required=True)
-

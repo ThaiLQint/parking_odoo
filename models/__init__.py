@@ -11,7 +11,7 @@ from . import _test
 
 from . import product_color
 from . import product_color_values
-from . import actionsServer
+# from . import actionsServer
 from . import baseAutomation
 from . import alert
 from . import settingNspBranch
@@ -20,6 +20,7 @@ from . import settingNspOffice
 from . import settingNspLane
 from . import ir_ui_menu
 from . import settingNspDevice
+from . import resConfigSettings
 
 from . import res_group
 # from . import res_config_settings

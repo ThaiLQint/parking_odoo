@@ -21,14 +21,14 @@
     'category': 'NSP',
     'version': '0.1',
     # any module necessary for this one to work correctly
-    'depends': ['contacts','stock', 'product', 'base'],
+    'depends': ['base_setup', 'contacts', 'stock', 'product', 'base'],
     "application": True,
     # always loaded
     'data': [
-        "views/User.xml",     
+        "views/User.xml",
         "security/access_user.xml",
-        "security/ir.model.access.csv",     
         "security/record_rule.xml",
+        "security/ir.model.access.csv",
         "views/AlerTag.xml",
         "views/Contact.xml",
         "views/ProductTemplate.xml",
@@ -36,17 +36,27 @@
         "views/StockMoveLine.xml",
         "views/SettingNSP.xml",
         "views/product_color_main.xml",
-        "views/nsp_menu_setting.xml",     
-        "views/hidden_view.xml",     
+        "views/nsp_menu_setting.xml",
+        "views/ChangeColorTheme.xml",
+        "views/ResConfigSettings.xml",
+        "views/customize_theme.xml",
+        "views/hidden_module.xml",
     ],
     'qweb': [],
     'installable': True,
     'application': True,
     'auto_install': True,
     'assets': {
+        # 'web._assets_primary_variables': [
+        #     ('prepend', 'parking_odoo/static/src/scss/theme_style.scss')
+
+        # ],
         'web.assets_backend':
         [
-            'parking_odoo/static/src/**/*',
+            'parking_odoo/static/src/js/*.js',
+            'parking_odoo/static/src/xml/*.xml',
+            'parking_odoo/static/src/css/*.css',
+            'parking_odoo/static/src/scss/image_capture.scss',
         ],
     },
 }

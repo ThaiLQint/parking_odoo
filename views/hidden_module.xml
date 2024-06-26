@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="stock.menu_stock_root" model="ir.ui.menu">
+        <field name="name">Inventory</field>
+        <!-- <field name="model_id" ref="model_res_partner" /> -->
+        <field name="active" eval="False" />
+    </record>
+
+    <record id="contacts.menu_contacts"
+        model="ir.ui.menu">
+        <field name="name">Contacts</field>
+        <field name="active" eval="False" />
+    </record>
+
+    <record id="mail.menu_root_discuss"
+        model="ir.ui.menu">
+        <field name="name">Discuss</field>
+        <field name="active" eval="False" />
+    </record>
+
+    <!-- Định nghĩa menu Apps -->
+    <!-- <record id="base.menu_management" model="ir.ui.menu">
+        <field name="name">Apps</field>
+        <field name="groups_id" eval="[(4, ref('parking_odoo.user_access'))]" />
+    </record>
+    Ẩn menu Apps cho nhóm parking_odoo.user_access
+    <record id="menu_apps_hidden_user_access" model="ir.ui.menu">
+        <field name="name">Apps</field>
+        <field name="groups_id" eval="[(6, 0, [ref('parking_odoo.user_access')])]" />
+        <field name="active" eval="False" />
+    </record> -->
+
+    <!-- Đảm bảo menu Apps vẫn hiển thị cho admin -->
+    <!-- <record id="menu_apps_visible_admin" model="ir.ui.menu">
+        <field name="name">Apps</field>
+        <field name="groups_id"
+            eval="[(6, 0, [ref('base.group_system'), ref('parking_odoo.user_access_admin')])]" />
+        <field name="active" eval="True" />
+    </record> -->
+</odoo>
