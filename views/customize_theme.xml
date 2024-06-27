@@ -7,57 +7,67 @@
                 <t t-set="navbar_background_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.navbar_background_color')"></t>
                 <t t-set="navbar_text_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.navbar_text_color')"></t>
                 <t t-set="dropdown_item_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.dropdown_item_color')"></t>
+                <t t-set="button_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.button_color')"></t>
                 <style type="text/css">
                     body{
                         user-select: none !important;
                     }
-                   .o_main_navbar {
+                    .o_main_navbar .o_menu_sections .o_nav_entry, .o_main_navbar .o_menu_sections .dropdown-toggle {
                         background: <t t-esc="navbar_background_color"/> !important;
-                        color: <t t-esc="navbar_text_color"/> !important;
-                        border-bottom:1px solid <t t-esc="navbar_background_color"/> !important
-                    }
-                    .o_main_navbar .o_menu_sections .o_nav_entry, .o_main_navbar .o_menu_sections .dropdown-toggle{
-                        background: transparent !important;
                         color: <t t-esc="navbar_text_color"/> !important;
                         border: 1px solid transparent !important;
                     }
-                    .o_main_navbar .o_menu_brand, .o_main_navbar .o_navbar_apps_menu .dropdown-toggle, .o_main_navbar .o_nav_entry, .o_main_navbar .dropdown-toggle {
-                        color: <t t-esc="navbar_text_color"/> !important;
+                    .text-primary {
+                        color: <t t-esc="navbar_background_color"/> !important;
                     }
+                    .o_main_navbar {
+                        background-color: <t t-esc="navbar_background_color"/> !important;
+                        color: <t t-esc="navbar_text_color"/> !important;
+                        border-bottom:1px solid <t t-esc="navbar_background_color"/> !important
+                    }
+                    .btn-primary{
+                        background-color: <t t-esc="button_color"/> !important;
+                        color: <t t-esc="navbar_text_color"/> !important;
+                        border-color: <t t-esc="button_color"/> !important;
+                    }
+                    <!-- .btn-secondary{
+                        background-color: <t t-esc="button_color"/> !important;
+                        color: <t t-esc="navbar_text_color"/> !important;
+                        border-color: <t t-esc="navbar_background_color"/> !important;
+                    } -->
                     .o_main_navbar .o_menu_sections .o_nav_entry:hover, .o_main_navbar .o_menu_sections .dropdown-toggle:hover {
                         background: rgba(0, 0, 0, 0.08) !important;
+                    }
+                    .o_main_navbar .o_menu_brand, .o_main_navbar .o_navbar_apps_menu .dropdown-toggle, .o_main_navbar .o_nav_entry, .o_main_navbar .dropdown-toggle {
+                        background: transparent;
+                        color: <t t-esc="navbar_text_color"/> !important;
+                    }
+                    .dropdown-item {
+                        color: <t t-esc="dropdown_color"/> !important;
+                        background-color: transparent;
+                    }
+                    .o_control_panel_main_buttons ,.o_control_panel_collapsed_create, .o_form_button_create {
+                        color: <t t-esc="navbar_text_color"/> !important;
+                        background-color: transparent;
                     }
                     .o_main_navbar .o_menu_sections .o_nav_entry:hover, .o_main_navbar .o_menu_sections .dropdown-toggle:active {
                         background: rgba(0, 0, 0, 0.08) !important;
                     }
-                    .dropdown-item {
-                        color: <t t-esc="dropdown_item_color"/> !important;
-                    }
-                    
                     .o_main_navbar .o_menu_sections .o_nav_entry:active, .o_main_navbar .o_menu_sections .dropdown-toggle:active {
                         background: rgba(0, 0, 0, 0.08) !important;
                     }
-                    .btn-primary {
-                        color: <t t-esc="navbar_text_color"/> !important;
-                        background-color: <t t-esc="navbar_background_color"/> !important;
-                        border-color: <t t-esc="navbar_background_color"/> !important;
-                    }
-                    
                     .btn-outline-primary {
-                        color: <t t-esc="navbar_background_color"/> !important;
-                        border-color: <t t-esc="navbar_background_color"/> !important;
+                        color: <t t-esc="button_color"/> !important;
+                        border-color: <t t-esc="button_color"/> !important;
                     }
-                    
                     .btn-outline-primary:hover {
                         color: <t t-esc="navbar_text_color"/> !important;
-                        background-color: <t t-esc="navbar_background_color"/> !important;
-                        border-color: <t t-esc="navbar_background_color"/> !important;
+                        background-color: <t t-esc="button_color"/> !important;
+                        border-color: <t t-esc="button_color"/> !important;
                     }
-
                     .btn-check:focus + .btn-outline-primary, .btn-outline-primary:focus {
                         box-shadow: 0 0 0 0.25rem rgba(113, 99, 158, 0.5);
                     }
-                    
                     .btn-check:checked + .btn-outline-primary, .btn-check:active + .btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
                         color: <t t-esc="navbar_text_color"/> !important;
                         background-color:  <t t-esc="navbar_background_color"/> !important;

@@ -12,6 +12,7 @@ class ParkingResConfigSettings(models.TransientModel):
         string="Navigationbar Background Color")
     navbar_text_color = fields.Char(string="Navigationbar Text Color")
     dropdown_item_color = fields.Char(string="Dropdown Items Color")
+    button_color = fields.Char(string="Button Primary Color")
 
     @api.model
     def get_values(self):
@@ -24,10 +25,13 @@ class ParkingResConfigSettings(models.TransientModel):
             'change_odoo_theme_header_color.navbar_text_color')
         dropdown_item_color = IPC.get_param(
             'change_odoo_theme_header_color.dropdown_item_color')
+        button_color = IPC.get_param(
+            'change_odoo_theme_header_color.button_color')
         res.update(
             navbar_background_color=navbar_background_color,
             navbar_text_color=navbar_text_color,
             dropdown_item_color=dropdown_item_color,
+            button_color=button_color
         )
         return res
 
@@ -40,3 +44,5 @@ class ParkingResConfigSettings(models.TransientModel):
             'change_odoo_theme_header_color.navbar_text_color', self.navbar_text_color)
         IPC.set_param(
             'change_odoo_theme_header_color.dropdown_item_color', self.dropdown_item_color)
+        IPC.set_param(
+            'change_odoo_theme_header_color.button_color', self.button_color)

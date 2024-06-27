@@ -21,9 +21,8 @@ class Webhoook(http.Controller):
             [('id_device', '=', kw['idDevice'])])
         if not actionServerDevice:
             return Response(json.dumps({"message": "Thiết bị không tìm thấy"}), content_type='application/json;charset=utf-8', status=400)
-        actionServerDevice.write(
-            {"isConnected": True if kw['isConnected'] == 1 else False})
-        _logger.info(kw['isConnected'])
+        boolean = actionServerDevice.write(
+            {"isConnected": True if kw['isConnected'] == "1" else False})
         return Response(json.dumps({"message": "Success"}), content_type='application/json;charset=utf-8', status=200)
 
     @http.route('/api/remove/webhook/device', type='http', auth='user', methods=['POST'], website=False, csrf=False)

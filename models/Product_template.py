@@ -48,7 +48,7 @@ class Product_template(models.Model):
          string='Id contact in out', readonly=True)
     barcode = fields.Char(string="Mật khẩu", readonly=False)
     default_code = fields.Char(string="Mã thẻ", readonly=False)
-    epc = fields.Char(string="EPC thẻ", readonly=False)
+    epc_tag = fields.Char(string="EPC thẻ", readonly=False)
     user_ids = fields.Many2many(
         'res.partner',  string="Người sử dụng", readonly=False, ondelete='cascade', store=True)
     domain = fields.Char(compute="_compute_domain", readonly=True)

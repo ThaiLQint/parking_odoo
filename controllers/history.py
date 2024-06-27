@@ -11,36 +11,37 @@ import threading
 import time
 _logger = logging.getLogger(__name__)
 
+
 class History(http.Controller):
     def __init__(self):
         self.my_dict = {}  # Khởi tạo dictionary rỗng
-        # url = 'http://localhost:8069'
-        # db = 'nsp.t4tek.tk'
-        # username = 'NhanDT'
-        # password = '123456aA@'
+        url = 'http://localhost:8069'
+        db = 'nsp.t4tek.tk'
+        username = 'NhanDT'
+        password = '123456aA@'
 
-        # session_url = f'{url}/web/session/authenticate'
-        # data = {
-        #     'params': {
-        #         'db': db,
-        #         'login': username,
-        #         'password': password,
-        #     }
-        # }
-        # session_response = requests.post(session_url, json=data)
-        # session_data = session_response.json()
-        # if session_data.get('result') and session_response.cookies.get('session_id'):
-        #     self.session_id = session_response.cookies['session_id']
-        # else:
-        #     _logger.error(
-        #         f'Error: Failed to authenticate - {session_data.get("error")}')
-        #     return None
+        session_url = f'{url}/web/session/authenticate'
+        data = {
+            'params': {
+                'db': db,
+                'login': username,
+                'password': password,
+            }
+        }
+        session_response = requests.post(session_url, json=data)
+        session_data = session_response.json()
+        if session_data.get('result') and session_response.cookies.get('session_id'):
+            self.session_id = session_response.cookies['session_id']
+        else:
+            _logger.error(
+                f'Error: Failed to authenticate - {session_data.get("error")}')
+            return None
 
-        # self.lock = threading.Lock()
-        # threaded = threading.Thread(
-        #     target=self.threadCheckAlert
-        # )
-        # threaded.start()
+        self.lock = threading.Lock()
+        threaded = threading.Thread(
+            target=self.threadCheckAlert
+        )
+        threaded.start()
 
     def _defferentTime(self, datetime, second):
         difference = datetime.now() - datetime
@@ -97,11 +98,23 @@ class History(http.Controller):
         if kw["code"] == "parking":
             return self._parkingHistoryHandle(kw)
 
+    @http.route('/api/history/validate/test', type='http', auth='public', methods=['POST'], website=False, csrf=False)
+    def validate_test(self, **kw):
+        tid = kw['tid']
+        if tid[0] == 's':
+            key = 'epc_tag'
+            tid = tid[1:]
+        else:
+            key = "ref"
+        partner = self._find_by_key("res.partner", key, tid)
+        if not partner:
+            return Response(json.dumps({"message": "Không tìm thấy thẻ người ["+kw['tid']+"]"}), content_type='application/json;charset=utf-8', status=400)
+
     @http.route('/api/history/alert/tag', type='json', auth='public', methods=['POST'],  website=False, csrf=False)
     def alert_tag(self, **kw):
         if kw["code"] == "parking":
             return self.create_alert_tag(kw)
-        
+
     def create_alert_tag(self, kw):
         code = kw["codeAlert"]
         if code == 1:
@@ -178,7 +191,7 @@ class History(http.Controller):
         return display_date_result
 
     def _parkingHistoryHandle(self, kw):
-        tid = kw.get("tid", None)
+        tid = kw["tid"]
         checkProduct = False
         # Tìm kiếm sản phẩm theo default_code
         if tid[0] == 's':
@@ -206,22 +219,25 @@ class History(http.Controller):
                     message = "đã VÀO"
                 else:
                     message = "không hợp lệ!!"
-
+                _logger.info("Xe " + message)
                 return Response(json.dumps({"message": "Xe " + message}), content_type='application/json;charset=utf-8', status=400)
             # Lưu cặp giá trị thẻ <key, value>
-            result = self._handle_product_found(product.default_code, product.id)
+            result = self._handle_product_found(
+                product.default_code, product.id)
             if picking_code == "outgoing":
                 return result
+
         if picking_code == "outgoing":
             # Tìm kiếm đối tác theo ref
+            tid = kw["tid"]
             if tid[0] == 's':
                 key = 'epc_tag'
                 tid = tid[1:]
             else:
                 key = "ref"
-            partner = self._find_by_key("res.partner", "ref", tid)
+            partner = self._find_by_key("res.partner", key, tid)
             if not partner:
-                return Response(json.dumps({"message": "Không tìm thấy thẻ"}), content_type='application/json;charset=utf-8', status=400)
+                return Response(json.dumps({"message": "Không tìm thấy thẻ người"}), content_type='application/json;charset=utf-8', status=400)
             # Kiểm tra danh sách sản phẩm riêng tư
             tid = self._check_product_list(partner.product_ids_private)
             if tid != "None":
@@ -243,7 +259,7 @@ class History(http.Controller):
                         message = "đã VÀO"
                     else:
                         message = "không hợp lệ!!"
-
+                    _logger.info("Xe " + message)
                     return Response(json.dumps({"message": "Xe " + message}), content_type='application/json;charset=utf-8', status=400)
 
         if checkProduct:  # Xe vào + thẻ người thẻ xe lối ra hợp lệ
@@ -256,7 +272,8 @@ class History(http.Controller):
             elif picking_code == "outgoing":
                 id = partner.id
             contact_id_in_out = id
-            product.write({"picking_code": picking_code, 'contact_id_in_out': contact_id_in_out}) 
+            product.write({"picking_code": picking_code,
+                          'contact_id_in_out': contact_id_in_out})
             imgTruoc, imgSau = self._imgTruocSauCamera(
                 kw["imgTruoc"], kw["imgSau"])
             idHistory = self._handle_history(
@@ -294,7 +311,7 @@ class History(http.Controller):
         """Xử lý khi tìm thấy sản phẩm."""
         self.my_dict.setdefault(
             tid, {"tid": tid, "datetime": datetime.now(), 'id': id})
-
+        _logger.info("Tìm thấy thẻ xe")
         return Response(json.dumps({"message": "Tìm thấy thẻ xe"}), content_type='application/json;charset=utf-8', status=200)
 
     def _handle_history(self, idPartner, idProduct, port, move_history_id, picking_code, imgTruoc, imgSau):
@@ -323,6 +340,6 @@ class History(http.Controller):
     def _check_product_list(self, product_list):
         """Kiểm tra danh sách sản phẩm."""
         for product in product_list:
-            if product["default_code"] in self.my_set:
+            if product["default_code"] in self.my_dict:
                 return product["default_code"]
         return "None"

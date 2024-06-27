@@ -3,7 +3,6 @@
 import json
 import logging
 
-
 import odoo
 import odoo.modules.registry
 from odoo import http
