@@ -15,6 +15,9 @@
                             <setting id="text_color_setting" string="Navigationbar Background Color" help="Selected color will apply to navigationbar text color">
                                 <field name="navbar_text_color" widget="color" nolabel="1"></field>
                             </setting>
+                            <setting id="dropdown_item_color_setting" string="Dropdown Items Color" help="Selected color will apply to dropdown items color">
+                                <field name="dropdown_item_color" widget="color" nolabel="1"></field>
+                            </setting>
                         </block>
                     </div>
                 </xpath>

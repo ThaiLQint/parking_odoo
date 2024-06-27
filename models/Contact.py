@@ -74,8 +74,7 @@ class Contact(models.Model):
         string="Ảnh mặt sau CMND/CCCD", max_width=1920, max_height=1920)
     
     contact_id = fields.Many2one('res.partner', string='Chủ sở hữu')
-    bien_so_realtime = fields.Char(string="Biển số xe")
-    car_status = fields.Char(string="Trạng Thái")
+    epc_tag = fields.Char(string="EPC thẻ")
     
     def delete_button(seft):
         seft.partner_id.partner_ids = [(3, seft.id)]
@@ -170,7 +169,6 @@ class Contact(models.Model):
         # values
         return record
 
-    
     
     def createUUID(self):
         hex_arr = uuid.uuid4().hex

@@ -3,11 +3,15 @@
     <data noupdate='1'>
         <record id="navbar_background_color" model="ir.config_parameter">
             <field name="key">change_odoo_theme_header_color.navbar_background_color</field>
-            <field name="value">#7C7bad</field>
+            <field name="value">#6deed8</field>
         </record>
         <record id="navbar_text_color" model="ir.config_parameter">
             <field name="key">change_odoo_theme_header_color.navbar_text_color</field>
-            <field name="value">#ffffff</field>
+            <field name="value">#0b1f6f</field>
+        </record>
+        <record id="dropdown_item_color" model="ir.config_parameter">
+            <field name="key">change_odoo_theme_header_color.dropdown_item_color</field>
+            <field name="value">#101307</field>
         </record>
     </data>
 </odoo>

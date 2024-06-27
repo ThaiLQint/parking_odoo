@@ -181,7 +181,12 @@ class History(http.Controller):
         tid = kw.get("tid", None)
         checkProduct = False
         # Tìm kiếm sản phẩm theo default_code
-        product = self._find_by_key("product.template", "default_code", tid)
+        if tid[0] == 's':
+            key = 'epc_tag'
+            tid = tid[1:]
+        else:
+            key = "default_code"
+        product = self._find_by_key("product.template", key, tid)
         port = kw["port"]
         picking_code = "outgoing"
         if product:
@@ -204,11 +209,16 @@ class History(http.Controller):
 
                 return Response(json.dumps({"message": "Xe " + message}), content_type='application/json;charset=utf-8', status=400)
             # Lưu cặp giá trị thẻ <key, value>
-            result = self._handle_product_found(tid, product.id)
+            result = self._handle_product_found(product.default_code, product.id)
             if picking_code == "outgoing":
                 return result
         if picking_code == "outgoing":
             # Tìm kiếm đối tác theo ref
+            if tid[0] == 's':
+                key = 'epc_tag'
+                tid = tid[1:]
+            else:
+                key = "ref"
             partner = self._find_by_key("res.partner", "ref", tid)
             if not partner:
                 return Response(json.dumps({"message": "Không tìm thấy thẻ"}), content_type='application/json;charset=utf-8', status=400)
@@ -313,6 +323,6 @@ class History(http.Controller):
     def _check_product_list(self, product_list):
         """Kiểm tra danh sách sản phẩm."""
         for product in product_list:
-            if self.my_dict.get(product["default_code"], "None") != "None":
+            if product["default_code"] in self.my_set:
                 return product["default_code"]
         return "None"
