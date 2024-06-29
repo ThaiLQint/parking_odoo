@@ -28,20 +28,20 @@ class History(http.Controller):
                 'password': password,
             }
         }
-        session_response = requests.post(session_url, json=data)
-        session_data = session_response.json()
-        if session_data.get('result') and session_response.cookies.get('session_id'):
-            self.session_id = session_response.cookies['session_id']
-        else:
-            _logger.error(
-                f'Error: Failed to authenticate - {session_data.get("error")}')
-            return None
+        # session_response = requests.post(session_url, json=data)
+        # session_data = session_response.json()
+        # if session_data.get('result') and session_response.cookies.get('session_id'):
+        #     self.session_id = session_response.cookies['session_id']
+        # else:
+        #     _logger.error(
+        #         f'Error: Failed to authenticate - {session_data.get("error")}')
+        #     return None
 
-        self.lock = threading.Lock()
-        threaded = threading.Thread(
-            target=self.threadCheckAlert
-        )
-        threaded.start()
+        # self.lock = threading.Lock()
+        # threaded = threading.Thread(
+        #     target=self.threadCheckAlert
+        # )
+        # threaded.start()
 
     def _defferentTime(self, datetime, second):
         difference = datetime.now() - datetime
