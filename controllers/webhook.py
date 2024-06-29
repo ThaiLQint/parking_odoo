@@ -13,6 +13,25 @@ _logger = logging.getLogger(__name__)
 
 class Webhoook(http.Controller):
 
+    @http.route('/api/state/device', type='http', auth='user', methods=['POST'], website=False, csrf=False)
+    def get_device_state(self, **kw):
+        if kw['code'] != "parking":
+            return Response(json.dumps({"message": "Dịch vụ không hỗ trợ!"}), content_type='application/json;charset=utf-8', status=400)
+        device_id = kw.get('idDevice')
+        if not device_id:
+            return Response(json.dumps({"error": "Device ID is required"}), content_type='application/json;charset=utf-8', status=400)
+
+        device = request.env['ir.actions.server'].sudo().search(
+            [('id_device', '=', device_id)], limit=1)
+        if not device:
+            return Response(json.dumps({"error": "Device not found"}), content_type='application/json;charset=utf-8', status=400)
+
+        state = {
+            "isConnected": device.isConnected,
+        }
+
+        return Response(json.dumps(state), content_type='application/json;charset=utf-8', status=200)
+
     @http.route('/api/update/state/device', type='http', auth='user', methods=['POST'], website=False, csrf=False)
     def update_state_webhook_device(self, **kw):
         if kw['code'] != "parking":
@@ -164,7 +183,7 @@ class Webhoook(http.Controller):
             # End: Thiết bị DISPLAY =========
             tempVals = {
                 "binding_model_id": False,
-                "name": "Send Webhook Nhân",
+                "name": kw['name'],
                 "state": "webhook",
                 "model_id": result.model_id.id,
                 "groups_id": [],

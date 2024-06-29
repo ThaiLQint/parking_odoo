@@ -43,7 +43,7 @@
                         color: <t t-esc="navbar_text_color"/> !important;
                     }
                     .dropdown-item {
-                        color: <t t-esc="dropdown_color"/> !important;
+                        color: <t t-esc="dropdown_item_color"/> !important;
                         background-color: transparent;
                     }
                     .o_control_panel_main_buttons ,.o_control_panel_collapsed_create, .o_form_button_create {

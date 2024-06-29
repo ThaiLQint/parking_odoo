@@ -8,18 +8,18 @@
             <field name="arch" type="xml">
                 <xpath expr="//app[@name='general_settings']//div[@id='invite_users']" position="before">
                     <div id="navbar_colors_configutation">
-                        <block title="Navigationbar Color Configuration" name="color_setting_container">
+                        <block title="Color Theme Configuration" name="color_setting_container">
                             <setting id="background_color_setting" string="Navigationbar Background Color" help="Selected color will apply to navigationbar background color">
                                 <field name="navbar_background_color" widget="color" nolabel="0"></field>
                                 <field name="navbar_background_color" nolabel="1"></field>
                             </setting>
-                            <setting id="text_color_setting" string="Navigationbar Background Color" help="Selected color will apply to navigationbar text color">
+                            <setting id="text_color_setting" string="Navigationbar Text Color" help="Selected color will apply to navigationbar text color">
                                 <field name="navbar_text_color" widget="color" nolabel="0"></field>
                                 <field name="navbar_text_color" nolabel="1"></field>
                             </setting>
                             <setting id="button_setting" string="Button Primary Color" help="Selected color will apply to button primary color">
                                 <field name="button_color" widget="color" nolabel="0"></field>
-                                <field name="navbar_background_color" nolabel="1"></field>
+                                <field name="button_color" nolabel="1"></field>
                             </setting>
                             <setting id="dropdown_item_color_setting" string="Dropdown Items Color" help="Selected color will apply to dropdown items color">
                                 <field name="dropdown_item_color" widget="color" nolabel="0"></field>

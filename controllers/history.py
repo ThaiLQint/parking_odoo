@@ -311,7 +311,6 @@ class History(http.Controller):
         """Xử lý khi tìm thấy sản phẩm."""
         self.my_dict.setdefault(
             tid, {"tid": tid, "datetime": datetime.now(), 'id': id})
-        _logger.info("Tìm thấy thẻ xe")
         return Response(json.dumps({"message": "Tìm thấy thẻ xe"}), content_type='application/json;charset=utf-8', status=200)
 
     def _handle_history(self, idPartner, idProduct, port, move_history_id, picking_code, imgTruoc, imgSau):
