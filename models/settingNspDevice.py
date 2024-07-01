@@ -10,6 +10,8 @@ configurationCode = "0001"
 class SettingNspDeviceIn(models.Model):
     _name = 'setting.nsp.device'
     _description = 'Setting Parking Device'
+    isConnected = fields.Boolean(string="Reader Status", default=False)
+    isConnected2 = fields.Boolean(string="Reader Status Trigger", default=False)
     id_device = fields.Char(string="ID thiết bị")
     name = fields.Selection([('reader', 'Đầu đọc thẻ'),
                              ('screenSecurity', "Màn hình bảo vệ"),

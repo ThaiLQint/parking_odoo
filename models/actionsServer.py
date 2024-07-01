@@ -11,7 +11,6 @@ _logger = logging.getLogger(__name__)
 class ActionsServer(models.Model):
     _inherit = 'ir.actions.server'
     id_device = fields.Char(string="Id Device", store=True)
-    isConnected = fields.Boolean(string="Cấp thẻ", default=False)
 
     def create(self, vals):
         """ Create a contextual action for each server action. """
