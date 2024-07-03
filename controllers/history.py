@@ -15,29 +15,6 @@ _logger = logging.getLogger(__name__)
 class History(http.Controller):
     def __init__(self):
         self.my_dict = {}  # Khởi tạo dictionary rỗng
-        url = 'http://localhost:8069'
-        db = 'nsp.t4tek.tk'
-        username = 'NhanDT'
-        password = '123456aA@'
-
-        session_url = f'{url}/web/session/authenticate'
-        data = {
-            'params': {
-                'db': db,
-                'login': username,
-                'password': password,
-            }
-        }
-        
-        session_response = requests.post(session_url, json=data)
-        session_data = session_response.json()
-        if session_data.get('result') and session_response.cookies.get('session_id'):
-            self.session_id = session_response.cookies['session_id']
-        else:
-            _logger.error(
-                f'Error: Failed to authenticate - {session_data.get("error")}')
-            return None
-
         self.lock = threading.Lock()
         threaded = threading.Thread(
             target=self.threadCheckAlert
@@ -57,18 +34,17 @@ class History(http.Controller):
             # 'send and forget' strategy, and avoid locking the user if the webhook
             # is slow or non-functional (we still allow for a 1s timeout so that
             # if we get a proper error response code like 400, 404 or 500 we can log)
-            json_values = {
-                'params': {
-                    'productId': id,
-                    'tag': 'Người',
-                    'code': 'parking',
-                    'codeAlert': 1
-                }
+            params = {
+                'productId': id,
+                'tag': 'Người',
+                'code': 'parking',
+                'codeAlert': 1
             }
-            response = requests.post("http://localhost:8069/api/history/alert/tag", json=json_values, headers={
-                                     'Content-Type': 'application/json',
-                                     'Cookie': f"session_id={self.session_id}",
-                                     }, timeout=0.1)
+            response = requests.post(
+            "http://host.docker.internal:8069/api/history/alert/tag",
+            data=params,
+            headers={'Content-Type': 'application/x-www-form-urlencoded'},
+            timeout=0.1)
             response.raise_for_status()
         except requests.exceptions.ReadTimeout:
             _logger.warning("Webhook call timed out after 1s - it may or may not have failed. "
@@ -111,10 +87,11 @@ class History(http.Controller):
         if not partner:
             return Response(json.dumps({"message": "Không tìm thấy thẻ người ["+kw['tid']+"]"}), content_type='application/json;charset=utf-8', status=400)
 
-    @http.route('/api/history/alert/tag', type='json', auth='public', methods=['POST'],  website=False, csrf=False)
+    @http.route('/api/history/alert/tag', type='http', auth='none', methods=['POST'],  website=False, csrf=False)
     def alert_tag(self, **kw):
         if kw["code"] == "parking":
             return self.create_alert_tag(kw)
+        return Response("Invalid request", status=400)
 
     def create_alert_tag(self, kw):
         code = kw["codeAlert"]
@@ -158,19 +135,19 @@ class History(http.Controller):
         partner = self._find_by_key("res.partner", "id", kw["contactId"])
         if not partner:
             return Response(json.dumps({"message": "Liên hệ không tìm thấy [" + kw["contactId"]+"]"}), content_type='application/json;charset=utf-8', status=400)
-        
+
         if kw['isIn'] == "1":
             if product.image_1920_bien_so == False:
                 product_image_1920_bien_so = "None"
             else:
                 product_image_1920_bien_so = product.image_1920_bien_so.decode()
 
-        if kw['isIn'] == "0":
+        elif kw['isIn'] == "0":
             if product.image_1920 == False:
                 product_image_1920 = "None"
             else:
                 product_image_1920 = product.image_1920.decode()
-            
+
             if partner.image_1920 == False:
                 partner_image_1920 = "None"
             else:
@@ -194,7 +171,7 @@ class History(http.Controller):
         #     "imgBienSo": product_image_1920_bien_so,
         #     "pickingCode": product.picking_code,
         if kw['isIn'] == "1":
-            jsonDumps["imgBienSo"] = product_image_1920_bien_so,
+            jsonDumps.update({"imgBienSo": product_image_1920_bien_so})
         if kw['isIn'] == "0":
             jsonDumps.update({
                 "imgXe": product_image_1920,

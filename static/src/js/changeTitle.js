@@ -2,16 +2,15 @@
 
 import { patch } from "@web/core/utils/patch";
 import { WebClient } from "@web/webclient/webclient";
-
+import { useService } from "@web/core/utils/hooks";
 patch(WebClient.prototype, {
   /**
    * @override
    */
   setup() {
-    const backendIconEl = document.querySelector("link[rel~='icon']");
     // Save initial backend values.
-    backendIconEl.href = "/parking_odoo/static/src/img/logo.ico";
     super.setup();
+    this.rpc = useService("rpc")
     this.updateTitle();
   },
 
