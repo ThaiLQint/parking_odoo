@@ -35,7 +35,8 @@ class Webhoook(http.Controller):
             [('id_device', '=', kw['idDevice'])])
         if not actionServerDevice:
             return Response(json.dumps({"message": "Thiết bị không tìm thấy"}), content_type='application/json;charset=utf-8', status=400)
-        actionServerDevice.unlink()
+        for action in actionServerDevice:
+            action.unlink()
         return Response(json.dumps({"message": "Success"}), content_type='application/json;charset=utf-8', status=200)
 
     @http.route('/api/load/nsp/config/view', type='json', auth='user', methods=['POST'], website=False, csrf=False)
@@ -131,8 +132,6 @@ class Webhoook(http.Controller):
             if not result:
                 return Response(json.dumps({"message": "Đăng ký dịch vụ không họp lệ!"}), content_type='application/json;charset=utf-8', status=400)
 
-            isCreateActionWebhook = False
-
             # Vòng lặp tìm kiếm id của thiết bị trong danh sách action con
             for actionServer in result.action_server_ids:
                 # Tìm kiếm id của thiết bị trong danh sách action con
@@ -156,19 +155,47 @@ class Webhoook(http.Controller):
             # End: Thiết bị RFREADER =========
 
             # Start: Thiết bị DISPLAY =======
-
             if kw['deviceType'] == "screenIn" or kw['deviceType'] == "screenOut" or kw['deviceType'] == "screenSecurity" or kw['deviceType'] == "screenAlert":
+                if kw['deviceType'] == "screenOut":
+                    domain = [
+                        ('model_id', '=', result.model_id.id),
+                        '|',
+                            ('name', '=', 'picking_code'),
+                            '|',
+                                '|',
+                                    ('name', '=', 'image_1920_camera_truoc'),
+                                    ('name', '=', 'image_1920_camera_sau'),
+                                '|',
+                                    ('name', '=', 'contact_id'),
+                                    ('name', '=', 'product_id'),
+                            ]
+                    limit = 5
+                elif kw['deviceType'] == "screenIn":
+                    domain = [
+                        (
+                        'model_id', '=', result.model_id.id),
+                        '|',
+                            ('name', '=', 'picking_code'),
+                            '|',
+                                ('name', '=', 'contact_id'),
+                                ('name', '=', 'product_id'),
+                        ]
+                    limit = 3
+
                 resultFields = request.env['ir.model.fields'].sudo().search(
-                    [('model_id', '=', result.model_id.id), '|', ('name', '=', 'contact_id_in_out'), ('name', '=', 'picking_code')], limit=2)
+                   domain, limit=limit)
                 for resultField in resultFields:
                     webhook_field_ids.append((4, resultField.id))
-            if kw["webhookName"] == "notifyDeviceStatus" and kw['deviceType'] == "reader":
+            elif kw["webhookName"] == "notifyDeviceStatus" and kw['deviceType'] == "reader":
                 resultFields = request.env['ir.model.fields'].sudo().search(
-                    [('model_id', '=', result.model_id.id), ('name', '=', 'isConnected')], limit=1)
-                webhook_field_ids.append((4, resultFields.id))
-
+                    [('model_id', '=', result.model_id.id),
+                      '|', 
+                        ('name', '=', 'isConnected'),
+                        ('name', '=', 'id_device')], limit=2)
+                for resultField in resultFields:
+                    webhook_field_ids.append((4, resultField.id))
             # End: Thiết bị DISPLAY =========
-            tempVals = {
+            tempVals={
                 "binding_model_id": False,
                 "name": kw['name'],
                 "state": "webhook",

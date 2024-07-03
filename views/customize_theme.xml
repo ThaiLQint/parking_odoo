@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <!-- Kế thừa web.layout để thêm thẻ <style> -->
+        
     <data>
         <template id="layout_inherit" inherit_id="web.layout">
+            
             <xpath expr="//head" position="inside">
+                <t t-set="title">Insert a Link / Button</t>
                 <t t-set="navbar_background_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.navbar_background_color')"></t>
                 <t t-set="navbar_text_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.navbar_text_color')"></t>
                 <t t-set="dropdown_item_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.dropdown_item_color')"></t>
                 <t t-set="button_color" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.button_color')"></t>
+                <t t-set="app_logo_main" t-value="request.env['ir.config_parameter'].sudo().get_param('change_odoo_theme_header_color.app_logo_main')"></t>
                 <style type="text/css">
+                    .oi-apps:before
+                     {
+                        content: url('data:image/png;base64, <t t-esc="app_logo_main"/>') !important;
+                     }
                     body{
                         user-select: none !important;
                     }

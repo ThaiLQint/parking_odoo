@@ -28,20 +28,21 @@ class History(http.Controller):
                 'password': password,
             }
         }
-        # session_response = requests.post(session_url, json=data)
-        # session_data = session_response.json()
-        # if session_data.get('result') and session_response.cookies.get('session_id'):
-        #     self.session_id = session_response.cookies['session_id']
-        # else:
-        #     _logger.error(
-        #         f'Error: Failed to authenticate - {session_data.get("error")}')
-        #     return None
+        
+        session_response = requests.post(session_url, json=data)
+        session_data = session_response.json()
+        if session_data.get('result') and session_response.cookies.get('session_id'):
+            self.session_id = session_response.cookies['session_id']
+        else:
+            _logger.error(
+                f'Error: Failed to authenticate - {session_data.get("error")}')
+            return None
 
-        # self.lock = threading.Lock()
-        # threaded = threading.Thread(
-        #     target=self.threadCheckAlert
-        # )
-        # threaded.start()
+        self.lock = threading.Lock()
+        threaded = threading.Thread(
+            target=self.threadCheckAlert
+        )
+        threaded.start()
 
     def _defferentTime(self, datetime, second):
         difference = datetime.now() - datetime
@@ -157,26 +158,49 @@ class History(http.Controller):
         partner = self._find_by_key("res.partner", "id", kw["contactId"])
         if not partner:
             return Response(json.dumps({"message": "Liên hệ không tìm thấy [" + kw["contactId"]+"]"}), content_type='application/json;charset=utf-8', status=400)
-        if product.image_1920 == False:
-            product_image_1920 = "None"
-        else:
-            product_image_1920 = product.image_1920.decode()
+        
+        if kw['isIn'] == "1":
+            if product.image_1920_bien_so == False:
+                product_image_1920_bien_so = "None"
+            else:
+                product_image_1920_bien_so = product.image_1920_bien_so.decode()
 
-        if product.image_1920_bien_so == False:
-            product_image_1920_bien_so = "None"
-        else:
-            product_image_1920_bien_so = product.image_1920_bien_so.decode()
-        return Response(json.dumps({
+        if kw['isIn'] == "0":
+            if product.image_1920 == False:
+                product_image_1920 = "None"
+            else:
+                product_image_1920 = product.image_1920.decode()
+            
+            if partner.image_1920 == False:
+                partner_image_1920 = "None"
+            else:
+                partner_image_1920 = partner.image_1920.decode()
+        jsonDumps = {
             "productId": product.id,
             "nameNg": partner.name,
             "nameXe": product.name,
             "tidNg": partner.ref[8:],
             "tidXe": product.default_code[8:],
             "typeXe": product.categ_id.complete_name,
-            "imgXe": product_image_1920,
-            "imgBienSo": product_image_1920_bien_so,
-            "pickingCode": product.picking_code,
-        }), content_type='application/json;charset=utf-8', status=200)
+        }
+
+        # "productId": product.id,
+        #     "nameNg": partner.name,
+        #     "nameXe": product.name,
+        #     "tidNg": partner.ref[8:],
+        #     "tidXe": product.default_code[8:],
+        #     "typeXe": product.categ_id.complete_name,
+        #     "imgXe": product_image_1920,
+        #     "imgBienSo": product_image_1920_bien_so,
+        #     "pickingCode": product.picking_code,
+        if kw['isIn'] == "1":
+            jsonDumps["imgBienSo"] = product_image_1920_bien_so,
+        if kw['isIn'] == "0":
+            jsonDumps.update({
+                "imgXe": product_image_1920,
+                "imgNg": partner_image_1920
+            })
+        return Response(json.dumps(jsonDumps), content_type='application/json;charset=utf-8', status=200)
 
     def _changeDate(self, date_in):
         user_tz = pytz.timezone(str(http.request.env.user.tz or pytz.utc))
