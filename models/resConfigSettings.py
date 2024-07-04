@@ -5,7 +5,6 @@ _logger = logging.getLogger(__name__)
 
 class ParkingResConfigSettings(models.TransientModel):
     _inherit = 'res.config.settings'
-    _description = 'Alert Tag'
 
     navbar_background_color = fields.Char(
         string="Navigationbar Background Color")

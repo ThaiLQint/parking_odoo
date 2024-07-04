@@ -155,47 +155,60 @@ class Webhoook(http.Controller):
             # End: Thiết bị RFREADER =========
 
             # Start: Thiết bị DISPLAY =======
-            if kw['deviceType'] == "screenIn" or kw['deviceType'] == "screenOut" or kw['deviceType'] == "screenSecurity" or kw['deviceType'] == "screenAlert":
-                if kw['deviceType'] == "screenOut":
+            domain = []
+            limit = 0
+            if (kw['deviceType'] == "screenIn" or kw['deviceType'] == "screenOut" or kw['deviceType'] == "screenSecurity") and (kw["webhookName"] != "alertOut" and kw["webhookName"] != "alertIn"):
+
+                if kw['deviceType'] == "screenOut" and kw["webhookName"] == "historyOut":
                     domain = [
                         ('model_id', '=', result.model_id.id),
                         '|',
-                            ('name', '=', 'picking_code'),
-                            '|',
-                                '|',
-                                    ('name', '=', 'image_1920_camera_truoc'),
-                                    ('name', '=', 'image_1920_camera_sau'),
-                                '|',
-                                    ('name', '=', 'contact_id'),
-                                    ('name', '=', 'product_id'),
-                            ]
+                        ('name', '=', 'picking_code'),
+                        '|',
+                        '|',
+                        ('name', '=', 'image_1920_camera_truoc'),
+                        ('name', '=', 'image_1920_camera_sau'),
+                        '|',
+                        ('name', '=', 'contact_id'),
+                        ('name', '=', 'product_id'),
+                    ]
                     limit = 5
-                elif kw['deviceType'] == "screenIn":
+                elif kw['deviceType'] == "screenIn" and kw["webhookName"] == "historyIn":
                     domain = [
                         (
-                        'model_id', '=', result.model_id.id),
+                            'model_id', '=', result.model_id.id),
                         '|',
-                            ('name', '=', 'picking_code'),
-                            '|',
-                                ('name', '=', 'contact_id'),
-                                ('name', '=', 'product_id'),
-                        ]
+                        ('name', '=', 'picking_code'),
+                        '|',
+                        ('name', '=', 'contact_id'),
+                        ('name', '=', 'product_id'),
+                    ]
                     limit = 3
 
                 resultFields = request.env['ir.model.fields'].sudo().search(
-                   domain, limit=limit)
+                    domain, limit=limit)
                 for resultField in resultFields:
                     webhook_field_ids.append((4, resultField.id))
             elif kw["webhookName"] == "notifyDeviceStatus" and kw['deviceType'] == "reader":
                 resultFields = request.env['ir.model.fields'].sudo().search(
                     [('model_id', '=', result.model_id.id),
-                      '|', 
+                     '|',
                         ('name', '=', 'isConnected'),
                         ('name', '=', 'id_device')], limit=2)
                 for resultField in resultFields:
                     webhook_field_ids.append((4, resultField.id))
+            elif kw["webhookName"] == "alertIn" or kw["webhookName"] == "alertOut":
+                _logger.info("aaaa")
+                resultFields = request.env['ir.model.fields'].sudo().search(
+                    [('model_id', '=', result.model_id.id),
+                     '|',
+                        ('name', '=', 'product_id'),
+                        ('name', '=', 'code')
+                     ], limit=2)
+                for resultField in resultFields:
+                    webhook_field_ids.append((4, resultField.id))
             # End: Thiết bị DISPLAY =========
-            tempVals={
+            tempVals = {
                 "binding_model_id": False,
                 "name": kw['name'],
                 "state": "webhook",

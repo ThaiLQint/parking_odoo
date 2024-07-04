@@ -17,7 +17,7 @@ class SettingNspDeviceIn(models.Model):
                              ('screenSecurity', "Màn hình bảo vệ"),
                              ('screenIn', "Màn hình vào"),
                              ('screenOut', "Màn hình ra"),
-                            ('screenAlert', "Màn hình cảnh báo")], string="Loại thiết bị")
+                           ], string="Loại thiết bị")
 
     lane_id = fields.Many2one(
         "setting.nsp.lane", string="Cổng",  ondelete='cascade')

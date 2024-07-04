@@ -46,7 +46,7 @@ class ActionsServer(models.Model):
             # is slow or non-functional (we still allow for a 1s timeout so that
             # if we get a proper error response code like 400, 404 or 500 we can log)
             response = requests.post(url, data=json_values, headers={
-                                     'Content-Type': 'application/json'}, timeout=0.1)
+                                     'Content-Type': 'application/json'}, timeout=1)
             response.raise_for_status()
         except requests.exceptions.ReadTimeout:
             _logger.warning("Webhook call timed out after 1s - it may or may not have failed. "
