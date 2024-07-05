@@ -11,7 +11,9 @@ class SettingNspOffice(models.Model):
     parking_id = fields.Many2one(
         "setting.nsp.parking", string="Bãi xe",  ondelete='cascade')
    
-
+    device_ids = fields.One2many(
+        'setting.nsp.device', 'office_id', string="Thiết bị")
+    
     lane_in_ids = fields.One2many(
         'setting.nsp.lane', 'office_id_in', string="Cổng vào")
 

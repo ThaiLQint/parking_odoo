@@ -27,7 +27,7 @@ class History(http.Controller):
         if self._session_id is None:
             self.login()
         return self._session_id
-    
+
     def login(self):
         url = 'http://localhost:8069'
         db = 'nsp.t4tek.tk'
@@ -44,7 +44,7 @@ class History(http.Controller):
         }
         session_response = requests.post(session_url, json=data)
         session_data = session_response.json()
-        
+
         if session_data.get('result') and session_response.cookies.get('session_id'):
             self._session_id = session_response.cookies['session_id']
         else:
@@ -52,6 +52,7 @@ class History(http.Controller):
             _logger.error(
                 f'Error: Failed to authenticate - {session_data.get("error")}')
             return None
+
     def run_Webhook(self, id, picking_code):
         try:
             # 'send and forget' strategy, and avoid locking the user if the webhook
@@ -85,7 +86,7 @@ class History(http.Controller):
         while True:
             current_time = datetime.now()
             keys_to_remove = []
-            
+
             for key, value in list(self.my_dict.items()):
                 if current_time - value["datetime"] >= timedelta(seconds=4):
                     try:
@@ -96,7 +97,7 @@ class History(http.Controller):
             with self.lock:
                 for key in keys_to_remove:
                     del self.my_dict[key]
-            
+
             time.sleep(1)
 
     @http.route('/api/history/validate', type='http', auth='public', methods=['POST'], website=False, csrf=False)
@@ -129,7 +130,7 @@ class History(http.Controller):
             name = "Thiếu thẻ người"
         elif code == 2:
             name = "Sai mật khẩu thẻ " + kw["tag"]
-        else: 
+        else:
             name = "Unknow"
         result = request.env["alert.tag"].sudo().create({
             "code": code,
@@ -174,7 +175,6 @@ class History(http.Controller):
                 product_image_1920_bien_so = "None"
             else:
                 product_image_1920_bien_so = product.image_1920_bien_so.decode()
-
         elif kw['isIn'] == "0":
             if product.image_1920 == False:
                 product_image_1920 = "None"
@@ -185,6 +185,20 @@ class History(http.Controller):
                 partner_image_1920 = "None"
             else:
                 partner_image_1920 = partner.image_1920.decode()
+        elif kw['isIn'] == "10":
+            if product.image_1920 == False:
+                product_image_1920 = "None"
+            else:
+                product_image_1920 = product.image_1920.decode()
+
+            if partner.image_1920 == False:
+                partner_image_1920 = "None"
+            else:
+                partner_image_1920 = partner.image_1920.decode()
+            if product.image_1920_bien_so == False:
+                product_image_1920_bien_so = "None"
+            else:
+                product_image_1920_bien_so = product.image_1920_bien_so.decode()
         jsonDumps = {
             "productId": product.id,
             "nameNg": partner.name,
@@ -205,10 +219,16 @@ class History(http.Controller):
         #     "pickingCode": product.picking_code,
         if kw['isIn'] == "1":
             jsonDumps.update({"imgBienSo": product_image_1920_bien_so})
-        if kw['isIn'] == "0":
+        elif kw['isIn'] == "0":
             jsonDumps.update({
                 "imgXe": product_image_1920,
                 "imgNg": partner_image_1920
+            })
+        elif kw['isIn'] == "10":
+            jsonDumps.update({
+                "imgXe": product_image_1920,
+                "imgNg": partner_image_1920,
+                "imgBienSo": product_image_1920_bien_so
             })
         return Response(json.dumps(jsonDumps), content_type='application/json;charset=utf-8', status=200)
 
@@ -345,7 +365,7 @@ class History(http.Controller):
         """Xử lý khi tìm thấy sản phẩm."""
         with self.lock:
             self.my_dict.setdefault(
-                tid, {"tid": tid, "datetime": datetime.now(), 'id': id, 'picking_code': 'in' if picking_code=="incoming" else 'out'})
+                tid, {"tid": tid, "datetime": datetime.now(), 'id': id, 'picking_code': 'in' if picking_code == "incoming" else 'out'})
         return Response(json.dumps({"message": "Tìm thấy thẻ xe"}), content_type='application/json;charset=utf-8', status=200)
 
     def _handle_history(self, idPartner, idProduct, port, move_history_id, picking_code, imgTruoc, imgSau):

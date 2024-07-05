@@ -11,6 +11,9 @@ from odoo.http import request, Response
 _logger = logging.getLogger(__name__)
 
 
+
+
+
 class Webhoook(http.Controller):
 
     @http.route('/api/update/state/device', type='http', auth='user', methods=['POST'], website=False, csrf=False)
@@ -55,17 +58,22 @@ class Webhoook(http.Controller):
         if kw.get("code") != "parking":
             return Response(json.dumps({"message": "Dịch vụ không hỗ trợ!"}), content_type='application/json;charset=utf-8', status=400)
         device = request.env['setting.nsp.device'].sudo().search([
-            ("id_device", "=",  kw['idDevice'])
+            ("id_device", "=", kw['idDevice'])
         ], limit=1)
+
         if not device:
-            return Response(json.dumps({"message": "Thiết bị không tìm thấy"}), content_type='application/json;charset=utf-8', status=400)
+            return Response(json.dumps({"message": "Thiết bị không tìm thấy!"}), content_type='application/json;charset=utf-8', status=400)
         lane = device.lane_id
-        office = lane.office_id_out
-        if lane.laneInOut == "in":
-            office = lane.office_id_in
+        office = lane.office_id_in if lane and lane.laneInOut == "in" else (
+            lane.office_id_out if lane else device.office_id)
         parking = office.parking_id
         branch = parking.branch_id
-        jsonConfig = {
+
+        config = self.build_config(branch, parking, office, lane, device)
+        return Response(json.dumps(config), content_type='application/json;charset=utf-8', status=200)
+    
+    def build_config(self, branch, parking, office, lane=None, device=None):
+        config = {
             "id": branch.id,
             "name": branch.name,
             "parking": {
@@ -73,21 +81,32 @@ class Webhoook(http.Controller):
                 "name": parking.name,
                 "office": {
                     "id": office.id,
-                    "name": office.name,
-                    "lane": {
-                        "id": lane.id,
-                        "name": lane.name,
-                        "laneInOut": lane.laneInOut,
-                        "device": {
-                            "id": device.id_device,
-                            "name": device.name
-                        }
-                    }
+                    "name": office.name
                 }
             }
         }
-        return Response(json.dumps(jsonConfig), content_type='application/json;charset=utf-8', status=200)
 
+        if lane:
+            config["parking"]["office"]["lane"] = {
+                "id": lane.id,
+                "name": lane.name,
+                "laneInOut": lane.laneInOut,
+                "device": {
+                    "id": device.id_device,
+                    "name": device.name
+                }
+            }
+        else:
+            config["parking"]["office"].update({
+                "device": {
+                    "id": device.id_device,
+                    "name": device.name
+                },
+                "listLaneIn": self._prepare_lane_data(office.lane_in_ids),
+                "listLaneOut": self._prepare_lane_data(office.lane_out_ids)
+            })
+
+        return config
     def _prepare_branch_data(self, branch):
         parking_data = [self._prepare_parking_data(
             parking) for parking in branch.parking_ids]
@@ -118,10 +137,14 @@ class Webhoook(http.Controller):
             "listLaneOut": lane_out_data
         }
 
-    def _prepare_device_data(self, lane_in):
+    def _prepare_device_data(self, lane):
         device_data = [{"id": device.id, "name": device.name}
-                       for device in lane_in.device_ids]
+                       for device in lane.device_ids]
         return device_data
+    def _prepare_lane_data(self, lanes):
+        return [{"id": lane.id, "name": lane.name, "listDevice": self._prepare_device_data(lane)}
+            for lane in lanes]
+
 
     @ http.route('/api/register/device', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def registerDevice(self, **kw):
@@ -159,7 +182,21 @@ class Webhoook(http.Controller):
             limit = 0
             if (kw['deviceType'] == "screenIn" or kw['deviceType'] == "screenOut" or kw['deviceType'] == "screenSecurity") and (kw["webhookName"] != "alertOut" and kw["webhookName"] != "alertIn"):
 
-                if kw['deviceType'] == "screenOut" and kw["webhookName"] == "historyOut":
+                if kw['deviceType'] == "screenSecurity" and (kw["webhookName"] == "historyOut" or kw["webhookName"] == "historyIn"):
+                    domain = [
+                        ('model_id', '=', result.model_id.id),
+                        '|',
+                        ('name', '=', 'picking_code'),
+                        '|',
+                        '|',
+                        ('name', '=', 'image_1920_camera_truoc'),
+                        ('name', '=', 'image_1920_camera_sau'),
+                        '|',
+                        ('name', '=', 'contact_id'),
+                        ('name', '=', 'product_id'),
+                    ]
+                    limit = 5
+                elif kw['deviceType'] == "screenOut" and kw["webhookName"] == "historyOut":
                     domain = [
                         ('model_id', '=', result.model_id.id),
                         '|',

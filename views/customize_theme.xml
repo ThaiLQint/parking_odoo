@@ -19,7 +19,7 @@
                      }
                     body{
                         user-select: none !important;
-                    }
+                    } 
                     .o_main_navbar .o_menu_sections .o_nav_entry, .o_main_navbar .o_menu_sections .dropdown-toggle {
                         background: <t t-esc="navbar_background_color"/> !important;
                         color: <t t-esc="navbar_text_color"/> !important;
