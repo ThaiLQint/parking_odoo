@@ -11,9 +11,6 @@ from odoo.http import request, Response
 _logger = logging.getLogger(__name__)
 
 
-
-
-
 class Webhoook(http.Controller):
 
     @http.route('/api/update/state/device', type='http', auth='user', methods=['POST'], website=False, csrf=False)
@@ -71,7 +68,7 @@ class Webhoook(http.Controller):
 
         config = self.build_config(branch, parking, office, lane, device)
         return Response(json.dumps(config), content_type='application/json;charset=utf-8', status=200)
-    
+
     def build_config(self, branch, parking, office, lane=None, device=None):
         config = {
             "id": branch.id,
@@ -107,6 +104,7 @@ class Webhoook(http.Controller):
             })
 
         return config
+
     def _prepare_branch_data(self, branch):
         parking_data = [self._prepare_parking_data(
             parking) for parking in branch.parking_ids]
@@ -141,153 +139,147 @@ class Webhoook(http.Controller):
         device_data = [{"id": device.id, "name": device.name}
                        for device in lane.device_ids]
         return device_data
+
     def _prepare_lane_data(self, lanes):
         return [{"id": lane.id, "name": lane.name, "listDevice": self._prepare_device_data(lane)}
-            for lane in lanes]
+                for lane in lanes]
 
+    @http.route('/api/register/device', type='http', auth='public', methods=['POST'], website=False, csrf=False)
+    def register_device(self, **kw):
+        if kw.get("code") != "parking":
+            return self.create_response("Dịch vụ không họp lệ!", 400)
 
-    @ http.route('/api/register/device', type='http', auth='public', methods=['POST'], website=False, csrf=False)
-    def registerDevice(self, **kw):
-        if kw["code"] == "parking":
-            # Tìm kiếm tên của automation
-            result = request.env['base.automation'].sudo().search(
-                [('name', '=', kw["webhookName"])], limit=1)
-            if not result:
-                return Response(json.dumps({"message": "Đăng ký dịch vụ không họp lệ!"}), content_type='application/json;charset=utf-8', status=400)
+        result = self.find_automation(kw["webhookName"])
+        if not result:
+            return self.create_response("Không tìm thấy webhook", 400)
 
-            # Vòng lặp tìm kiếm id của thiết bị trong danh sách action con
-            for actionServer in result.action_server_ids:
-                # Tìm kiếm id của thiết bị trong danh sách action con
-                if actionServer.id_device == kw["idDevice"]:
-                    # Kiểm tra sự thay đổi của Url web hook, có thể thay đổi port
-                    if actionServer.webhook_url == kw['webhookUrl']:
-                        return Response(json.dumps({"message": "Tạo thành công"}),
-                                        content_type='application/json;charset=utf-8', status=201)
-                    # Nếu có sự thay đổi url thì cập nhật Url lại và return
-                    else:
-                        actionServer.write({"webhook_url": kw['webhookUrl']})
-                        return Response(json.dumps({"message": "Tạo thành công"}),
-                                        content_type='application/json;charset=utf-8', status=201)
+        for action_server in result.action_server_ids:
+            if action_server.id_device == kw["idDevice"]:
+                return self.update_existing_device(action_server, kw['webhookUrl'])
 
-            # Chạy hết vòng lặp vẫn không thấy IdDevice thì tạo
-            webhook_field_ids = []
-            # Start: Thiết bị RFREADER =======
+        return self.create_new_device(result, kw)
 
-            # Đăng ký webhook để nhận thông báo khi có sự thay đổi dữ liệu thẻ xe và người để đồng bộ dữ liệu
+    def find_automation(self, webhook_name):
+        return request.env['base.automation'].sudo().search([('name', '=', webhook_name)], limit=1)
 
-            # End: Thiết bị RFREADER =========
+    def update_existing_device(self, action_server, webhook_url):
+        if action_server.webhook_url != webhook_url:
+            action_server.write({"webhook_url": webhook_url})
+        return self.create_response("Tạo thành công", 201)
 
-            # Start: Thiết bị DISPLAY =======
-            domain = []
+    def create_new_device(self, result, kw):
+        webhook_field_ids = self.get_webhook_field_ids(result, kw)
+        new_device_vals = self.create_device_vals(
+            kw, result, webhook_field_ids)
+        result.write(
+            {'action_server_ids': [(0, 'virtual_17', new_device_vals)]})
+        return self.create_response("Tạo thành công", 201)
+
+    def get_webhook_field_ids(self, result, kw):
+        webhook_field_ids = []
+        device_type = kw.get('deviceType')
+        webhook_name = kw.get('webhookName')
+
+        if not device_type or not webhook_name:
+            return webhook_field_ids
+
+        if device_type in ["screenIn", "screenOut", "screenSecurity"] and webhook_name not in ["alertOut", "alertIn"]:
+            domain, limit = self.get_screen_domain_and_limit(result, device_type, webhook_name)
+        elif webhook_name == "notifyDeviceStatus" and device_type == "reader":
+            domain = [
+                ('model_id', '=', result.model_id.id),
+                '|', ('name', '=', 'isConnected'), ('name', '=', 'id_device')
+            ]
+            limit = 2
+        elif webhook_name in ["alertIn", "alertOut"]:
+            domain = [
+                ('model_id', '=', result.model_id.id),
+                '|', ('name', '=', 'product_id'), ('name', '=', 'code')
+            ]
+            limit = 2
+        else:
+            return webhook_field_ids
+
+        try:
+            fields = request.env['ir.model.fields'].sudo().search(domain, limit=limit)
+            webhook_field_ids = [(4, field.id) for field in fields]
+        except Exception as e:
+            _logger.error(f"Error while searching fields: {e}")
+            _logger.error(f"Domain: {domain}, Limit: {limit}")
+
+        return webhook_field_ids
+
+    def get_screen_domain_and_limit(self, result, device_type, webhook_name):
+        model_condition = ('model_id', '=', result.model_id.id)
+        common_fields = ['contact_id', 'product_id', 'picking_code', 'create_date']
+
+        base_domain = [model_condition]
+
+        if device_type in ["screenSecurity", "screenOut"]:
+            domain = base_domain + [
+                '|', ('name', 'in', common_fields),
+                '|', ('name', '=', 'image_1920_camera_truoc'),
+                    ('name', '=', 'image_1920_camera_sau')
+            ]
+            limit = 6
+        elif device_type == "screenIn":
+            domain = base_domain + [
+                '|', ('name', '=', 'picking_code'),
+                '|', ('name', '=', 'contact_id'),
+                    ('name', '=', 'product_id')
+            ]
+            limit = 3
+        else:
+            domain = base_domain
             limit = 0
-            if (kw['deviceType'] == "screenIn" or kw['deviceType'] == "screenOut" or kw['deviceType'] == "screenSecurity") and (kw["webhookName"] != "alertOut" and kw["webhookName"] != "alertIn"):
 
-                if kw['deviceType'] == "screenSecurity" and (kw["webhookName"] == "historyOut" or kw["webhookName"] == "historyIn"):
-                    domain = [
-                        ('model_id', '=', result.model_id.id),
-                        '|',
-                        ('name', '=', 'picking_code'),
-                        '|',
-                        '|',
-                        ('name', '=', 'image_1920_camera_truoc'),
-                        ('name', '=', 'image_1920_camera_sau'),
-                        '|',
-                        ('name', '=', 'contact_id'),
-                        ('name', '=', 'product_id'),
-                    ]
-                    limit = 5
-                elif kw['deviceType'] == "screenOut" and kw["webhookName"] == "historyOut":
-                    domain = [
-                        ('model_id', '=', result.model_id.id),
-                        '|',
-                        ('name', '=', 'picking_code'),
-                        '|',
-                        '|',
-                        ('name', '=', 'image_1920_camera_truoc'),
-                        ('name', '=', 'image_1920_camera_sau'),
-                        '|',
-                        ('name', '=', 'contact_id'),
-                        ('name', '=', 'product_id'),
-                    ]
-                    limit = 5
-                elif kw['deviceType'] == "screenIn" and kw["webhookName"] == "historyIn":
-                    domain = [
-                        (
-                            'model_id', '=', result.model_id.id),
-                        '|',
-                        ('name', '=', 'picking_code'),
-                        '|',
-                        ('name', '=', 'contact_id'),
-                        ('name', '=', 'product_id'),
-                    ]
-                    limit = 3
+        return domain, limit
 
-                resultFields = request.env['ir.model.fields'].sudo().search(
-                    domain, limit=limit)
-                for resultField in resultFields:
-                    webhook_field_ids.append((4, resultField.id))
-            elif kw["webhookName"] == "notifyDeviceStatus" and kw['deviceType'] == "reader":
-                resultFields = request.env['ir.model.fields'].sudo().search(
-                    [('model_id', '=', result.model_id.id),
-                     '|',
-                        ('name', '=', 'isConnected'),
-                        ('name', '=', 'id_device')], limit=2)
-                for resultField in resultFields:
-                    webhook_field_ids.append((4, resultField.id))
-            elif kw["webhookName"] == "alertIn" or kw["webhookName"] == "alertOut":
-                _logger.info("aaaa")
-                resultFields = request.env['ir.model.fields'].sudo().search(
-                    [('model_id', '=', result.model_id.id),
-                     '|',
-                        ('name', '=', 'product_id'),
-                        ('name', '=', 'code')
-                     ], limit=2)
-                for resultField in resultFields:
-                    webhook_field_ids.append((4, resultField.id))
-            # End: Thiết bị DISPLAY =========
-            tempVals = {
-                "binding_model_id": False,
-                "name": kw['name'],
-                "state": "webhook",
-                "model_id": result.model_id.id,
-                "groups_id": [],
-                "evaluation_type": "value",
-                "update_path": False,
-                "update_field_id": False,
-                "value_field_to_show": "value",
-                "update_field_type": False,
-                "update_m2m_operation": "add",
-                "value": False,
-                "resource_ref": False,
-                "selection_value": False,
-                "update_boolean_value": "true",
-                "type": "ir.actions.server",
-                "crud_model_id": False,
-                "link_field_id": False,
-                "sms_template_id": False,
-                "sms_method": False,
-                "partner_ids": [],
-                "template_id": False,
-                "mail_post_method": False,
-                "mail_post_autofollow": False,
-                "webhook_url": kw['webhookUrl'],
-                "webhook_field_ids": webhook_field_ids,
-                "activity_type_id": False,
-                "activity_summary": False,
-                "activity_date_deadline_range": 0,
-                "activity_date_deadline_range_type": False,
-                "activity_user_type": False,
-                "activity_user_field_name": False,
-                "activity_user_id": False,
-                "activity_note": False,
-                "child_ids": [],
-                "sequence": 7,
-                "base_automation_id": result.id,
-                "id_device": kw["idDevice"]
-            }
-            result.write(
-                {'action_server_ids': [(0, 'virtual_17', tempVals)]})
-            return Response(json.dumps({
-                "message": "Tạo thành công",
-            }), content_type='application/json;charset=utf-8', status=201)
-        return Response(json.dumps({"message": "Đăng ký dịch vụ không họp lệ!"}), content_type='application/json;charset=utf-8', status=400)
+    def create_device_vals(self, kw, result, webhook_field_ids):
+        return {
+            "binding_model_id": False,
+            "name": kw['name'],
+            "state": "webhook",
+            "model_id": result.model_id.id,
+            "groups_id": [],
+            "evaluation_type": "value",
+            "update_path": False,
+            "update_field_id": False,
+            "value_field_to_show": "value",
+            "update_field_type": False,
+            "update_m2m_operation": "add",
+            "value": False,
+            "resource_ref": False,
+            "selection_value": False,
+            "update_boolean_value": "true",
+            "type": "ir.actions.server",
+            "crud_model_id": False,
+            "link_field_id": False,
+            "sms_template_id": False,
+            "sms_method": False,
+            "partner_ids": [],
+            "template_id": False,
+            "mail_post_method": False,
+            "mail_post_autofollow": False,
+            "webhook_url": kw['webhookUrl'],
+            "webhook_field_ids": webhook_field_ids,
+            "activity_type_id": False,
+            "activity_summary": False,
+            "activity_date_deadline_range": 0,
+            "activity_date_deadline_range_type": False,
+            "activity_user_type": False,
+            "activity_user_field_name": False,
+            "activity_user_id": False,
+            "activity_note": False,
+            "child_ids": [],
+            "sequence": 7,
+            "base_automation_id": result.id,
+            "id_device": kw["idDevice"]
+        }
+
+    def create_response(self, message, status):
+        return Response(
+            json.dumps({"message": message}),
+            content_type='application/json;charset=utf-8',
+            status=status
+        )

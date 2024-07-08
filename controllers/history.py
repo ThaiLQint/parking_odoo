@@ -164,41 +164,13 @@ class History(http.Controller):
     @http.route('/api/history/getbyid', type='http', auth='public', methods=['POST'], website=False, csrf=False)
     def getById(self, **kw):
         product = self._find_by_key("product.template", "id", kw["productId"])
-        if not product:
-            return Response(json.dumps({"message": "Xe không tìm thấy [" + kw["productId"]+"]"}), content_type='application/json;charset=utf-8', status=400)
         partner = self._find_by_key("res.partner", "id", kw["contactId"])
-        if not partner:
-            return Response(json.dumps({"message": "Liên hệ không tìm thấy [" + kw["contactId"]+"]"}), content_type='application/json;charset=utf-8', status=400)
 
-        if kw['isIn'] == "1":
-            if product.image_1920_bien_so == False:
-                product_image_1920_bien_so = "None"
-            else:
-                product_image_1920_bien_so = product.image_1920_bien_so.decode()
-        elif kw['isIn'] == "0":
-            if product.image_1920 == False:
-                product_image_1920 = "None"
-            else:
-                product_image_1920 = product.image_1920.decode()
+        if not product or not partner:
+            missing = "Xe" if not product else "Liên hệ"
+            return Response(json.dumps({"message": f"{missing} không tìm thấy [{kw['productId' if not product else 'contactId']}]"}), 
+                            content_type='application/json;charset=utf-8', status=400)
 
-            if partner.image_1920 == False:
-                partner_image_1920 = "None"
-            else:
-                partner_image_1920 = partner.image_1920.decode()
-        elif kw['isIn'] == "10":
-            if product.image_1920 == False:
-                product_image_1920 = "None"
-            else:
-                product_image_1920 = product.image_1920.decode()
-
-            if partner.image_1920 == False:
-                partner_image_1920 = "None"
-            else:
-                partner_image_1920 = partner.image_1920.decode()
-            if product.image_1920_bien_so == False:
-                product_image_1920_bien_so = "None"
-            else:
-                product_image_1920_bien_so = product.image_1920_bien_so.decode()
         jsonDumps = {
             "productId": product.id,
             "nameNg": partner.name,
@@ -208,28 +180,18 @@ class History(http.Controller):
             "typeXe": product.categ_id.complete_name,
         }
 
-        # "productId": product.id,
-        #     "nameNg": partner.name,
-        #     "nameXe": product.name,
-        #     "tidNg": partner.ref[8:],
-        #     "tidXe": product.default_code[8:],
-        #     "typeXe": product.categ_id.complete_name,
-        #     "imgXe": product_image_1920,
-        #     "imgBienSo": product_image_1920_bien_so,
-        #     "pickingCode": product.picking_code,
-        if kw['isIn'] == "1":
-            jsonDumps.update({"imgBienSo": product_image_1920_bien_so})
-        elif kw['isIn'] == "0":
+        def decode_image(image):
+            return image.decode() if image else "None"
+
+        is_in = kw['isIn']
+        if is_in in ("0", "10"):
             jsonDumps.update({
-                "imgXe": product_image_1920,
-                "imgNg": partner_image_1920
+                "imgXe": decode_image(product.image_1920),
+                "imgNg": decode_image(partner.image_1920)
             })
-        elif kw['isIn'] == "10":
-            jsonDumps.update({
-                "imgXe": product_image_1920,
-                "imgNg": partner_image_1920,
-                "imgBienSo": product_image_1920_bien_so
-            })
+        if is_in in ("1", "10"):
+            jsonDumps["imgBienSo"] = decode_image(product.image_1920_bien_so)
+
         return Response(json.dumps(jsonDumps), content_type='application/json;charset=utf-8', status=200)
 
     def _changeDate(self, date_in):
