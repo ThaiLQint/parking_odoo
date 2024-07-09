@@ -11,7 +11,7 @@ from . import _test
 
 from . import product_color
 from . import product_color_values
-# from . import actionsServer
+from . import actionsServer
 from . import baseAutomation
 from . import alert
 from . import settingNspBranch
