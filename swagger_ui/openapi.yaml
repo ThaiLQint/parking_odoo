@@ -1,0 +1,467 @@
+openapi: 3.0.0
+info:
+  title: Odoo History API
+  version: 1.0.0
+  description: API for managing history and alerts in Odoo
+servers:
+  - url: http://localhost:8069
+    description: Odoo server
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session_id
+
+security:
+  - cookieAuth: []
+paths:
+  /web/session/authenticate:
+    post:
+      summary: Login to Odoo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                jsonrpc:
+                  type: string
+                  enum: ["2.0"]
+                params:
+                  type: object
+                  properties:
+                    login:
+                      type: string
+                    password:
+                      type: string
+                    db:
+                      type: string
+              required:
+                - jsonrpc
+                - params
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: null
+                  result:
+                    type: object
+                    properties:
+                      session_id:
+                        type: string
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jsonrpc:
+                    type: string
+                  id:
+                    type: null
+                  error:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+
+  /api/history/validate:
+    post:
+      summary: Validate parking history
+      tags:
+        - History
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  enum: [parking]
+                tid:
+                  type: string
+                port:
+                  type: string
+                  enum: [Cổng Vào, Cổng Ra]
+                imgTruoc:
+                  type: string
+                  format: binary
+                imgSau:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  message:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/history/alert/tag:
+    post:
+      summary: Create alert tag
+      tags:
+        - Alert
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  enum: [parking]
+                codeAlert:
+                  type: integer
+                productId:
+                  type: integer
+                tag:
+                  type: string
+                picking_code:
+                  type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/history/alert/product:
+    post:
+      summary: Get product alert information
+      tags:
+        - Alert
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productId:
+                    type: integer
+                  nameNg:
+                    type: string
+                  nameXe:
+                    type: string
+                  tidNg:
+                    type: string
+                  tidXe:
+                    type: string
+                  typeXe:
+                    type: string
+                  imgXe:
+                    type: string
+                  imgNg:
+                    type: string
+                  imgPath1:
+                    type: string
+                  imgPath2:
+                    type: string
+                  imgBienSo:
+                    type: string
+                  createDateTime:
+                    type: string
+                  pickingCode:
+                    type: string
+
+  /api/history/getbyid:
+    post:
+      summary: Get product and contact information by ID
+      tags:
+        - History
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                contactId:
+                  type: integer
+                isIn:
+                  type: string
+                  enum: ['0', '1', '10']
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productId:
+                    type: integer
+                  nameNg:
+                    type: string
+                  nameXe:
+                    type: string
+                  tidNg:
+                    type: string
+                  tidXe:
+                    type: string
+                  typeXe:
+                    type: string
+                  imgXe:
+                    type: string
+                  imgNg:
+                    type: string
+                  imgBienSo:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/update/state/device:
+    post:
+      summary: Update device state
+      tags:
+        - Device
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  enum: [parking]
+                idDevice:
+                  type: string
+                isConnected:
+                  type: string
+                  enum: ['0', '1']
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/remove/webhook/device:
+    post:
+      summary: Remove webhook device
+      tags:
+        - Device
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  enum: [parking]
+                idDevice:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/load/nsp/config/view:
+    post:
+      summary: Load NSP config view
+      tags:
+        - Config
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  enum: [parking]
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  records:
+                    type: array
+                    items:
+                      type: object
+
+  /api/load/nsp/config:
+    post:
+      summary: Load NSP config
+      tags:
+        - Config
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  enum: [parking]
+                idDevice:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/register/device:
+    post:
+      summary: Register device
+      tags:
+        - Device
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  enum: [parking]
+                webhookName:
+                  type: string
+                idDevice:
+                  type: string
+                webhookUrl:
+                  type: string
+                name:
+                  type: string
+                deviceType:
+                  type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: session_id

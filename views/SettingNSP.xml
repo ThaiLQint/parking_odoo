@@ -70,6 +70,7 @@
                                             <field name="id_device" />
                                             <field name="name2" />
                                             <field name="name" invisible="1" />
+                                            <field name="name3" invisible="1" />
                                             <field name="office_id" invisible="0" />
                                         </group>
                                     </sheet>
@@ -101,7 +102,7 @@
                                                             <field name="id_device"  />
                                                             <field name="name3" />
                                                             <field name="name" invisible="1" />
-
+                                                            <field name="name2" invisible="1" />
                                                             <field name="lane_id" invisible="0" />
                                                         </group>
                                                     </sheet>
@@ -138,6 +139,7 @@
                                                             <field name="id_device" />
                                                             <field name="name3" />
                                                             <field name="name" invisible="1" />
+                                                            <field name="name2" invisible="1" />
                                                             <field name="lane_id" />
                                                         </group>
                                                     </sheet>
