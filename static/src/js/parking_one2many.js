@@ -40,7 +40,6 @@ export class ParkingSettingList extends ListRenderer {
   add(params) {
     const self = this;
     if (self.canCreate) {
-      console.log(self);
       var data = self.props.list._parent.data;
       self.props.list._parent.save(data).then((result) => {
         if (result === true) {

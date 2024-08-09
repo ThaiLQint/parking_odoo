@@ -12,6 +12,9 @@ class  AlertTag(models.Model):
         "product.template", string="Xe")
     name = fields.Char(string = "Thông điệp")
     code = fields.Integer(string = "Code")
+    gate = fields.Selection([('in', 'In'),
+                             ('out', "Out"),
+                            ], string="Lối ra/vào")
     @api.model
     def create(self, vals):
         _logger.info(vals)

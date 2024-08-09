@@ -7,18 +7,28 @@ _logger = logging.getLogger(__name__)
 configurationCode = "0001"
 
 
-class SettingNspDeviceIn(models.Model):
+class SettingNspDevice(models.Model):
     _name = 'setting.nsp.device'
     _description = 'Setting Parking Device'
+    isConnected = fields.Boolean(string="Reader Status", default=False)
+    isConnected2 = fields.Boolean(
+        string="Reader Status Trigger", default=False)
     id_device = fields.Char(string="ID thiết bị")
     name = fields.Selection([('reader', 'Đầu đọc thẻ'),
                              ('screenSecurity', "Màn hình bảo vệ"),
                              ('screenIn', "Màn hình vào"),
                              ('screenOut', "Màn hình ra"),
-                            ('screenAlert', "Màn hình cảnh báo")], string="Loại thiết bị")
-
+                             ], string="Loại thiết bị")
+    name2 = fields.Selection([('screenSecurity', "Màn hình bảo vệ"),
+                              ], string="Loại thiết bị")
+    name3 = fields.Selection([('reader', 'Đầu đọc thẻ'),
+                             ('screenIn', "Màn hình vào"),
+                             ('screenOut', "Màn hình ra"),
+                              ], string="Loại thiết bị")
     lane_id = fields.Many2one(
         "setting.nsp.lane", string="Cổng",  ondelete='cascade')
+    office_id = fields.Many2one(
+        "setting.nsp.office", string="Văn phòng",  ondelete='cascade')
 
     def generate_truncated_uuid_4bytes(self):
         # Generate a full UUID
@@ -38,16 +48,19 @@ class SettingNspDeviceIn(models.Model):
         # Format the date and time as a string
         formatted_now = now.strftime("%d%m%Y")
         id_device = "0000"
-        if vals['name'] == 'screenSecurity':
+        if vals['name2'] == 'screenSecurity':
+            vals['name'] = vals['name2']
             id_device = "0001"
-        elif vals['name'] == 'screenIn':
+        elif vals['name3'] == 'screenIn':
+            vals['name'] = vals['name3']
             id_device = "0002"
-        elif vals['name'] == 'screenOut':
+        elif vals['name3'] == 'screenOut':
+            vals['name'] = vals['name3']
             id_device = "0003"
-        elif vals['name'] == 'screenAlert':
-            id_device = "0004"
+        else:
+            vals['name'] = vals['name3']
         uidBCD = str(self.generate_truncated_uuid_4bytes())
         vals['id_device'] = formatted_now + '-' + \
             id_device + '-' + configurationCode+'-' + uidBCD
-        new_record = super(SettingNspDeviceIn, self).create(vals)
+        new_record = super(SettingNspDevice, self).create(vals)
         return new_record

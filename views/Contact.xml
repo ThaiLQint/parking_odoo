@@ -93,6 +93,7 @@
                         <field name="ma_dinh_danh" placeholder="e.g. 31195100312" on_change="1"
                             modifiers="{&quot;required&quot;: true}" />
                         <field name="ref" placeholder="e.g. 31195100312" on_change="1" />
+                        <field name="epc_tag" placeholder="e.g. EBAD67486e" on_change="1" />
                         <field name="zalo" string="Zalo" invisible="not radio_zalo" />
                         <field name="viper" string="Viber" invisible="not radio_viper" />
                         <field name="what_app" string="What's App" invisible="not radio_what_app" />
@@ -308,6 +309,7 @@
                         <group>
                             <group>
                                 <field name="ref" />
+                                <field name="epc_tag" />
                                 <field name="barcode" string="Mật khẩu" password="true"></field>
                             </group>
                         </group>
